@@ -59,8 +59,10 @@ CloudProgram/
   是否早于首次调用)。
 - 云函数调用是异步的,所有调用包 try-catch 并打印错误码 + message,
   AGC 的错误信息里通常带可定位的原因。
-- 认证服务:模板提供登录组件(账号密码/手机验证码/邮箱验证码),需传入项目的
-  apiKey 与 clientSecret。
+- 认证服务:初始化只需读取 rawfile 中的 `agconnect-services.json` 调 initialize()
+  (凭据字段已含在该官方下发的 JSON 内,由 SDK 内部使用);登录组件只传认证方式
+  (modes)与回调即可。**不要在端侧代码里手写 apiKey/clientSecret**——clientSecret
+  属服务端密钥,放端侧是凭据泄露。
 
 ## 排错路径(端侧调云侧失败)
 

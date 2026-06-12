@@ -24,7 +24,7 @@ metadata:
 | 稳定性 | 长时间/随机操作不崩 | 压力遍历、长稳挂测 | 本文 §稳定性 |
 | 兼容性 | 多设备/多系统版本 | 真机矩阵 + 云测 | 本文 §兼容性与云测 |
 | 功耗 | 前后台耗电 | 系统功耗分析/云测专项 | 本文 §专项 |
-| 安全合规 | 权限最小化/数据加密 | 人工核查 + 工具扫描 | security-and-permissions、release-and-compliance |
+| 安全合规 | 权限最小化/数据加密 | 人工核查 + 工具扫描 | security-permissions、release-and-compliance |
 | 真实用户 | Beta 反馈 | AGC 邀请测试/内测分发 | 本文 §内测 |
 
 注意框架澄清:ArkTS/Stage 模型下单元测试框架是 **Hypium**;网上资料提到的

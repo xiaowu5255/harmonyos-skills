@@ -14,12 +14,15 @@ metadata:
 
 # API 版本治理与升级
 
-## 两个版本号的语义(混淆即事故)
+## 三个版本号的语义(混淆即事故)
 
-- **compatibleSdkVersion**:承诺支持的最低系统版本。代码中调用了高于它的
-  API,在老设备上运行时报错。**它决定你的用户覆盖面**。
-- **targetSdkVersion**:按哪个版本的系统行为运行。升它可能改变运行时行为
-  (权限策略、组件默认值等),升级后必须全量回归。
+- **compileSdkVersion**:按哪个版本的 SDK 编译,**决定哪些 API 能通过编译**。
+- **compatibleSdkVersion**:承诺支持的最低系统版本。调用了高于它的 API,在老设备上
+  运行时报错。**它决定你的用户覆盖面**。
+- **targetSdkVersion**(可选):目标运行行为版本。升它可能改变运行时行为(权限策略、
+  组件默认值等),升级后必须全量回归。
+
+口诀:**能否编译看 compileSdkVersion;能否在老设备跑看 compatibleSdkVersion + canIUse 守卫**。
 
 ## 判断"这个 API 我能不能用"的标准动作
 
@@ -34,8 +37,8 @@ metadata:
 
 1. 升级前:`tools/sdk-diff/diff_api.py <旧SDK> <新SDK>` 生成 API 变更清单,
    重点看 removed 与 deprecated 列表与本工程的交集。
-2. 改 build-profile.json5 两个版本号 → 全量编译,逐个清理编译错误
-   (多为 API 签名变更)。
+2. 改 build-profile.json5 的 compileSdkVersion / compatibleSdkVersion(及如有
+   targetSdkVersion)→ 全量编译,逐个清理编译错误(多为 API 签名变更)。
 3. 跑 `/harmony-api-scan` 检查是否仍有高于 compatible 版本的裸调用。
 4. 全量回归重点:权限弹窗行为、后台任务、生命周期时序——target 升级最
    容易在这三处出现"代码没改行为变了"。

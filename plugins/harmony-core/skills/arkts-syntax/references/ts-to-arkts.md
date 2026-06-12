@@ -49,7 +49,11 @@ config.set('extra', 'x');
 config.delete('timeout');
 ```
 
-## 3. 字段初始化(arkts-strict-property-initialization)
+## 3. 字段初始化(强制 TS 严格检查 strictPropertyInitialization,错误码 10605999)
+
+> 注:无独立 `arkts-*` 规则名;ArkTS 通过强制开启 TS 严格类型检查实施。用确定赋值
+> 断言 `!`(`name!: string`)可消除报错,但会触发 `warning: arkts-no-definite-assignment`,
+> 官方不推荐。
 
 ```typescript
 // 错误
@@ -81,18 +85,25 @@ class B implements HasV { v: number = 0 }
 let x: HasV = new B();
 ```
 
-## 5. 解构与展开
+## 5. 解构与展开(arkts-no-destruct-assignment / -decls / -params / -spread)
 
-部分解构/展开写法受限。保险写法是显式访问:
+**解构是错误级禁止,不是"部分受限"**:解构赋值(`arkts-no-destruct-assignment`,10605069)、
+解构变量声明(`arkts-no-destruct-decls`,10605074)、参数解构(`arkts-no-destruct-params`,
+10605091)一律报错。展开运算符(`arkts-no-spread`,10605099)**仅**支持数组/Array 子类/
+TypedArray 在两个场景:传给剩余参数、复制到数组字面量;**对象展开 `{...obj}` 禁止**。
 
 ```typescript
-// 可能受限(视编译器版本)
+// 错误:解构变量声明与解构赋值均禁止
 const { width, height } = getSize();
 
-// 永远安全
+// 正确:显式访问
 const size = getSize();
 const width = size.width;
 const height = size.height;
+
+// 数组展开到剩余参数 / 数组字面量 → 允许
+fn(...arr);  const copy = [...arr];
+// 对象展开 → 禁止,改用逐字段赋值或 Object 构造
 ```
 
 ## 6. 其他高频限制

@@ -49,7 +49,7 @@ metadata:
 - 应用数据一律放沙箱路径(context.filesDir 等),不要假设可访问任意全局路径;
   跨应用共享走 Picker/分享/UDMF,不走"公共目录"思维。
 - 敏感数据落盘:Preferences/RDB 的加密选项 + 数据分级(securityLevel)按
-  数据敏感度设置(见 arkdata-storage);密钥用系统密钥管理,不要硬编码。
+  数据敏感度设置(见 data-storage);密钥用系统密钥管理,不要硬编码。
 
 ## 排查:"权限明明给了还是不行"
 

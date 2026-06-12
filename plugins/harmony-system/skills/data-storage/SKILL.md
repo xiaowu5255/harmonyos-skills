@@ -21,7 +21,7 @@ metadata:
 | 结构化、可查询、量大 | RelationalStore(SQLite) | 当 KV 用(杀鸡用牛刀) |
 | 文件/媒体 | 沙箱文件 + 媒体库接口 | 自造路径访问公共目录 |
 | 跨应用拖拽/分享/剪贴板 | UDMF 统一数据 | 自定义私有格式硬传 |
-| 多端同步 | 分布式 KV / RDB 同步 / 分布式数据对象 | 见 distributed-collaboration 前置清单 |
+| 多端同步 | 分布式 KV / RDB 同步 / 分布式数据对象 | 见 distributed 前置清单 |
 | 云端 | CloudDB(见 cloud-foundation) | |
 
 ## Preferences 要点
@@ -37,15 +37,16 @@ metadata:
 - 查询用谓词(RdbPredicates)而非手拼 SQL 字符串(注入与转义问题);
   确需原生 SQL 用参数化接口。
 - 所有读写是异步的,串行依赖用 await 链;事务接口包裹多写操作。
-- **版本迁移**:自己维护 schema version 表 + 升级脚本;鸿蒙不会替你做
-  自动迁移,无脑改表结构会让老用户升级后崩溃。
+- **版本迁移**:RelationalStore 提供 `store.version`(即 SQLite user_version)作为版本
+  载体,但**不自动改表结构**;升级逻辑(ALTER/建表/数据回填)需自己写——建议读 store.version
+  比对目标版本、n→n+1 增量、整段事务包裹、成功后再 bump version。无脑改表结构会让老用户升级后崩溃。
 
 ## 数据类 bug 排查
 
 - "存了但读出来是旧值":Preferences 忘 flush / 多实例不同 name / 异步时序。
 - "数据库报错打不开":加密参数与建库时不一致 / securityLevel 与设备锁屏
   状态约束冲突 / 沙箱路径误用。
-- "跨端不同步":先过 distributed-collaboration 的五条前置清单。
+- "跨端不同步":先过 distributed 的五条前置清单。
 - 调试时可 `hdc file recv` 拉沙箱内 db 文件本地用 SQLite 工具查看
   (debug 包,且注意加密库拉下来也看不了——这反而可验证加密生效)。
 

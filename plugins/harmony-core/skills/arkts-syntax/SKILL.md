@@ -22,7 +22,10 @@ metadata:
    `targetSdkVersion`。所有回答必须以项目实际锁定的 API 版本为准,不要假设用户在用最新版。
 2. **查本地 SDK 接口声明**。SDK 中的 `.d.ts` / `.d.ets` 文件是 API 签名的唯一真相来源,
    永远比记忆可靠。典型位置(按实际安装路径调整):
-   - DevEco 安装目录或 `~/`下的 SDK 路径:`.../sdk/<版本>/openharmony/ets/api/`
+   - DevEco Studio 安装目录(当前布局,无版本号目录):
+     `<DevEco>/sdk/default/openharmony/ets/api/`(OpenHarmony 基础 API,`@ohos.*`)与
+     `<DevEco>/sdk/default/hms/ets/api/`(华为专有 Kit,`@hms.*`);`@kit.*.d.ts` 聚合声明
+     在对应 `ets/kits/`。macOS 为 `DevEco-Studio.app/Contents/sdk/default/...`。
    - 工程内查找:`grep -r "declare" oh_modules/` 或对可疑 API 名做全局搜索
 3. **对不确定的 API,明确说"需要查证"**,并给出查证方法(本地 d.ts 或官方文档),
    而不是给出一个看起来合理但可能不存在的 API 名。鸿蒙 API 每个季度都在变化,
@@ -40,14 +43,17 @@ metadata:
 4. **禁止 `var`**,只用 `let` / `const`。
 5. **限制结构化类型**。两个形状相同的类不能互相赋值,需要显式继承或实现接口。
 6. **不支持 `#` 私有字段语法**,使用 `private` 关键字。
-7. **限制解构等动态特性**:部分解构写法、`arguments`、原型链操作(`Object.setPrototypeOf`
+7. **禁止解构等动态特性**:解构赋值/解构声明/参数解构一律错误级禁止(对象展开 `{...obj}`
+   也禁止,数组展开仅限剩余参数与数组字面量)、`arguments`、原型链操作(`Object.setPrototypeOf`
    等)被禁止。遇到编译器报 `arkts-` 开头的规则名时,**把规则名原文告诉用户并解释绕行写法**,
    不要只说"语法错误"。
 8. **UI 结构体用 `struct` 而非 `class`**,且自定义组件必须有 `build()` 方法。
 
-## 状态管理装饰器:V1 与 V2 不可混用
+## 状态管理装饰器:V1 与 V2 默认不混用
 
-先判断项目用哪一代状态管理(看现有代码用的装饰器),保持一致,不要混搭:
+先判断项目用哪一代状态管理(看现有代码用的装饰器),保持一致。注意:**API 19 之前不可
+混用;API 19+ 官方提供部分混用能力**(如 @Local 与 @Observed 同用,见官方《状态管理 V1V2
+混用指导》),但同一组件树仍建议保持一代,渐进迁移时再按混用矩阵局部放开。
 
 **V1(存量项目常见)**
 - `@State`:组件内部状态,变化驱动 UI 刷新。只能观察第一层属性变化。
@@ -59,9 +65,12 @@ metadata:
 
 **V2(API 12+ 引入,新项目推荐)**
 - `@ObservedV2` + `@Trace`:类属性级精确观察,天然支持深层嵌套。
-- `@Local`(替代 @State)、`@Param`(替代 @Prop,默认只读)、`@Event`(子→父回调)、
-  `@Provider()` / `@Consumer()`。
-- `@Param` 默认不可在子组件内直接修改——要改就配 `@Event` 回调让父组件改。
+- `@Local`(替代 @State,**禁止从父组件外部初始化**)、`@Param`(替代 @Prop,默认只读)、
+  `@Event`(子→父回调)、`@Provider()` / `@Consumer()`(跨层级双向同步,带括号传 aliasName)。
+- `@Param` 默认只读指**不能整体重新赋值**;复杂对象按引用传入,其属性可改且同步回数据源。
+  需本地改值用 `@Once`(仅初始化同步一次);需把改动写回数据源用 `@Event` 回调。
+- 其他常用:`@Monitor`(状态变化监听)、`@Computed`(计算属性)、`!!` 双向绑定语法、
+  `makeObserved`(把 JSON.parse/三方对象变为可观察,解决"改了不刷新")。
 
 ## build() 函数内的限制
 
@@ -70,8 +79,12 @@ metadata:
 - 不允许声明局部变量、不允许 `console.log` 等任意语句。
 - 条件渲染用 `if/else`,列表用 `ForEach` / `LazyForEach`(长列表必须用 LazyForEach
   并配合 `cachedCount`,否则有性能问题)。
+- 不允许 `switch`(用 `if/else`)、不允许表达式语句。
 - 复杂逻辑提取到 `@Builder` 方法、`@Styles`(通用样式)、`@Extend`(组件级样式扩展)中。
-- `@Builder` 按引用传参时用对象字面量 `{ param: this.value }` 才能保持响应式更新。
+- `@Builder` **默认按值传递,状态变量变化不会触发其内部 UI 刷新**;按引用传参(传对象
+  字面量 `{ param: this.value }`)才保持响应式,且**仅单参数、直接传对象字面量时生效**,
+  多参数不刷新。API 20+ 可用 `UIUtils.makeBinding()` 突破此限制。
+- 隐蔽坑:别在 build()/ForEach 内写 `this.arr.sort()` 等原地修改状态的调用(触发重渲染死循环)。
 
 ## 工程文件速查
 

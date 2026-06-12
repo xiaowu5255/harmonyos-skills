@@ -19,7 +19,9 @@ metadata:
   和**协同**(多设备同时参与,如手机当平板的摄像头)。
 - 底座:分布式软总线(发现/组网/传输,系统自动管理)。
 - 数据层:分布式数据对象(内存对象跨端同步)、分布式 KV/RDB 同步(见
-  arkdata-storage)、跨设备文件访问。
+  data-storage)、跨设备文件访问。
+- HarmonyOS 6 起新增**碰一碰**(NFC/近场一碰流转:传文件/支付/组队)与**服务互通**等
+  轻量跨端触达能力;深度业务接续仍走下文的 onContinue 迁移。
 
 ## 跑通任何分布式功能的前置清单(违反任一条 = 必失败)
 
@@ -35,14 +37,16 @@ metadata:
 
 发起端 UIAbility:
 - module.json5 中该 Ability 配置 `continuable: true`。
-- 实现 `onContinue(wantParam)`:把状态写入 wantParam,返回 AGREE/REJECT。
+- 实现 `onContinue(wantParam)`:把状态写入 wantParam,返回 `AbilityConstant.OnContinueResult`
+  的 AGREE / REJECT / **MISMATCH**(版本不匹配拒绝)。
 
 接收端(同应用):
-- 在 onCreate / onNewWant 中判断 launchReason 为接续,从 want.parameters
-  恢复状态并恢复 UI。
+- 在 onCreate / onNewWant 中判断 `launchParam.launchReason === LaunchReason.CONTINUATION`,
+  从 want.parameters 恢复状态;ArkUI 组件状态恢复用 restoreId 标记 + 调 **restoreWindowStage()** 触发。
 
-注意:onContinue 中只放可序列化的轻量状态;大文件走分布式文件或先落盘。
-API 23+ 增强了自定义组件跨 Ability 迁移能力,使用前确认 compatibleSdkVersion。
+注意:onContinue 中只放可序列化的轻量状态,wantParam 直传建议 **< 100KB**;大文件/大状态走
+分布式数据对象或分布式文件。具体迁移能力随 API 版本演进,使用前查对应版本 changelog 与
+compatibleSdkVersion。
 
 ## 分布式数据对象(轻量状态同步)
 

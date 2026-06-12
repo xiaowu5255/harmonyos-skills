@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.1] - 2026-06-12
+
+### 官方文档核验修正（对照 developer.huawei.com 全量核验 19 个深度 skill）
+- **新增 VERIFICATION.md**：沉淀全部核验结论（结论→信源级别→日期→落地状态），配合「贯穿红线 #2」。
+- **修正照抄即失败的硬错**：`hdc shell bm get -udid` → `--udid`（5 处）；"release 默认开启混淆"
+  → DevEco 5.0.3.600 起默认关闭。
+- **修正编造/失实**：删除 `arkts-strict-property-initialization`（编造规则名）与 distributed
+  "API 23+ 自定义组件跨 Ability 迁移"（疑似杜撰）；解构"部分受限"→错误级禁止（含真实规则名）。
+- **修正过时**：@Styles/@Extend → AttributeModifier；@CustomDialog → openCustomDialog；
+  列表三件套 → 四件套（freezeWhenInactive）；SDK 路径 `sdk/<版本>` → `sdk/default`（openharmony+hms）；
+  Push token 监听刷新 → 冷启动 getToken 比对；证书指纹 → 公钥指纹；taskpool/Worker 补 @Sendable。
+- **补全**：状态管理 V2 补 @Once/@Monitor/@Computed/makeObserved 与 API 19+ 混用；version-guide
+  补 compileSdkVersion；stage-model 补 onNewWant/拉起其他应用(openLink/startAbilityByType)；
+  background-tasks 修正多长时任务并行规则（API21+ 10个）；断点补官方阈值；签名补 signAlg/有效期数值。
+- **一致性**：清除重构后 8 处旧 skill 名交叉引用（huawei-ecosystem-kits/security-and-permissions/
+  distributed-collaboration/arkdata-storage/api-version-migration）。
+- **规约修订**：ROADMAP 转正流程中 references/ 改为按需补充，避免与「未核实 API 不入库」冲突。
+
 ## [0.4.0] - 2026-06-12
 
 ### Phase 3 覆盖率扩展完成（45%→50% Kit 覆盖）

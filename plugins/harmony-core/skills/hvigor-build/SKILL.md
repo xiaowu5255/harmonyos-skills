@@ -43,11 +43,16 @@ metadata:
 
 ## release 混淆:暗坑高发区
 
-release 默认开启代码混淆。**"debug 正常、release 异常/崩溃"九成与混淆有关**:
+**先确认混淆是否开启**:DevEco Studio 5.0.3.600 起新建工程混淆**默认关闭**
+(模块级 build-profile.json5 的 `arkOptions.obfuscation.ruleOptions.enable: false`);
+更早的工程模板或手动开过的工程才默认开。混淆仅在 release 编译生效。一旦开启,
+**"debug 正常、release 异常/崩溃"九成与混淆有关**:
 - 反射、动态调用、JSON 序列化字段名、native 回调的类/方法名被混淆 → 在
-  `obfuscation-rules.txt` 中 keep。
-- 排查法:构建产物中查混淆映射文件,对照崩溃栈反解;或临时关混淆验证猜想
-  (仅验证,不要当修复)。
+  `obfuscation-rules.txt` 中 keep(`-keep`/`-keep-property-name` 等)。
+- 排查法:查混淆映射文件 `build/.../release/obfuscation/nameCache.json`,对照崩溃栈
+  反解;或临时关混淆(`enable: false`)验证猜想(仅验证,不要当修复)。
+- 上架前提醒:发布包通常应**显式开启**混淆(`enable: true`)以保护代码,开启后
+  必须真机实测核心流程。
 
 ## 构建命令(CI 用)
 

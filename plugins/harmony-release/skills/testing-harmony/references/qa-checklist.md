@@ -26,7 +26,7 @@
 - [ ] 核心列表滑动无明显丢帧(Frame 模板验证)
 - [ ] 退后台后无残留高频任务(后台任务类型合规)
 
-## 安全合规(详见 security-and-permissions / release-and-compliance)
+## 安全合规(详见 security-permissions / release-and-compliance)
 - [ ] 权限清单最小化,user_grant 均有真实 reason
 - [ ] 用户同意隐私政策前抓包验证零数据上报
 - [ ] 敏感数据加密存储(密钥走系统密钥库,无硬编码)

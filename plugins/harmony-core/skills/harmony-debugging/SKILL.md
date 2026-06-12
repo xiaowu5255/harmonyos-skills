@@ -57,7 +57,7 @@ metadata:
 常用命令(在用户机器上执行或指导用户执行):
 ```bash
 hdc list targets                 # 确认设备已连接
-hdc shell bm get -udid           # 获取设备 UDID(注册调试设备要用)
+hdc shell bm get --udid          # 获取设备 UDID(旧写法 -udid 已失效,用 --udid 或 -u)
 hdc install <path/to/hap>        # 命令行安装,错误信息比 IDE 更直接
 hdc shell bm dump -n <bundleName>  # 查看已安装包信息
 ```

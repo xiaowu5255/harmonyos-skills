@@ -22,7 +22,8 @@ metadata:
 
 1. 签名:发布证书 + 发布 Profile(调试 Profile 签的包提不了审,见
    signing-and-certificates 第 3 步)。
-2. 混淆:release 默认混淆,**必须真机实测 release 包核心流程**——
+2. 混淆:DevEco 5.0.3.600 起新建工程混淆默认关闭,发布包应**显式开启**
+  (`ruleOptions.enable: true`)保护代码;**开启后必须真机实测 release 包核心流程**——
   "debug 全对 release 崩"专题见 hvigor-build 混淆节。
 3. 构建产物:上架用 App Pack(.app,hvigorw assembleApp),不是单 HAP。
 4. 清理:日志开关关闭、测试入口/调试菜单移除、网络环境指向生产。
@@ -39,7 +40,7 @@ metadata:
    不得收集"——同意前就初始化统计/推送 SDK 是典型驳回点,SDK 初始化
    必须后置到用户同意之后。
 2. **权限最小化**:requestPermissions 里没用到的权限删掉;每个 user_grant
-   权限的 reason 用途说明真实、具体(见 security-and-permissions)。
+   权限的 reason 用途说明真实、具体(见 security-permissions)。
 3. **第三方 SDK 清单**:声明所集成 SDK 及其收集行为,与隐私声明一致。
 4. 账号类应用提供注销入口;UGC 类有举报/审核机制;特定行业备好资质。
 

@@ -58,7 +58,7 @@
 ### 真机安装失败但模拟器正常
 - 根因(按概率):调试 Profile 未注册该真机 UDID > 受限权限未在 Profile 中授权 >
   设备未开启开发者模式/USB 调试。
-- 修复:`hdc shell bm get -udid` 取 UDID → AGC 设备管理中注册 → 重新生成调试
+- 修复:`hdc shell bm get --udid` 取 UDID → AGC 设备管理中注册 → 重新生成调试
   Profile → 重签名安装。
 - 版本:全版本。
 
