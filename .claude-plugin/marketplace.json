@@ -1,0 +1,34 @@
+{
+  "name": "harmonyos-skills",
+  "owner": {
+    "name": "YOUR_NAME",
+    "email": "you@example.com"
+  },
+  "metadata": {
+    "description": "HarmonyOS 6 (API 20-24) 开发专家技能集:ArkTS 语法、构建调试、签名发布、端云一体化。技能遵循 Agent Skills 开放标准,可移植到 Codex / OpenCode 等工具。",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "harmony-core",
+      "source": "./plugins/harmony-core",
+      "description": "鸿蒙开发核心:ArkTS 语法规则与调试方法论。所有鸿蒙开发者必装。",
+      "version": "0.1.0",
+      "keywords": ["harmonyos", "arkts", "arkui", "hvigor", "debugging"]
+    },
+    {
+      "name": "harmony-cloud",
+      "source": "./plugins/harmony-cloud",
+      "description": "端云一体化开发:Cloud Foundation Kit、云函数、云数据库、AGC 工程绑定。",
+      "version": "0.1.0",
+      "keywords": ["harmonyos", "cloud", "agc", "serverless"]
+    },
+    {
+      "name": "harmony-release",
+      "source": "./plugins/harmony-release",
+      "description": "签名证书与发布:p12/CSR/cer/p7b 全链路、调试设备注册、签名排错。",
+      "version": "0.1.0",
+      "keywords": ["harmonyos", "signing", "certificate", "release"]
+    }
+  ]
+}

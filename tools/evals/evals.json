@@ -1,0 +1,102 @@
+{
+  "skill_name": "harmonyos-skills",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。",
+  "evals": [
+    {
+      "id": 1,
+      "skill": "arkts-syntax",
+      "prompt": "我把一段 TypeScript 工具类复制进鸿蒙工程的 .ets 文件,编译报了一堆 arkts-no-any-unknown 和属性初始化错误,帮我改成能编译通过的写法",
+      "expected_output": "触发 arkts-syntax;读取/询问 compatibleSdkVersion;按 ts-to-arkts 参考逐条改写;不使用 any"
+    },
+    {
+      "id": 2,
+      "skill": "harmony-debugging",
+      "prompt": "我的鸿蒙应用在模拟器上正常,装到真机上提示 install failed,怎么排查?",
+      "expected_output": "触发 harmony-debugging;按层定位到签名/安装层;给出 UDID 注册排查路径而不是泛泛建议"
+    },
+    {
+      "id": 3,
+      "skill": "signing-and-certificates",
+      "prompt": "换了一台新的测试手机后 HAP 装不上了,报 signature verify 失败",
+      "expected_output": "触发 signing 技能;第一步即核对 Profile 设备列表与新机 UDID;提醒重新生成 p7b"
+    },
+    {
+      "id": 4,
+      "skill": "cloud-foundation",
+      "prompt": "端云一体化工程里端侧调云函数一直失败,云函数代码我感觉没问题",
+      "expected_output": "触发 cloud-foundation;先走绑定自检清单;建议 AGC 控制台直测云函数做二分定位"
+    },
+    {
+      "id": 5,
+      "skill": "arkts-syntax",
+      "prompt": "鸿蒙页面里我修改了列表项对象的一个嵌套属性,数据变了但界面不刷新",
+      "expected_output": "触发 arkts-syntax;识别为 V1 状态管理深层观察问题;给出 @Observed/@ObjectLink 或 V2 方案"
+    },
+    {
+      "id": 6,
+      "skill": "none(负样本)",
+      "prompt": "帮我写一个 Python 脚本批量重命名文件",
+      "expected_output": "不触发任何鸿蒙技能"
+    },
+    {
+      "id": 7,
+      "skill": "background-tasks",
+      "prompt": "我的鸿蒙应用切到后台后下载就停了,有什么办法让它在后台继续跑?",
+      "expected_output": "触发 background-tasks;映射到任务类型(长时/延迟)而非教用户绕过管控"
+    },
+    {
+      "id": 8,
+      "skill": "security-and-permissions",
+      "prompt": "我要做一个让用户选一张照片上传的功能,需要申请什么权限?",
+      "expected_output": "触发权限技能;答案是 PhotoViewPicker 免权限,而不是列权限清单"
+    },
+    {
+      "id": 9,
+      "skill": "atomic-services-and-cards",
+      "prompt": "我做的桌面服务卡片,数据更新了但卡片内容一直不变",
+      "expected_output": "触发卡片技能;按三条刷新通路排查;重点核查 formId 持久化与刷新频率管控"
+    },
+    {
+      "id": 10,
+      "skill": "multi-device-adaptation",
+      "prompt": "这个页面在手机上正常,在折叠屏展开后布局全乱了,怎么系统性适配?",
+      "expected_output": "触发一多技能;按窗口断点而非设备型号设计;给出栅格/断点监听方案"
+    },
+    {
+      "id": 11,
+      "skill": "api-version-migration",
+      "prompt": "想把工程的 compatibleSdkVersion 从 20 升到 23,要注意什么?",
+      "expected_output": "触发版本迁移技能;给出 diff→编译→api-scan→回归→老设备验证的流程"
+    },
+    {
+      "id": 12,
+      "skill": "huawei-ecosystem-kits",
+      "prompt": "接了华为账号一键登录,代码照文档写的,但一直报授权失败",
+      "expected_output": "触发生态 Kit 技能;先走 AGC 前置五条清单(尤其证书指纹),再查代码"
+    },
+    {
+      "id": 13,
+      "skill": "release-and-compliance",
+      "prompt": "应用上架被驳回说隐私不合规,提示同意隐私政策前收集了用户信息",
+      "expected_output": "触发合规技能;定位 SDK 初始化时机早于用户同意;给出后置初始化整改方案"
+    },
+    {
+      "id": 14,
+      "skill": "performance-tuning",
+      "prompt": "App 冷启动要好几秒才进首页,帮我优化",
+      "expected_output": "触发性能技能;先要求 Profiler Launch 数据定位,再按入口瘦身清单优化"
+    },
+    {
+      "id": 15,
+      "skill": "testing-harmony",
+      "prompt": "给我们的鸿蒙 App 制定一套上架前的完整测试方案,要覆盖兼容性和稳定性",
+      "expected_output": "触发 testing-harmony;按 QA 全景图分维度输出;包含云测与压力遍历;引用 qa-checklist"
+    },
+    {
+      "id": 16,
+      "skill": "testing-harmony",
+      "prompt": "用 Hypium 给这个工具类写单元测试,顺便教我为什么我的用例写了但跑不起来",
+      "expected_output": "触发 testing-harmony;给出 Hypium 骨架;指出测试入口注册问题;不提 JUnit"
+    }
+  ]
+}

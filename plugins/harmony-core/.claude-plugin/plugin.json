@@ -1,0 +1,7 @@
+{
+  "name": "harmony-core",
+  "version": "0.1.0",
+  "description": "HarmonyOS 6 (API 20-24) 开发核心能力:ArkTS 语法规则、状态管理装饰器、构建与运行时调试方法论。",
+  "author": { "name": "YOUR_NAME" },
+  "keywords": ["harmonyos", "arkts", "arkui", "hvigor", "hdc", "hilog"]
+}

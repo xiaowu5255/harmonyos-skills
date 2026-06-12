@@ -1,0 +1,62 @@
+# 自进化流水线第一段:每周监测官方信号源变化,变化时自动开 issue 提醒维护者。
+# 这是诚实的"半自动"版本:监测自动化,知识更新仍由人(或人审的 agent PR)完成。
+# 使用前:① 替换 WATCH_URLS 为你确认有效的官方页面;② 仓库开启 Actions 写权限。
+name: weekly-sdk-watch
+on:
+  schedule:
+    - cron: "0 2 * * 1"   # 每周一 02:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and hash watched pages
+        id: hash
+        run: |
+          set -e
+          mkdir -p .watch
+          # TODO: 替换为实际监测页(版本说明/Release Notes/SDK 下载页等)
+          WATCH_URLS="https://developer.huawei.com/consumer/cn/doc/ https://developer.huawei.com/consumer/cn/deveco-studio/"
+          NEW=""
+          for u in $WATCH_URLS; do
+            h=$(curl -fsSL --max-time 60 "$u" | sha256sum | cut -d' ' -f1) || h="fetch-failed"
+            NEW="$NEW$u $h\n"
+          done
+          printf "%b" "$NEW" > .watch/current.txt
+          if [ -f .watch/last.txt ] && ! diff -q .watch/last.txt .watch/current.txt >/dev/null; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+          cp .watch/current.txt .watch/last.txt
+      - name: Commit watch state
+        run: |
+          git config user.name "sdk-watch-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add .watch/last.txt && git commit -m "chore: update sdk watch state" || true
+          git push || true
+      - name: Open issue on change
+        if: steps.hash.outputs.changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[sdk-watch] 监测页面发生变化 ${new Date().toISOString().slice(0,10)}`,
+              labels: ['sdk-watch'],
+              body: [
+                '官方监测页内容发生变化,请人工确认是否有新 API 版本/工具发布。',
+                '',
+                '更新流程(见 api-version-migration 技能"维护本插件自身"节):',
+                '1. 下载新旧 SDK,运行 `python3 tools/sdk-diff/diff_api.py <旧> <新> -o tools/sdk-diff/api-changes-<N>.md`',
+                '2. 据 diff 更新受影响技能与版本标注',
+                '3. 跑 `tools/evals/evals.json` 回归后提 PR'
+              ].join('\n')
+            })
