@@ -6,7 +6,7 @@ description: >-
   本技能。
 license: MIT
 requires: 0-media-index
-kits: [@kit.AudioKit]
+kits: ["@kit.AudioKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

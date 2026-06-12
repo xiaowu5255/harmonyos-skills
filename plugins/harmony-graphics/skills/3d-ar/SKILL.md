@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-graphics-index
-kits: [@kit.ArkGraphics3D, @kit.AREngine, @kit.SpatialReconKit, @kit.XEngineKit]
+kits: ["@kit.ArkGraphics3D", "@kit.AREngine", "@kit.SpatialReconKit", "@kit.XEngineKit"]
 ---
 
 # 3D 与 AR：场景渲染与增强现实
@@ -18,13 +18,13 @@ kits: [@kit.ArkGraphics3D, @kit.AREngine, @kit.SpatialReconKit, @kit.XEngineKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 3D 模型展示 | `ArkGraphics3D.loadModel()` + Scene 管理 | ArkGraphics3D |
-| AR 平面放置 | `AREngine.createHitTestSession()` | AREngine |
-| AR 人脸特效 | `AREngine.FaceTrackingConfig` | AREngine |
-| 空间扫描 | `SpatialReconKit.startScanning()` | SpatialReconKit |
-| GPU 加速计算 | `XEngineKit.Vulkan` 或 OpenGL ES | XEngineKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 3D 模型展示 | ArkGraphics3D | [3D 场景渲染指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-3d-model) |
+| AR 平面放置 | AREngine | [AR 平面检测指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ar-engine-hit-test) |
+| AR 人脸特效 | AREngine | [AR 人脸跟踪指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ar-engine-face-tracking) |
+| 空间扫描 | SpatialReconKit | [空间建模指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/spatial-recon) |
+| GPU 加速计算 | XEngineKit | [GPU 加速指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/xengine-overview) |
 
 ## P2 完善计划
 
@@ -36,3 +36,4 @@ kits: [@kit.ArkGraphics3D, @kit.AREngine, @kit.SpatialReconKit, @kit.XEngineKit]
 - [ ] Spatial Recon Kit 的空间扫描与 3D 网格导出流程
 - [ ] XEngine Kit Vulkan 管线的初始化与计算着色器示例
 - [ ] 相机权限与 AR 场景联合使用的权限申请流程
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

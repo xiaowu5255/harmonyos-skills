@@ -5,7 +5,7 @@ description: >-
   WebView 调试。涉及加载网页、JS 与 ArkTS 互调、Web 性能优化时使用本技能。
 license: MIT
 requires: 0-core-index
-kits: [@kit.ArkWeb]
+kits: ["@kit.ArkWeb"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

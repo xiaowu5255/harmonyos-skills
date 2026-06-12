@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-media-index
-kits: [@kit.AVSessionKit, @kit.DRMKit, @kit.ScanKit]
+kits: ["@kit.AVSessionKit", "@kit.DRMKit", "@kit.ScanKit"]
 ---
 
 # 媒体系统服务：播控、DRM 与扫码
@@ -18,13 +18,13 @@ kits: [@kit.AVSessionKit, @kit.DRMKit, @kit.ScanKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 媒体播控 | `AVSession.createAVSession(context)` + 设置 metadata | AVSessionKit |
-| 投屏到电视 | `AVSession.startCast()` + 设备发现 | AVSessionKit |
-| DRM 视频播放 | `MediaKeySystem` → `MediaKeySession` → 解密 | DRMKit |
-| 二维码扫码 | `ScanKit.startScan()` 或 `ScanUtil.decodeFromPixels()` | ScanKit |
-| 铃声设置 | `RingtoneManager.setRingtone()` | RingtoneKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 媒体播控 | AVSessionKit | [播控框架指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-overview) |
+| 投屏到电视 | AVSessionKit | [投屏指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-cast) |
+| DRM 视频播放 | DRMKit | [DRM 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/drm-overview) |
+| 二维码扫码 | ScanKit | [统一扫码指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/scan-barcode) |
+| 铃声设置 | RingtoneKit | [铃声服务指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ringtone) |
 
 ## P2 完善计划
 
@@ -36,3 +36,4 @@ kits: [@kit.AVSessionKit, @kit.DRMKit, @kit.ScanKit]
 - [ ] Scan Kit 自定义扫码 UI 与相机权限联合处理方案
 - [ ] 后台播控的连续任务(`continuousTask`)与音频焦点配合
 - [ ] 多场景联合：扫码 → DRM 校验 → 投屏播放的端到端流程
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

@@ -6,7 +6,7 @@ description: >-
   使用本技能。
 license: MIT
 requires: 0-ecosystem-index
-kits: [@kit.LocationKit, @kit.MapKit]
+kits: ["@kit.LocationKit", "@kit.MapKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

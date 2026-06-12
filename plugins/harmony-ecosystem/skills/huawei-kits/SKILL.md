@@ -1,5 +1,5 @@
 ---
-name: huawei-ecosystem-kits
+name: huawei-kits
 description: >-
   华为生态 Kit 接入:华为账号一键登录(Account Kit)、推送(Push Kit)、应用内
   支付(IAP Kit)、地图/定位、扫码(Scan Kit)等开放能力。凡是涉及接入任何

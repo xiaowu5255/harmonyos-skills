@@ -1,5 +1,5 @@
 ---
-name: api-version-migration
+name: version-guide
 description: >-
   鸿蒙 API 版本治理与升级:compatibleSdkVersion/targetSdkVersion 语义、
   canIUse 运行时探测、@since/@deprecated 注释解读、SDK 版本间 API diff、

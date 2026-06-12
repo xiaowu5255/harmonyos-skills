@@ -5,7 +5,7 @@ description: >-
   网络状态监听、连接管理。涉及调用API、文件上传下载、实时通信时使用本技能。
 license: MIT
 requires: 0-system-index
-kits: [@kit.NetworkKit, @kit.NetworkBoostKit]
+kits: ["@kit.NetworkKit", "@kit.NetworkBoostKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-ai-index
-kits: [@kit.NaturalLanguageKit]
+kits: ["@kit.NaturalLanguageKit"]
 ---
 
 # 自然语言处理：分词、实体与意图
@@ -18,14 +18,14 @@ kits: [@kit.NaturalLanguageKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 中文分词 | `NaturalLanguageKit.createWordSegmenter()` | NaturalLanguageKit |
-| 实体提取 | `NaturalLanguageKit.createEntityExtractor()` | NaturalLanguageKit |
-| 意图识别 | `NaturalLanguageKit.createIntentDetector()` | NaturalLanguageKit |
-| 文本分类 | `NaturalLanguageKit.createTextClassifier()` | NaturalLanguageKit |
-| 语义相似度 | `TextEmbedding.computeSimilarity()` | NaturalLanguageKit |
-| 搜索关键词提取 | 分词 + 词性过滤 + 实体加权 | NaturalLanguageKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 中文分词 | NaturalLanguageKit | [分词指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-word-segmentation) |
+| 实体提取 | NaturalLanguageKit | [实体识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-entity-extraction) |
+| 意图识别 | NaturalLanguageKit | [意图理解指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-intent-detection) |
+| 文本分类 | NaturalLanguageKit | [文本分类指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-text-classification) |
+| 语义相似度 | NaturalLanguageKit | [文本嵌入指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-text-embedding) |
+| 搜索关键词提取 | NaturalLanguageKit | [关键词提取指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-keyword-extraction) |
 
 ## P2 完善计划
 
@@ -37,3 +37,4 @@ kits: [@kit.NaturalLanguageKit]
 - [ ] TextEmbedding 的向量存储与检索(结合向量数据库)的应用示例
 - [ ] 多 Kit 联合：语音识别 → 分词 → 实体提取 → 意图执行 的端到端流水线
 - [ ] 端侧 NLP 与云侧大模型的混合推理策略
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

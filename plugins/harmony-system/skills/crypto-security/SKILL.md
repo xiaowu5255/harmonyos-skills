@@ -6,7 +6,7 @@ description: >-
   涉及数据加密、安全存储、指纹/人脸登录时使用本技能。
 license: MIT
 requires: 0-system-index
-kits: [@kit.CryptoArchitectureKit, @kit.UniversalKeystoreKit, @kit.UserAuthenticationKit]
+kits: ["@kit.CryptoArchitectureKit", "@kit.UniversalKeystoreKit", "@kit.UserAuthenticationKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

@@ -281,8 +281,11 @@ kits:
 6. Agent 再主动加载 performance-tuning → 读取 Profiler 工作流 + 入口瘦身清单
 7. 输出诊断步骤
 
-全程加载：3 个 skill × 平均 1KB = ~3KB context
-vs 加载 19 个 skill × 平均 2KB = ~38KB（当前结构）
+全程加载：3 个 skill × 平均 1KB = ~3KB context。
+
+> **注意**：Agent Skills 的 body 内容本就是按 description 触发按需加载的，旧结构下也不会 19 个 skill 全量加载。
+> 但渐进架构的真实收益在于：(1) 47 个 skill 的 description 元数据开销固定 ~3-5KB，通过领域拆分使路由更精准；
+> (2) 索引层提供全景发现兜底——当用户需求模糊时 agent 可通过 harmony-index 定位到正确的领域。
 ```
 
 ### 场景：用户说"做一个拍照上传功能"
@@ -339,7 +342,7 @@ vs 加载 19 个 skill × 平均 2KB = ~38KB（当前结构）
 
 | 决策 | 选项 | 选择 | 理由 |
 |------|------|------|------|
-| 索引 skill 命名 | `index` / `{domain}-overview` / `0-{domain}` | `0-{domain}-index` | `0-` 前缀确保排序在最前 |
+| 索引 skill 命名 | `index` / `{domain}-overview` / `0-{domain}` | `0-{domain}-index` | 文件系统排序确保索引在目录列表首位，方便人工查看（对 description 路由无影响） |
 | 索引 skill 是否可独立使用 | 纯路由 / 含领域原则 | 含 1-2 条核心原则 | 纯路由太单薄，加载后没有获得感 |
 | 深度 skill 是否引用索引 | 显式 `requires` / 仅 description 暗示 | 显式 `requires` | 多一个路由信号减轻 description 负担 |
 | 跨 plugin 迁移已有 skill | 保留路径 / 移动路径 | 移动路径 | 归属于语义正确的 plugin，长期可维护 |
@@ -348,11 +351,14 @@ vs 加载 19 个 skill × 平均 2KB = ~38KB（当前结构）
 
 ## 八、量化目标
 
-| 指标 | 当前 | 目标 |
-|------|------|------|
-| Skill 数量 | 19 | ~45（含索引层 8 个） |
-| Plugin 数量 | 3 | 8 |
-| 平均加载 skill 数/请求 | 14（全加载） | ≤5（渐进加载） |
-| context 消耗/请求 | ~38KB | ≤10KB |
-| Kit 覆盖率 | 19% | ≥50% |
-| 单 skill 最大字数 | ~1200 词 | 不变 |
+| 指标 | v0.1.0 | v0.2.0 | 目标(v0.3.0+) |
+|------|--------|--------|---------------|
+| Skill 数量 | 19 | 47 | ~50（P2 占位升级为深度） |
+| Plugin 数量 | 3 | 8 | 8（稳定，不再扩展） |
+| 深度 skill 数量 | 19 | 35（含 P0+P1 新增 11） | ~45（P2 补齐） |
+| Kit 覆盖率 | ~19% | ~45% | ≥55% |
+| 单 skill 最大字数 | ~1200 词 | 不变 | 不变 |
+
+> **关于 context 开销**：Agent Skills 的 body 内容按 description 触发按需加载，不会全量载入。
+> 重构前后的真实变化是：47 个 skill 的 name+description 元数据常驻 context（约 3-5KB，vs 旧版 19 个约 1.5KB），
+> 对终端用户影响可忽略。收益在于更精准的路由和索引层的全景发现兜底。

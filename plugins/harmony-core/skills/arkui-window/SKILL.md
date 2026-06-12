@@ -5,7 +5,7 @@ description: >-
   刷新率。涉及多窗口、悬浮窗权限、横竖屏切换时使用本技能。
 license: MIT
 requires: 0-core-index
-kits: [@kit.ArkUI]
+kits: ["@kit.ArkUI"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

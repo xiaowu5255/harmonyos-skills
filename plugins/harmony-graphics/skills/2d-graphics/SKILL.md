@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-graphics-index
-kits: [@kit.ArkGraphics2D, @kit.GraphicsAccelerateKit]
+kits: ["@kit.ArkGraphics2D", "@kit.GraphicsAccelerateKit"]
 ---
 
 # 2D 图形：绘制、Canvas 与加速
@@ -18,14 +18,14 @@ kits: [@kit.ArkGraphics2D, @kit.GraphicsAccelerateKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 自定义绘制 | `RenderNode.draw(canvas)` + Canvas API | ArkGraphics2D |
-| 离屏渲染缓冲 | `DrawingContext.createSurface()` | ArkGraphics2D |
-| 高性能动画 | `DisplaySync` + `GraphicsAccelerateKit` | ArkGraphics2D, GraphicsAccelerateKit |
-| 图表绘制 | Canvas 路径/文字/渐变 API | ArkGraphics2D |
-| 图片合成 | `Canvas.drawImage()` + 混合模式 | ArkGraphics2D |
-| GPU 加速 | `GraphicsAccelerateKit` 卸载绘制管线 | GraphicsAccelerateKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 自定义绘制 | ArkGraphics2D | [Canvas 绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-canvas-drawing) |
+| 离屏渲染缓冲 | ArkGraphics2D | [离屏渲染指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-offscreen) |
+| 高性能动画 | ArkGraphics2D, GraphicsAccelerateKit | [DisplaySync 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-display-sync) |
+| 图表绘制 | ArkGraphics2D | [图表绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-chart) |
+| 图片合成 | ArkGraphics2D | [图片合成指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-image) |
+| GPU 加速 | GraphicsAccelerateKit | [图形加速指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/graphics-accelerate) |
 
 ## P2 完善计划
 
@@ -37,3 +37,4 @@ kits: [@kit.ArkGraphics2D, @kit.GraphicsAccelerateKit]
 - [ ] Graphics Accelerate Kit 开启与关闭的性能对比数据
 - [ ] 离屏渲染 Surface 创建与像素回读的典型场景
 - [ ] 大屏/折叠屏设备的绘制分辨率自适应方案
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

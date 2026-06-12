@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-media-index
-kits: [@kit.AVCodecKit, @kit.ImageKit, @kit.MediaKit, @kit.MediaLibraryKit]
+kits: ["@kit.AVCodecKit", "@kit.ImageKit", "@kit.MediaKit", "@kit.MediaLibraryKit"]
 ---
 
 # 媒体处理：编解码、图片编辑与媒体库
@@ -18,14 +18,14 @@ kits: [@kit.AVCodecKit, @kit.ImageKit, @kit.MediaKit, @kit.MediaLibraryKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 视频转码 | `AVCodecKit.createVideoDecoder/Encoder` | AVCodecKit |
-| 图片压缩 | `ImageSource + ImagePacker(packToFile)` | ImageKit |
-| 图片裁剪/旋转 | `PixelMap.crop() / rotate()` | ImageKit |
-| 音视频播放 | `AVPlayer.create()` | MediaKit |
-| 录音/录像 | `AVRecorder.create()` | MediaKit, AudioKit |
-| 媒体文件查询 | `MediaLibraryKit.getFileAssets()` | MediaLibraryKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 视频转码 | AVCodecKit | [视频编解码指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avcodec-video-codec) |
+| 图片压缩 | ImageKit | [图片压缩指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/image-compression) |
+| 图片裁剪/旋转 | ImageKit | [像素处理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/image-pixelmap) |
+| 音视频播放 | MediaKit | [播放指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-playback) |
+| 录音/录像 | MediaKit, AudioKit | [录制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-recorder) |
+| 媒体文件查询 | MediaLibraryKit | [媒体库指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-library) |
 
 ## P2 完善计划
 
@@ -37,3 +37,4 @@ kits: [@kit.AVCodecKit, @kit.ImageKit, @kit.MediaKit, @kit.MediaLibraryKit]
 - [ ] 媒体库权限(`READ_MEDIA`/`WRITE_MEDIA`)与文件访问路径规则
 - [ ] 硬件编解码能力查询与 fallback 策略(软解切换)
 - [ ] 批量图片处理的 TaskPool 并发优化方案
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

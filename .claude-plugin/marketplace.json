@@ -5,30 +5,65 @@
     "email": "you@example.com"
   },
   "metadata": {
-    "description": "HarmonyOS 6 (API 20-24) 开发专家技能集:ArkTS 语法、构建调试、签名发布、端云一体化。技能遵循 Agent Skills 开放标准,可移植到 Codex / OpenCode 等工具。",
-    "version": "0.1.0"
+    "description": "HarmonyOS 6 (API 20-24) 开发专家技能集: 8 plugin / 47 skill 三层渐进式架构,覆盖应用框架/系统/媒体/图形/AI/生态/发布全流程。",
+    "version": "0.2.0"
   },
   "plugins": [
     {
-      "name": "harmony-core",
-      "source": "./plugins/harmony-core",
-      "description": "鸿蒙开发核心:ArkTS 语法规则与调试方法论。所有鸿蒙开发者必装。",
-      "version": "0.1.0",
-      "keywords": ["harmonyos", "arkts", "arkui", "hvigor", "debugging"]
+      "name": "harmony-platform",
+      "source": "./plugins/harmony-platform",
+      "description": "平台入口:总索引 + API 版本迁移。所有鸿蒙开发者必装。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "index", "version", "migration"]
     },
     {
-      "name": "harmony-cloud",
-      "source": "./plugins/harmony-cloud",
-      "description": "端云一体化开发:Cloud Foundation Kit、云函数、云数据库、AGC 工程绑定。",
-      "version": "0.1.0",
-      "keywords": ["harmonyos", "cloud", "agc", "serverless"]
+      "name": "harmony-core",
+      "source": "./plugins/harmony-core",
+      "description": "应用框架:ArkTS/ArkUI/Stage模型/ArkWeb/构建/调试/元服务/多设备适配。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "arkts", "arkui", "web", "build", "debugging", "atomic", "adaptive"]
+    },
+    {
+      "name": "harmony-system",
+      "source": "./plugins/harmony-system",
+      "description": "系统能力:后台任务/权限/网络/加密/文件/存储/连接/分布式/Native。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "network", "security", "storage", "encryption", "bluetooth", "distributed", "native"]
+    },
+    {
+      "name": "harmony-media",
+      "source": "./plugins/harmony-media",
+      "description": "多媒体:音频播放录制/相机/编解码/图片处理/播控/DRM。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "audio", "camera", "codec", "media", "drm"]
+    },
+    {
+      "name": "harmony-graphics",
+      "source": "./plugins/harmony-graphics",
+      "description": "图形渲染:2D绘制/3D渲染/AR增强现实/空间感知。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "graphics", "2d", "3d", "ar", "spatial"]
+    },
+    {
+      "name": "harmony-ai",
+      "source": "./plugins/harmony-ai",
+      "description": "AI智能:视觉AI/语音AI/NLP/端侧推理/Agent。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "ai", "vision", "speech", "nlp", "inference"]
+    },
+    {
+      "name": "harmony-ecosystem",
+      "source": "./plugins/harmony-ecosystem",
+      "description": "应用服务:账号/推送/支付/通知/地图/云开发/分享。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "account", "push", "payment", "notification", "map", "cloud"]
     },
     {
       "name": "harmony-release",
       "source": "./plugins/harmony-release",
-      "description": "签名证书与发布:p12/CSR/cer/p7b 全链路、调试设备注册、签名排错。",
-      "version": "0.1.0",
-      "keywords": ["harmonyos", "signing", "certificate", "release"]
+      "description": "发布运维:性能优化/QA测试/签名证书/上架合规。",
+      "version": "0.2.0",
+      "keywords": ["harmonyos", "performance", "testing", "signing", "release", "compliance"]
     }
   ]
 }

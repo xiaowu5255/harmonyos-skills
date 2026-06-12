@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-ai-index
-kits: [@kit.SpeechKit, @kit.CoreSpeechKit]
+kits: ["@kit.SpeechKit", "@kit.CoreSpeechKit"]
 ---
 
 # 语音 AI：识别、合成与字幕
@@ -18,14 +18,14 @@ kits: [@kit.SpeechKit, @kit.CoreSpeechKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| TTS 文本朗读 | `SpeechKit.createTextToSpeechEngine()` | SpeechKit |
-| 实时语音识别 | `CoreSpeechKit.createSpeechRecognizer()` | CoreSpeechKit |
-| AI 字幕生成 | `SpeechKit.createAISubtitle()` | SpeechKit |
-| 离线语音识别 | `SpeechRecognizer` + 离线模型 | CoreSpeechKit |
-| 多语种朗读 | `TextToSpeechEngine.setLanguage()` | SpeechKit |
-| 语音指令控制 | 识别 → NLP 意图解析 → 动作 | CoreSpeechKit, NaturalLanguageKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| TTS 文本朗读 | SpeechKit | [TTS 朗读指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-tts) |
+| 实时语音识别 | CoreSpeechKit | [语音识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-recognition) |
+| AI 字幕生成 | SpeechKit | [AI 字幕指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-ai-subtitle) |
+| 离线语音识别 | CoreSpeechKit | [离线识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-offline-recognition) |
+| 多语种朗读 | SpeechKit | [TTS 语种配置](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-tts-language) |
+| 语音指令控制 | CoreSpeechKit, NaturalLanguageKit | [语音指令集成](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-voice-command) |
 
 ## P2 完善计划
 
@@ -37,3 +37,4 @@ kits: [@kit.SpeechKit, @kit.CoreSpeechKit]
 - [ ] 离线语音识别的模型下载、安装与切换方案
 - [ ] 麦克风权限与音频焦点配合(语音识别期间与其他音频的协调)
 - [ ] TTS 朗读与 AVSession 播控的集成(朗读暂停/恢复/进度)
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

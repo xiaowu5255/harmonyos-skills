@@ -1,5 +1,5 @@
 ---
-name: arkdata-storage
+name: data-storage
 description: >-
   鸿蒙数据持久化与管理(ArkData):Preferences 轻量存储、RelationalStore
   关系型数据库、统一数据通路 UDMF、分布式数据同步、加密与数据分级。凡是涉及

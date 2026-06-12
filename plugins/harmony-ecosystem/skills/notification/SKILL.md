@@ -5,7 +5,7 @@ description: >-
   通知渠道、跨设备协同通知。涉及推送、状态栏消息、桌面角标时使用本技能。
 license: MIT
 requires: 0-ecosystem-index
-kits: [@kit.NotificationKit]
+kits: ["@kit.NotificationKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

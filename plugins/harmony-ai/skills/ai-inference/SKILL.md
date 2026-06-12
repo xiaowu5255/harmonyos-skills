@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-ai-index
-kits: [@kit.MindSporeLiteKit, @kit.NeuralNetworkRuntimeKit, @kit.CANNKit, @kit.AgentFrameworkKit]
+kits: ["@kit.MindSporeLiteKit", "@kit.NeuralNetworkRuntimeKit", "@kit.CANNKit", "@kit.AgentFrameworkKit"]
 ---
 
 # 端侧 AI 推理：模型部署与智能体
@@ -18,14 +18,14 @@ kits: [@kit.MindSporeLiteKit, @kit.NeuralNetworkRuntimeKit, @kit.CANNKit, @kit.A
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 模型推理 | `MindSporeLiteKit.loadModel() → predict()` | MindSporeLiteKit |
-| 模型量化部署 | `MindSporeLiteKit.convertModel(quantize=true)` | MindSporeLiteKit |
-| 异构推理 | `NeuralNetworkRuntime.createRuntime(device)` | NeuralNetworkRuntimeKit |
-| NPU 加速 | `CANNKit.compileGraph() → runGraph()` | CANNKIT |
-| 智能体构建 | `AgentFrameworkKit.createAgent(tools)` | AgentFrameworkKit |
-| 多智能体协作 | `AgentFrameworkKit.createTeam(agents, planner)` | AgentFrameworkKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 模型推理 | MindSporeLiteKit | [模型推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/mindspore-lite-inference) |
+| 模型量化部署 | MindSporeLiteKit | [模型量化指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/mindspore-lite-quantization) |
+| 异构推理 | NeuralNetworkRuntimeKit | [异构推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/neural-network-runtime) |
+| NPU 加速 | CANNKIT | [NPU 推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cann-npu) |
+| 智能体构建 | AgentFrameworkKit | [智能体框架指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/agent-framework) |
+| 多智能体协作 | AgentFrameworkKit | [多智能体协作指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/agent-framework-multi-agent) |
 
 ## P2 完善计划
 
@@ -37,3 +37,4 @@ kits: [@kit.MindSporeLiteKit, @kit.NeuralNetworkRuntimeKit, @kit.CANNKit, @kit.A
 - [ ] Agent Framework 工具注册、规划器配置、对话管理的完整示例
 - [ ] 端侧推理性能基准：不同量化策略(FP16/INT8/INT4)的延迟与精度对比
 - [ ] 模型安全：端侧模型加密存储与热更新分发方案
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

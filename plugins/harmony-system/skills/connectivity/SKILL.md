@@ -5,7 +5,7 @@ description: >-
   涉及蓝牙设备配对联调、WiFi 直连、一碰传时使用本技能。
 license: MIT
 requires: 0-system-index
-kits: [@kit.ConnectivityKit, @kit.NearLinkKit]
+kits: ["@kit.ConnectivityKit", "@kit.NearLinkKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

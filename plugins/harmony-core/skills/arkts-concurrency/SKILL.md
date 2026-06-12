@@ -5,7 +5,7 @@ description: >-
   并发容器。涉及多线程、任务超时、线程通信、并发安全时使用本技能。
 license: MIT
 requires: 0-core-index
-kits: [@kit.ArkTS]
+kits: ["@kit.ArkTS"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

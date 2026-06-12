@@ -1,5 +1,5 @@
 ---
-name: distributed-collaboration
+name: distributed
 description: >-
   鸿蒙分布式能力:跨设备流转(接续/迁移)、多端协同、分布式数据对象与分布式
   数据同步、跨设备组网发现。凡是涉及"流转""接续""跨设备""多端协同""分布式"

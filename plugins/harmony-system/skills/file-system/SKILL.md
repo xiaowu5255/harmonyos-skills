@@ -5,7 +5,7 @@ description: >-
   文件 URI 转路径。涉及读写文件、缓存管理、文件选择器时使用本技能。
 license: MIT
 requires: 0-system-index
-kits: [@kit.CoreFileKit, @kit.FileManagerServiceKit]
+kits: ["@kit.CoreFileKit", "@kit.FileManagerServiceKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

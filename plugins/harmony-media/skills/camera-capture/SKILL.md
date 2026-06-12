@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-media-index
-kits: [@kit.CameraKit]
+kits: ["@kit.CameraKit"]
 ---
 
 # 相机开发：预览、拍照与录像
@@ -18,14 +18,14 @@ kits: [@kit.CameraKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 相机预览 | `cameraSession.startPreview()` | CameraKit |
-| 拍照输出 | `session.createPhotoOutput()` | CameraKit |
-| 录像输出 | `session.createVideoOutput()` + AVCodecKit | CameraKit, AVCodecKit |
-| 二维码扫描 | `session.createMetadataOutput(metadataTypes: ['barcode'])` | CameraKit, ScanKit |
-| 人脸追焦 | `SubjectTrackingFocus` (API 24+) | CameraKit |
-| 延迟预览 | `DeferredPhotoOutput` | CameraKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 相机预览 | CameraKit | [相机预览指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-preview) |
+| 拍照输出 | CameraKit | [拍照指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-photo-capture) |
+| 录像输出 | CameraKit, AVCodecKit | [录像指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-video-capture) |
+| 二维码扫描 | CameraKit, ScanKit | [扫码集成指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-metadata-scan) |
+| 人脸追焦 | CameraKit | [影随人动追焦指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-subject-tracking-focus) |
+| 延迟预览 | CameraKit | [延迟预览指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-deferred-photo) |
 
 ## P2 完善计划
 
@@ -37,3 +37,4 @@ kits: [@kit.CameraKit]
 - [ ] 相机权限申请(`ohos.permission.CAMERA`)与用户授权处理
 - [ ] 多设备适应性(折叠屏相机切换、平板前后摄管理)
 - [ ] 性能优化：预览帧率控制、内存占用管理
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 22 条(含 2 负样本)。",
   "evals": [
     {
       "id": 1,
@@ -46,7 +46,7 @@
     },
     {
       "id": 8,
-      "skill": "security-and-permissions",
+      "skill": "security-permissions",
       "prompt": "我要做一个让用户选一张照片上传的功能,需要申请什么权限?",
       "expected_output": "触发权限技能;答案是 PhotoViewPicker 免权限,而不是列权限清单"
     },
@@ -64,13 +64,13 @@
     },
     {
       "id": 11,
-      "skill": "api-version-migration",
+      "skill": "version-guide",
       "prompt": "想把工程的 compatibleSdkVersion 从 20 升到 23,要注意什么?",
       "expected_output": "触发版本迁移技能;给出 diff→编译→api-scan→回归→老设备验证的流程"
     },
     {
       "id": 12,
-      "skill": "huawei-ecosystem-kits",
+      "skill": "huawei-kits",
       "prompt": "接了华为账号一键登录,代码照文档写的,但一直报授权失败",
       "expected_output": "触发生态 Kit 技能;先走 AGC 前置五条清单(尤其证书指纹),再查代码"
     },
@@ -97,6 +97,42 @@
       "skill": "testing-harmony",
       "prompt": "用 Hypium 给这个工具类写单元测试,顺便教我为什么我的用例写了但跑不起来",
       "expected_output": "触发 testing-harmony;给出 Hypium 骨架;指出测试入口注册问题;不提 JUnit"
+    },
+    {
+      "id": 17,
+      "skill": "harmony-index",
+      "prompt": "我要做一个拍照上传的鸿蒙功能,涉及相机、网络、文件存储,从哪开始?",
+      "expected_output": "触发 harmony-index;路由到 0-media-index(camera-capture) + 0-system-index(network-requests + file-system)"
+    },
+    {
+      "id": 18,
+      "skill": "network-requests",
+      "prompt": "鸿蒙应用 HTTP 请求一直超时,怎么排查和优化?",
+      "expected_output": "触发 network-requests;给出超时配置/重试策略/弱网优化/证书固定排查路径"
+    },
+    {
+      "id": 19,
+      "skill": "audio-playback",
+      "prompt": "我的鸿蒙音乐播放 App 在耳机插入时声音没切过去,怎么处理音频路由?",
+      "expected_output": "触发 audio-playback;给出设备路由监听/音频焦点管理方案"
+    },
+    {
+      "id": 20,
+      "skill": "notification",
+      "prompt": "鸿蒙应用的通知发不出去,用户没收到推送,怎么排查?",
+      "expected_output": "触发 notification;按授权检查→渠道配置→发布格式→PushKit联调的路径排查"
+    },
+    {
+      "id": 21,
+      "skill": "crypto-security",
+      "prompt": "鸿蒙应用里要把用户密码安全存储到本地,应该用什么方案?",
+      "expected_output": "触发 crypto-security;推荐 HUKS 安全存储而非明文/SharedPreferences;警告 MD5/SHA256 不可用于密码存储"
+    },
+    {
+      "id": 22,
+      "skill": "none(负样本)",
+      "prompt": "用 Python 帮我写个爬虫抓取京东商品价格",
+      "expected_output": "不触发任何鸿蒙技能"
     }
   ]
 }

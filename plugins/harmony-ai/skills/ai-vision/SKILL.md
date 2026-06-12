@@ -5,7 +5,7 @@ license: MIT
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 requires: 0-ai-index
-kits: [@kit.VisionKit, @kit.CoreVisionKit]
+kits: ["@kit.VisionKit", "@kit.CoreVisionKit"]
 ---
 
 # 视觉 AI：文字识别与图像分析
@@ -18,14 +18,14 @@ kits: [@kit.VisionKit, @kit.CoreVisionKit]
 
 ## 常见场景速查
 
-| 场景 | 核心 API | 需关注的 Kit |
-|------|---------|-------------|
-| 拍照 OCR 识别 | `VisionKit.createTextRecognizer()` | VisionKit |
-| 身份证扫描 | `VisionKit.createIDCardAnalyzer()` | VisionKit |
-| 文档矫正扫描 | `VisionKit.createDocReflectionDetector()` | VisionKit |
-| 图像分类 | `CoreVisionKit.createImageClassifier()` | CoreVisionKit |
-| 目标检测 | `CoreVisionKit.createObjectDetector()` | CoreVisionKit |
-| 手势识别 | `VisionKit.createGestureDetector()` | VisionKit |
+| 场景 | 需关注的 Kit | 官方文档入口 |
+|------|-------------|------------|
+| 拍照 OCR 识别 | VisionKit | [通用文字识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-text-recognition) |
+| 身份证扫描 | VisionKit | [卡证识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-card-identification) |
+| 文档矫正扫描 | VisionKit | [文档矫正指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-document-reflection) |
+| 图像分类 | CoreVisionKit | [图像分类指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-image-classification) |
+| 目标检测 | CoreVisionKit | [目标检测指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-object-detection) |
+| 手势识别 | VisionKit | [手势识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-gesture-detection) |
 
 ## P2 完善计划
 
@@ -37,3 +37,4 @@ kits: [@kit.VisionKit, @kit.CoreVisionKit]
 - [ ] 图片输入源的选择策略：相机帧(`cameraOutput`) vs `PixelMap` vs `ImageUri`
 - [ ] 识别结果的置信度过滤与后处理最佳实践
 - [ ] 端侧推理的性能优化：模型量化、NPU 加速、内存管理
+- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

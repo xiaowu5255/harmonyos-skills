@@ -6,7 +6,7 @@ description: >-
   DeepLink配置、读取通讯录时使用本技能。
 license: MIT
 requires: 0-ecosystem-index
-kits: [@kit.ShareKit, @kit.AppLinkingKit, @kit.ContactsKit, @kit.CalendarKit]
+kits: ["@kit.ShareKit", "@kit.AppLinkingKit", "@kit.ContactsKit", "@kit.CalendarKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
