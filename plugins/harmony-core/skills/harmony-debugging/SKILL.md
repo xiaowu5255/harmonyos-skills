@@ -6,6 +6,7 @@ description: >-
   ohpm 依赖报错、模拟器与真机行为不一致等情况,务必先使用本技能——即使报错信息
   看起来是普通的 JS/TS 错误,鸿蒙工程的根因往往在配置文件和签名链路而非代码本身。
 license: MIT
+requires: 0-core-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

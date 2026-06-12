@@ -5,6 +5,7 @@ description: >-
   合规(隐私声明/权限用途/SDK 目录)、审核常见驳回与整改。凡是准备提审上架、
   被审核驳回、做合规自查、配置版本号策略时使用本技能。
 license: MIT
+requires: 0-release-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---

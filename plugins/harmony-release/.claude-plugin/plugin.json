@@ -3,5 +3,5 @@
   "version": "0.1.0",
   "description": "HarmonyOS 签名证书与发布:密钥/证书/Profile 全链路配置、调试设备注册、签名类错误排查。",
   "author": { "name": "YOUR_NAME" },
-  "keywords": ["harmonyos", "signing", "p12", "p7b", "agc", "release"]
+  "skills": ["0-release-index", "performance-tuning", "testing-harmony", "signing-and-certificates", "release-and-compliance"]
 }

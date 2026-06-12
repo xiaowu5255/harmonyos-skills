@@ -6,6 +6,7 @@ description: >-
   2in1(PC 形态)、横竖屏、窗口尺寸变化导致 UI 错乱,或设计稿要求多端一致时
   使用本技能。HarmonyOS 6 周期新设备形态(含 PC 形态)持续增加,一多是必修课。
 license: MIT
+requires: 0-core-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

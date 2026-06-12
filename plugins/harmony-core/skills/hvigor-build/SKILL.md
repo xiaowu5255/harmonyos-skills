@@ -7,6 +7,7 @@ description: >-
   异常(尤其混淆相关)、构建产物组织问题时使用本技能。构建报错的排查方法论在
   harmony-debugging 技能。
 license: MIT
+requires: 0-core-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

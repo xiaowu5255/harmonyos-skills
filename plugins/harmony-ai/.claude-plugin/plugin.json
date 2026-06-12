@@ -1,0 +1,7 @@
+{
+  "name": "harmony-ai",
+  "version": "0.2.0",
+  "description": "HarmonyOS 6.x AI智能 — 视觉/语音/NLP/端侧推理/Agent",
+  "author": "HarmonyOS Skills",
+  "skills": ["0-ai-index", "ai-vision", "ai-speech", "ai-nlp", "ai-inference"]
+}

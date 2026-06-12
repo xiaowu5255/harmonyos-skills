@@ -1,7 +1,0 @@
-{
-  "name": "harmony-cloud",
-  "version": "0.1.0",
-  "description": "HarmonyOS 端云一体化开发:Cloud Foundation Kit(云函数/云数据库/云存储/认证)、AGC 工程绑定与部署。",
-  "author": { "name": "YOUR_NAME" },
-  "keywords": ["harmonyos", "cloud-foundation", "agc", "clouddb", "cloud-function"]
-}

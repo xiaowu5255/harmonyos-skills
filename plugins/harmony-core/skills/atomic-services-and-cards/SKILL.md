@@ -6,6 +6,7 @@ description: >-
   "服务卡片""桌面卡片""万能卡片"开发、卡片不刷新/点击无响应类问题时使用本技能。
   元服务不是小型 App,直接套应用开发思路会在工程结构和包体上翻车。
 license: MIT
+requires: 0-core-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

@@ -6,6 +6,7 @@ description: >-
   测试计划制定。凡是涉及写测试用例、搭测试工程、CI 跑测试、制定测试计划/
   QA 方案、上架前测试验证、组织内测时,务必使用本技能。
 license: MIT
+requires: 0-release-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

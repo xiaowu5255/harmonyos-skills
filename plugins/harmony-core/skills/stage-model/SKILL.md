@@ -6,6 +6,7 @@ description: >-
   凡是涉及应用入口与生命周期问题、新建/配置 Ability、应用间跳转、后台前台切换行为、
   module.json5 改动时使用本技能。
 license: MIT
+requires: 0-core-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

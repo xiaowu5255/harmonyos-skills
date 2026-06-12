@@ -7,6 +7,7 @@ description: >-
   "写一个简单页面"或"改一个小 bug"。ArkTS 与 TypeScript 存在大量不兼容约束,凭 TS 直觉
   写代码会直接产生编译错误。
 license: MIT
+requires: 0-core-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

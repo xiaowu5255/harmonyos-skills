@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.2.0] - 2026-06-12
+
+### 架构重构：三层渐进式
+- 从 3 个扁平 plugin 重构为 **8 plugin / 47 skill** 的三层渐进架构
+- 第一层：`harmony-platform` — 总索引 `harmony-index` + 版本迁移
+- 第二层：7 个领域插件，各含 `0-{domain}-index` 领域索引
+- 第三层：39 个深度 skill，通过 `requires` 字段链接到领域索引
+
+### 新增 Skill（11 个）
+- **应用框架**: arkts-concurrency(TaskPool/Worker)、arkui-window(窗口管理)、arkweb(Web容器)
+- **系统**: network-requests(HTTP/WS/Socket)、crypto-security(加解密/生物认证)、file-system(沙箱文件)、connectivity(蓝牙/WiFi/星闪)
+- **生态服务**: notification(通知)、location-map(定位地图)、sharing-social(分享/DeepLink)
+- **媒体**: audio-playback(音频播放/录制/MIDI)
+
+### P2 占位 Skill（9 个）
+- 媒体: camera-capture、media-processing、media-system
+- 图形: 2d-graphics、3d-ar
+- AI: ai-vision、ai-speech、ai-nlp、ai-inference
+
+### 新增文档
+- AUDIT_REPORT.md: 基于官方文档一手数据的覆盖率审计
+- ARCHITECTURE.md: 三层渐进式架构设计文档
+
+### 已有 skill 迁移
+- harmony-cloud 并入 harmony-ecosystem
+- 系统级 skill(后台/存储/分布式/权限/Native)迁移到 harmony-system
+- 性能优化迁入 harmony-release
+- API迁移功能迁入 harmony-platform/version-guide
+- 所有已有 skill 添加 `requires` 索引引用
+
 ## [0.1.0] - 2026-06-10
 适配:HarmonyOS 6.x / API 20-24。首个完整版本。
 

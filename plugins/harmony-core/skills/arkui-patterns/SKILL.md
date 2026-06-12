@@ -6,6 +6,7 @@ description: >-
   凡是要实现具体界面、写页面布局、做页面跳转、优化列表卡顿、加动画效果时使用本技能。
   注意:语言级语法约束与状态管理装饰器在 arkts-syntax 技能中,两者经常需要配合使用。
 license: MIT
+requires: 0-core-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---

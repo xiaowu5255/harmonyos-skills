@@ -7,6 +7,7 @@ description: >-
   准备上架打 release 包,或新人搭建鸿蒙调试环境时,务必使用本技能。签名是
   鸿蒙新手放弃率最高的环节,按本清单排查可避免盲目试错。
 license: MIT
+requires: 0-release-index
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---
