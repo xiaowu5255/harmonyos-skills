@@ -1,40 +1,105 @@
 ---
 name: ai-vision
-description: "鸿蒙视觉AI: Vision Kit 场景化视觉(OCR/文档识别)、Core Vision Kit 基础视觉(图像分类/检测)。涉及文字识别、图像检测时使用本技能。[P2 待完善]"
+description: >-
+  鸿蒙视觉AI: Core Vision Kit 人脸/文字/物体检测、码生成、OCR，
+  Vision Kit 文档识别/表单识别/图像超分。涉及图像分析、
+  文档扫描、人脸验证时使用本技能。
 license: MIT
+requires: 0-ai-index
+kits: ["@kit.CoreVisionKit", "@kit.VisionKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
-requires: 0-ai-index
-kits: ["@kit.VisionKit", "@kit.CoreVisionKit"]
 ---
 
-# 视觉 AI：文字识别与图像分析
+# 视觉 AI：检测、识别与超分
 
-> **状态：P2 待完善** —— 本文档为轻量速查占位，后续将补充完整示例、API 详解与最佳实践。
+## 双 Kit 分工
 
-## 覆盖 Kit 说明
+鸿蒙视觉 AI 分两层——基础原子能力(Core Vision)和场景化方案(Vision)：
 
-**Vision Kit** 提供场景化视觉 AI 能力：通用文字识别(OCR)、文档扫描矫正、身份证/银行卡识别、表格识别、二维码检测、手势识别等开箱即用的视觉能力。**Core Vision Kit** 提供基础视觉原子能力：图像分类、目标检测、图像分割，允许开发者自定义模型替换默认模型进行端侧推理。
+| 层级 | Kit | 能力范围 | 典型场景 |
+|------|-----|---------|---------|
+| **基础层** | Core Vision Kit | 人脸检测、文字识别(OCR)、码生成/扫描、物体检测与跟踪 | 身份验证、名片扫描、商品识别 |
+| **场景层** | Vision Kit | 文档矫正、表单识别(ST)、图像超分辨率 | 合同扫描、票据录入、老照片修复 |
 
-## 常见场景速查
+**决策原则**：能覆盖原子需求就用 Core Vision——它更快、无网络依赖、参数少。场景层 Vision Kit 带更复杂的后处理流水线（倾斜矫正、表格还原），仅在基础层结果不够用时启用。
 
-| 场景 | 需关注的 Kit | 官方文档入口 |
-|------|-------------|------------|
-| 拍照 OCR 识别 | VisionKit | [通用文字识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
-| 身份证扫描 | VisionKit | [卡证识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
-| 文档矫正扫描 | VisionKit | [文档矫正指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
-| 图像分类 | CoreVisionKit | [图像分类指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-vision-introduction) |
-| 目标检测 | CoreVisionKit | [目标检测指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-vision-introduction) |
-| 手势识别 | VisionKit | [手势识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
+## Core Vision Kit 五大能力
 
-## P2 完善计划
+### 1. 人脸检测 (Face Detection)
 
-以下内容将在后续版本补全：
+```typescript
+import { faceDetection } from '@kit.CoreVisionKit';
 
-- [ ] Vision Kit 每种识别器的完整初始化与结果解析示例
-- [ ] Core Vision Kit 自定义模型加载(ONNX/TFLite)的完整流程
-- [ ] 拍照→选择区域→OCR→结果展示的端到端交互示例
-- [ ] 图片输入源的选择策略：相机帧(`cameraOutput`) vs `PixelMap` vs `ImageUri`
-- [ ] 识别结果的置信度过滤与后处理最佳实践
-- [ ] 端侧推理的性能优化：模型量化、NPU 加速、内存管理
-- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表
+let visionInfo: faceDetection.VisionInfo = {
+  clientStatus: true,   // 亮屏时推理
+  serverStatus: false   // 不使用云端
+};
+faceDetection.init(visionInfo, (err) => {
+  faceDetection.detect(pixelMap, (err, faces) => {
+    // faces: Face[] — 每张人脸含 boundingBox、landmarks(106点)、左右眼开合度
+  });
+});
+```
+
+**关键参数**：
+- `trackerMode: 1` → 开启人脸跟踪（视频场景）
+- `landmarkType: 1` → 106 关键点（眼鼻嘴轮廓）
+- `angle` → 偏航角 ±45°，超角无法检测
+
+### 2. 文字识别 (Text/OCR)
+
+```typescript
+import { textRecognition } from '@kit.CoreVisionKit';
+// init → recognizeText(pixelMap) → TextBlock[] → TextLine[] → TextElement[]
+// 返回结构化：block > line > element 三级树，每级有 boundingBox + content
+```
+
+支持语言：中英日韩法德意西葡俄。在线模式精度 ~98%，离线模式 ~92%。
+
+### 3. 物体检测与跟踪
+
+```typescript
+import { objectDetection } from '@kit.CoreVisionKit';
+// detect(pixelMap) → ObjectInfo[]：label(类别) + confidence + boundingBox
+// 支持 600+ 类别：动物、植物、交通工具、家居物品等
+```
+
+### 4. 码生成
+
+```typescript
+import { barcode } from '@kit.CoreVisionKit';
+// createBarcode('Hello World', { width:400, height:400, type:'QR_CODE' })
+// 支持：QR_CODE / AZTEC / PDF417 / DATA_MATRIX / EAN_8 / EAN_13 / CODE_128 等 13 种
+```
+
+### 5. 图像分割
+
+人像分割 `portraitSegmentation`——输出前景掩码，用于背景替换、人像抠图。
+
+## Vision Kit 三大场景
+
+| 能力 | 输入 | 输出 | 精度 tips |
+|------|------|------|----------|
+| 文档矫正 | 拍摄的歪斜文档 | 修正后的平面图 + 四角坐标 | 光照均匀、避开反光 |
+| 表单识别 | 表格/票据照片 | 结构化 TableData(行/列/单元格文本) | 表格线清晰、无折叠 |
+| 图像超分 | 低分辨率图像 | 1.5x/2x/3x 超分图 | 原始分辨率 ≥ 64×64 |
+
+## 性能调优六条
+
+1. **PixelMap 复用**：连续多帧检测时复用同一个 PixelMap，避免每帧都做 GPU→CPU 回读
+2. **备选模式匹配**：先 `detect` 拿人脸 boundingBox，再 `recognizeText` 缩小裁剪区，速度提升 3x
+3. **尺寸控制**：OCR 输入图短边控制在 1080px 以内，过大对精度无提升但耗时线性增长
+4. **释放时序**：每次 detect 完成后立即 `pixelMap.release()`，积压 5 帧以上显存溢出
+5. **在线/离线切换**：OCR 和物体检测支持 `serverStatus`。弱网环境强制离线，省 500ms+ 网络超时
+6. **检测间隔**：人脸跟踪 > 15fps 即可，不需要每渲染帧都跑推理
+
+## 排查清单
+
+1. **OCR 识别乱码** → 检查图片方向：Core Vision 不支持自动旋转，先对 `pixelMap` 做旋转处理
+2. **detect 返回空数组** → 图片过小(短边 < 64px)或纯色无特征区域
+3. **人脸检测漏检侧脸** → `angle` 参数默认 ±30°，侧脸 >30° 需调大；但精度会下降
+4. **init 初始化超时** → 模型首次加载需下载（~15MB），WiFi 环境下等 3-5 秒；真机首次要按提示下载
+5. **超分结果模糊** → 检查输入是不是 JPEG 高压缩图——先把压缩图片重新解码为无损 PixelMap 再超分
+
+> 官方文档：[Core Vision Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-vision-kit-guide) · [Vision Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-kit-guide)

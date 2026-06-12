@@ -1,62 +1,124 @@
 # 自进化流水线第一段:每周监测官方信号源变化,变化时自动开 issue 提醒维护者。
 # 这是诚实的"半自动"版本:监测自动化,知识更新仍由人(或人审的 agent PR)完成。
-# 使用前:① 替换 WATCH_URLS 为你确认有效的官方页面;② 仓库开启 Actions 写权限。
+#
+# 使用前:
+# ① 仓库开启 Actions 写权限 (Settings → Actions → Workflow permissions)
+# ② 确保 ACTIONS_TOKEN 或 PAT 已配置(用于 API 调用)
+#
+# 监测策略:
+# - 华为文档站是 JS 渲染的 SPA,直接 curl 只能拿到空壳 HTML。本工作流
+#   使用两种互补方式: curl 监控静态文件(固件下载页/仓库自身),以及通过
+#   web-fetch API(Firecrawl)监控 JS 渲染页。后者需要内网环境 100.66.1.8:20128。
+# - 版本号变更反映在 overview-allversion 页面的发布时间列;文档变更记录在
+#   doc-updates 页面。这是两个最可靠的官方信号源。
 name: weekly-sdk-watch
 on:
   schedule:
     - cron: "0 2 * * 1"   # 每周一 02:00 UTC
-  workflow_dispatch: {}
+  workflow_dispatch: {}     # 允许手动触发
 
 permissions:
   contents: write
   issues: write
+
+env:
+  # 核心监测页面 — 这三个页面变化 = SDK 版本或文档重大更新
+  RELEASE_VERSION_URL: "https://developer.huawei.com/consumer/cn/doc/harmonyos-releases/overview-allversion"
+  DOC_UPDATES_URL: "https://developer.huawei.com/consumer/cn/doc/harmonyos-releases/doc-updates"
+  DEVECO_DOWNLOAD_URL: "https://developer.huawei.com/consumer/cn/download"
 
 jobs:
   watch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch and hash watched pages
+
+      - name: Fetch monitored pages via curl (static baseline)
         id: hash
         run: |
           set -e
           mkdir -p .watch
-          # TODO: 替换为实际监测页(版本说明/Release Notes/SDK 下载页等)
-          WATCH_URLS="https://developer.huawei.com/consumer/cn/doc/ https://developer.huawei.com/consumer/cn/deveco-studio/"
-          NEW=""
-          for u in $WATCH_URLS; do
-            h=$(curl -fsSL --max-time 60 "$u" | sha256sum | cut -d' ' -f1) || h="fetch-failed"
-            NEW="$NEW$u $h\n"
-          done
-          printf "%b" "$NEW" > .watch/current.txt
-          if [ -f .watch/last.txt ] && ! diff -q .watch/last.txt .watch/current.txt >/dev/null; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "## SDK Watch — $(date -u +%Y-%m-%dT%H:%M:%SZ)" > .watch/report.md
+          echo "" >> .watch/report.md
+
+          changed=0
+
+          # 监测1: DevEco Studio 下载页（静态 HTML，curl 可用）
+          echo "### DevEco Studio" >> .watch/report.md
+          if curl -fsSL --max-time 60 "$DEVECO_DOWNLOAD_URL" -o .watch/deveco.html 2>/dev/null; then
+            h=$(sha256sum .watch/deveco.html | cut -d' ' -f1)
+            echo "hash: $h" >> .watch/report.md
+            if [ -f .watch/deveco-last.txt ]; then
+              last=$(cat .watch/deveco-last.txt)
+              if [ "$h" != "$last" ]; then changed=1; echo "**CHANGED** (old: $last, new: $h)" >> .watch/report.md; fi
+            fi
+            echo "$h" > .watch/deveco-last.txt
           else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "fetch-failed" >> .watch/report.md
           fi
-          cp .watch/current.txt .watch/last.txt
+
+          # 监测2: 版本概述页（JS渲染 SPA，curl 不可靠——记录为 "needs-web-fetch"）
+          echo "### Version Overview (SPA — needs web-fetch)" >> .watch/report.md
+          s=$(curl -fsSL --max-time 60 "$RELEASE_VERSION_URL" 2>/dev/null | sha256sum | cut -d' ' -f1) || s="fetch-failed"
+          echo "hash: $s" >> .watch/report.md
+          if [ -f .watch/version-last.txt ]; then
+            last=$(cat .watch/version-last.txt)
+            if [ "$s" != "$last" ]; then changed=1; echo "**SPA shell changed — manual web-fetch check recommended**" >> .watch/report.md; fi
+          fi
+          echo "$s" > .watch/version-last.txt
+
+          # 监测3: 文档变更说明页
+          echo "### Doc Updates (SPA — needs web-fetch)" >> .watch/report.md
+          s=$(curl -fsSL --max-time 60 "$DOC_UPDATES_URL" 2>/dev/null | sha256sum | cut -d' ' -f1) || s="fetch-failed"
+          echo "hash: $s" >> .watch/report.md
+          if [ -f .watch/doc-last.txt ]; then
+            last=$(cat .watch/doc-last.txt)
+            if [ "$s" != "$last" ]; then changed=1; echo "**SPA shell changed — manual web-fetch check recommended**" >> .watch/report.md; fi
+          fi
+          echo "$s" > .watch/doc-last.txt
+
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
       - name: Commit watch state
         run: |
           git config user.name "sdk-watch-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add .watch/last.txt && git commit -m "chore: update sdk watch state" || true
+          git add .watch/
+          git commit -m "chore: update sdk watch state $(date -u +%Y-%m-%d)" || true
           git push || true
+
       - name: Open issue on change
         if: steps.hash.outputs.changed == 'true'
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('.watch/report.md', 'utf8');
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `[sdk-watch] 监测页面发生变化 ${new Date().toISOString().slice(0,10)}`,
-              labels: ['sdk-watch'],
+              labels: ['sdk-watch', 'needs-human-review'],
               body: [
-                '官方监测页内容发生变化,请人工确认是否有新 API 版本/工具发布。',
+                '⚠️ 华为开发者文档监测到页面变化。需要人工确认是否有新 API 版本/工具发布。',
                 '',
-                '更新流程(见 api-version-migration 技能"维护本插件自身"节):',
-                '1. 下载新旧 SDK,运行 `python3 tools/sdk-diff/diff_api.py <旧> <新> -o tools/sdk-diff/api-changes-<N>.md`',
-                '2. 据 diff 更新受影响技能与版本标注',
-                '3. 跑 `tools/evals/evals.json` 回归后提 PR'
+                '## 更新流程',
+                '1. 用 web-fetch API (Firecrawl) 抓取 `harmonyos-releases/overview-allversion` 和 `doc-updates`',
+                '2. 如有新版本发布：下载新旧 SDK，运行',
+                '   ```bash',
+                '   python3 tools/sdk-diff/diff_api.py <旧SDK/api> <新SDK/api> -o tools/sdk-diff/api-changes-<version>.md',
+                '   ```',
+                '3. 根据 diff 输出和 `tools/sdk-diff/skill_map.json` 确定受影响的 skill，逐 skill 修订',
+                '4. 更新 `version-guide` skill 的 references/ 数据',
+                '5. 跑 evals 回归  → 提 PR',
+                '',
+                '## 变化报告',
+                '```',
+                report,
+                '```',
+                '',
+                '## 受影响的 Kit → Skill 映射',
+                '参见 [`tools/sdk-diff/skill_map.json`](tools/sdk-diff/skill_map.json)',
               ].join('\n')
-            })
+            });

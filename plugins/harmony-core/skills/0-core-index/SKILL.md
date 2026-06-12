@@ -23,3 +23,5 @@ requires: harmony-index
 | 调试诊断 | 六层诊断框架、hilog、异常捕获 | `harmony-debugging` |
 | 元服务与卡片 | 原子化服务、Form Kit 卡片开发 | `atomic-services-and-cards` |
 | 多设备适配 | 断点系统、折叠屏适配、横竖屏 | `multi-device-adaptation` |
+| 无障碍与本地化 | 屏幕朗读适配、多语言资源、长辈关怀模式、RTL布局 | `accessibility-i18n` |
+| 进程通信与输入法 | IPC RPC跨进程调用、输入法开发与自绘编辑器集成 | `ipc-ime` |

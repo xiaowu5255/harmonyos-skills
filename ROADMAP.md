@@ -5,7 +5,7 @@
 ## 总路线
 
 ```
-v0.2.1 修复发布阻断 ✅ → v0.2.2 一致性基建 ✅ → v0.3.0 占位转正 → v0.4.0 覆盖扩展 → 持续:自进化闭环
+v0.2.1 修复发布阻断 ✅ → v0.2.2 一致性基建 ✅ → v0.3.0 占位转正 ✅ → v0.4.0 覆盖扩展 ✅ → 持续:自进化闭环
 ```
 
 ## Phase 0 — v0.2.1 发布修复 ✅（2026-06-12 完成）
@@ -24,9 +24,13 @@ v0.2.1 修复发布阻断 ✅ → v0.2.2 一致性基建 ✅ → v0.3.0 占位�
 - [x] sync-skills.sh 加 harmony- 前缀防冲突
 - [x] 占位 skill 52 个文档 URL 全量核实，49 个失效链接替换为已验证 Kit 入口
 
-## Phase 2 — v0.3.0 九个 P2 占位转正（目标：+1 个月）
+## Phase 2 — v0.3.0 九个 P2 占位转正 ✅（2026-06-12 完成）
 
-转正流程（每个 skill）：**sdk-diff 核实 API → SKILL.md 重写为方法论密度（600-1200 词）→ 核实 API 明细放 references/ → 补 2-3 条 eval → lint 通过**。
+转正流程（每个 skill）：**sdk-diff 核实 API → SKILL.md 重写为方法论密度（600-1200 词）→ 补 2-3 条 eval → lint 通过**。
+
+> 规约修订（v0.4.0 后）：`references/` 改为**按需补充**而非硬性产出——仅当某 skill 积累了
+> 足够多**经核实**的 API 明细时才外置到 references/。强行为每个转正 skill 造 references/ 会
+> 与「贯穿红线 #2(未核实 API 不入库)」冲突,得不偿失。深度 skill 正文已含方法论密度即达标。
 
 | 批次 | Skill | 理由 |
 |------|-------|------|
@@ -41,11 +45,11 @@ v0.2.1 修复发布阻断 ✅ → v0.2.2 一致性基建 ✅ → v0.3.0 占位�
 
 | 新 Skill | 落点 | 优先级 | 说明 |
 |----------|------|--------|------|
-| accessibility-i18n | harmony-core | **P1** | 无障碍是上架合规要求，审计列 P1 但 v0.2.0 未做 |
-| sensors-input | harmony-system | P2 | Sensor Service / Input / Pen Kit |
-| telephony | harmony-system | P2 | 蜂窝通信、通话场景 |
-| ipc-localization | harmony-core | P2 | IPC Kit、IME Kit、Localization Kit |
-| assets/ 首批模板 | hvigor-build、atomic-services-and-cards | P3 | build-profile 模板、卡片样板 |
+| accessibility-i18n | harmony-core | **P1** | ✅ 已完成：Accessibility Kit 三要素 + Localization Kit 格式化/RTL/自检 |
+| sensors-input | harmony-system | P2 | ✅ 已完成：Sensor(加速度/陀螺仪/光线/距离/振动)+Input(键盘/鼠标/手柄)+Pen(手写笔) |
+| telephony | harmony-system | P2 | ✅ 已完成：拨打电话(拨号盘/应用内)、短信(收发/验证码)、网络状态、SIM管理 |
+| ipc-localization → ipc-ime | harmony-core | P2 | ✅ 已完成：IPC(RPC三步骤/远端订阅)+IME(输入法开发/自绘编辑器)；Localization 已并入 accessibility-i18n |
+| assets/ 首批模板 | hvigor-build、atomic-services-and-cards | P3 | ✅ 已完成：build-profile 多模块模板；卡片样板（form_config.json + WidgetCard.ets） |
 
 每新增 skill 同步：领域索引路由 +1 行、plugin.json、README 矩阵、2-3 条 eval（lint 强制）。
 

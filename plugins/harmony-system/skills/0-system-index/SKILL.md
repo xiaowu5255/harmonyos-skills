@@ -23,3 +23,5 @@ requires: harmony-index
 | 分布式能力 | 设备流转、跨设备协同、任务接续 | `distributed` |
 | Native NDK | C/C++ 开发、N-API 桥接 | `native-ndk` |
 | 功能框架(FASt/基础服务) | 系统基础服务任务 | 暂无深度技能（未来扩展） |
+| 传感器与输入 | 加速度/陀螺仪/光线/手写笔/振动 | `sensors-input` |
+| 蜂窝通信 | 拨打电话、短信、SIM管理、网络状态 | `telephony` |

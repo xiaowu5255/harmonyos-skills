@@ -1,40 +1,116 @@
 ---
 name: 2d-graphics
-description: "鸿蒙2D图形: ArkGraphics 2D 绘制/显示/Canvas、Graphics Accelerate Kit 图形加速。涉及自定义绘制、高性能渲染时使用本技能。[P2 待完善]"
+description: >-
+  鸿蒙2D图形: ArkGraphics 2D Canvas绘制、RenderNode自定义渲染、
+  DisplaySync同步、离屏渲染与Snapshot。涉及自定义图表、
+  手绘板、游戏2D界面、动画引擎时使用本技能。
 license: MIT
+requires: 0-graphics-index
+kits: ["@kit.ArkGraphics2D"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
-requires: 0-graphics-index
-kits: ["@kit.ArkGraphics2D", "@kit.GraphicsAccelerateKit"]
 ---
 
-# 2D 图形：绘制、Canvas 与加速
+# 2D 图形绘制：Canvas、RenderNode 与 DisplaySync
 
-> **状态：P2 待完善** —— 本文档为轻量速查占位，后续将补充完整示例、API 详解与最佳实践。
+## 三条渲染路径
 
-## 覆盖 Kit 说明
+ArkGraphics 2D 提供三层抽象，由浅入深：
 
-**ArkGraphics 2D** 是鸿蒙 2D 图形绘制核心引擎，提供 `Canvas`、`RenderNode`、显示合成(`DisplaySync`)能力。支持路径绘制、文字渲染、图片合成、滤镜效果等基础绘图原语，与 ArkUI 组件树深度集成。**Graphics Accelerate Kit** 提供硬件图形加速能力，将 2D 绘制负载卸载到 GPU，适用于高性能渲染场景如游戏 UI、图表引擎、动画特效等。
+| 层级 | API | 适用场景 | 控制粒度 |
+|------|-----|---------|---------|
+| **声明式 Canvas** | `Canvas(context)` 组件内 | 简单图表、签名板 | 组件级重绘 |
+| **RenderNode 自绘制** | 自定义 `FrameNode` + `DrawContext` | 数据可视化、实时仪表盘 | 逐帧控制 |
+| **DisplaySync 同步** | `displaySync` 绑定帧回调 | 游戏引擎、物理模拟 | V-Sync 级同步 |
 
-## 常见场景速查
+**选型原则**：静态图表用声明式 Canvas；需要频繁更新的实时展示用 RenderNode；需要帧同步的游戏/动效用 DisplaySync。
 
-| 场景 | 需关注的 Kit | 官方文档入口 |
-|------|-------------|------------|
-| 自定义绘制 | ArkGraphics2D | [Canvas 绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
-| 离屏渲染缓冲 | ArkGraphics2D | [离屏渲染指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
-| 高性能动画 | ArkGraphics2D, GraphicsAccelerateKit | [DisplaySync 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
-| 图表绘制 | ArkGraphics2D | [图表绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
-| 图片合成 | ArkGraphics2D | [图片合成指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
-| GPU 加速 | GraphicsAccelerateKit | [图形加速指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/graphics-accelerate-introduction) |
+## 声明式 Canvas：快速上手
 
-## P2 完善计划
+```typescript
+Canvas(this.context)
+  .onReady(() => {
+    let ctx = this.context.getContext2D();
+    // 坐标系：左上角原点，x右正，y下正
+    ctx.beginPath();
+    ctx.moveTo(50, 50);
+    ctx.lineTo(200, 200);
+    ctx.strokeStyle = '#FF0000';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  })
+```
 
-以下内容将在后续版本补全：
+**Canvas 三个不变量**：
+1. `onReady` 回调中获取 context2D——此回调在组件测量完成后触发，在此之前 context 为 null
+2. 每次绘制完毕需显式调 `invalidate()` 触发重绘，ArkUI 不会自动重绘 Canvas
+3. Canvas 尺寸由父容器确定，宽高为 0 时不绘制。确保父布局给足空间
 
-- [ ] Canvas 2D 绘制原语(path/rect/text/image)的完整 API 参考
-- [ ] RenderNode 与 ArkUI 组件树集成的生命周期管理
-- [ ] DisplaySync 同步 vsync 信号进行流畅动画渲染的示例
-- [ ] Graphics Accelerate Kit 开启与关闭的性能对比数据
-- [ ] 离屏渲染 Surface 创建与像素回读的典型场景
-- [ ] 大屏/折叠屏设备的绘制分辨率自适应方案
-- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表
+## RenderNode：自定义帧绘制
+
+适合需要精细控制绘制时序的场景——K 线图、实时频谱、粒子效果：
+
+```typescript
+class MyRenderNode extends RenderNode {
+  draw(context: DrawContext) {
+    let canvas = context.canvas;
+    // 拿到 Canvas 后与声明式 Canvas API 完全一致
+    canvas.drawRect(/* ... */);
+    canvas.drawCircle(/* ... */);
+  }
+}
+```
+
+**与声明式 Canvas 的关键差异**：
+- `draw()` 由渲染管线主动调用，不用手动 invalidate
+- 可通过 `markContentDirty` 标记脏区，渲染器只重绘该区域——高性能场景的核心优化手段
+- 多个 RenderNode 按 z-order 叠加，下层先画、上层后画
+
+## DisplaySync：V-Sync 级同步
+
+```typescript
+import { displaySync } from '@kit.ArkGraphics2D';
+
+let sync = displaySync.create();
+sync.setExpectedFrameRateRange({ min: 30, max: 60, expected: 60 });
+
+sync.on('frame', () => {
+  // 每帧在此更新绘制状态——如物理引擎 tick、动画插值计算
+  myNode.markContentDirty(); // 标记 RenderNode 需重绘
+});
+sync.start();
+```
+
+**帧率控制决策**：
+| 场景 | 帧率 | 理由 |
+|------|------|------|
+| 静态图表 | 按需 invalidate | 无变化不重绘 |
+| 实时数据(1Hz) | 1fps | 数据更新频率低 |
+| 仪表盘/频谱 | 15-30fps | 人眼可感知变化即可 |
+| 动效/游戏 | 60fps | 流畅必须 |
+
+## 离屏渲染与截图
+
+```typescript
+// 离屏 Canvas
+let offscreen = new OffscreenCanvas(1080, 1920);
+let ctx = offscreen.getContext2D();
+// 绘制...
+// 导出为 PixelMap
+let pixelMap = offscreen.transferToImageBitmap();
+
+// RenderNode 截图
+let snapshot = renderNode.getSnapshot();
+```
+
+**用法**：离屏渲染用于生成分享图片、水印合成——不在屏幕上显示但需要完整的绘制管线。
+
+## 排查清单
+
+1. **Canvas 不显示内容** → 检查宽高：0×0 的 Canvas 不绘制；确认 `onReady` 已触发
+2. **绘制内容模糊** → 检查 Canvas 物理像素：用 `vp2px` 转换，Retina 屏需要 2x/3x 分辨率
+3. **动画卡顿** → 减少每帧绘制命令数；拆分静态背景和动态前景到两个 RenderNode
+4. **多次绘制叠加** → 忘记调 `clearRect(0, 0, w, h)` 导致上一帧残留
+5. **文字绘制大小不一致** → 字体加载是异步的，在 `font.loadFont()` 的 then 回调中再绘制
+
+> 官方文档：[ArkGraphics 2D](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2D-introduction)

@@ -1,39 +1,102 @@
 ---
 name: media-system
-description: "鸿蒙媒体系统服务: AVSession Kit 音视频播控/投屏、DRM Kit 数字版权保护、Scan Kit 统一扫码、Ringtone Kit 铃声服务。涉及媒体投屏、版权视频、扫码跳转时使用本技能。[P2 待完善]"
+description: >-
+  鸿蒙播控与媒体系统: AVSession Kit 播控中心、媒体通知栏、
+  跨设备投屏与流转、DRM 版权保护、扫码(Scan Kit)。涉及后台播放、
+  锁屏控制、投屏到电视时使用本技能。
 license: MIT
+requires: 0-media-index
+kits: ["@kit.AVSessionKit", "@kit.DrmKit", "@kit.ScanKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
-requires: 0-media-index
-kits: ["@kit.AVSessionKit", "@kit.DRMKit", "@kit.ScanKit"]
 ---
 
-# 媒体系统服务：播控、DRM 与扫码
+# 播控与媒体系统：AVSession、DRM、扫码
 
-> **状态：P2 待完善** —— 本文档为轻量速查占位，后续将补充完整示例、API 详解与最佳实践。
+## AVSession 心智模型
 
-## 覆盖 Kit 说明
+AVSession 是你应用程序与**系统播控中心**之间的桥梁——锁屏的播放按钮、控制中心的上一曲/下一曲，都通过 AVSession 通信。
 
-**AVSession Kit** 提供系统级音视频播控服务：锁屏/通知栏媒体控件、媒体元数据设置、播放状态同步。支持投屏能力，将音频/视频流投射到远端设备。**DRM Kit** 为受版权保护的音视频内容提供数字版权解密与许可管理，支持主流 DRM 方案(Widevine/ChinaDRM)。**Scan Kit** 提供统一扫码能力，支持二维码/条形码的相机扫码与图片解码两种模式。
+```
+你的 App                   系统播控中心              手表/耳机/车机
+  │                           │                        │
+  ├─ createAVSession ────────►│                        │
+  ├─ setMetadata(歌名/封面)───►│──── 广播 ──────────────►│
+  ├─ activate() ─────────────►│                        │
+  │   (成为活跃会话)            │                        │
+  └─ on('play'/'pause'/'stopNext') ←─── 用户点按钮 ────┘
+```
 
-## 常见场景速查
+**不变量**：AVSession 是"单例广播"——同一时间只有一个应用是活跃播控。不设 metadata 就被系统忽略，不注册 controlCommand 就收不到用户操作。
 
-| 场景 | 需关注的 Kit | 官方文档入口 |
-|------|-------------|------------|
-| 媒体播控 | AVSessionKit | [播控框架指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-overview) |
-| 投屏到电视 | AVSessionKit | [投屏指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-overview) |
-| DRM 视频播放 | DRMKit | [DRM 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/drm-overview) |
-| 二维码扫码 | ScanKit | [统一扫码指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/scan-introduction) |
-| 铃声设置 | RingtoneKit | [铃声服务指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ringtone-introduction) |
+## 本地 vs 分布式会话
 
-## P2 完善计划
+| 维度 | 本地会话 | 分布式会话 |
+|------|---------|-----------|
+| 用途 | 本机播控（锁屏/通知栏/控制中心） | 跨设备流转（手机→平板→电视） |
+| 创建 | `createAVSession(context, 'audio', 'local')` | `createAVSession(context, 'audio', 'distributed')`|
+| 前提 | 无额外要求 | 同账号、同 WiFi、开启蓝牙（设备发现） |
+| 迁移 | 不支持 | `castAudio(session, deviceDescriptors)` |
 
-以下内容将在后续版本补全：
+**分布式流转五步排查**（按优先级依次检查）：
+1. 两台设备都已登录同一华为账号
+2. 两台设备同一个 WiFi 且连通（ping 测试）
+3. 蓝牙已开启（负责设备发现，非传输数据）
+4. 分布式能力已申请：`ohos.permission.DISTRIBUTED_DATASYNC`
+5. 目标设备支持音视频播控（平板/电视支持，手表仅通知）
 
-- [ ] AVSession 播控控件的完整生命周期(创建→激活→元数据更新→释放)
-- [ ] Cast+ 投屏的设备发现、连接建立与流传输的完整流程
-- [ ] DRM 在线/离线许可获取与媒体解密完整示例
-- [ ] Scan Kit 自定义扫码 UI 与相机权限联合处理方案
-- [ ] 后台播控的连续任务(`continuousTask`)与音频焦点配合
-- [ ] 多场景联合：扫码 → DRM 校验 → 投屏播放的端到端流程
-- [ ] 用 sdk-diff 验证所有 API 名后再补回速查表
+## 播控自检清单
+
+接入播控必过的 6 项检查：
+
+- [ ] `createAVSession` 的 type 与 `AudioRenderer` 匹配（`'audio'` / `'video'`）
+- [ ] `setMetadata` 填了 mediaId / title / artist / albumImage（缺封面系统不展示）
+- [ ] 时长 `setDuration(totalDuration)` 和进度 `setProgress(currentPosition, speed)` 持续更新
+- [ ] `activate()` 被调了——不激活系统不认
+- [ ] `on('play')` / `on('pause')` / `on('stopNext')` 三个事件都有实现
+- [ ] `on('seek')` 处理了拖动进度条（视频/播客场景必须）
+
+## DRM Kit 速览
+
+`@kit.DrmKit` 处理受版权保护的媒体内容。三个核心流程：
+
+```typescript
+// 1. 创建 DRM 实例
+let drmManager = drm.createDrmManager('com.wiseplay.drm');
+// 2. 打开媒体 → 判断是否需要许可证
+drmManager.openMedia(uri).then(status => { /* 检查 DRM 方案 */ });
+// 3. 许可证获取/续期
+drmManager.generateLicense(licenseServerUrl, requestHeaders);
+```
+
+**典型坑**：DRM 内容不能用普通 AVPlayer 直接播放，必须用 `AVCodec` 绑定 DRM 的 `decryptConfig`。看到 "can not play this protected content" 错误，第一步检查 `drmManager.isMediaKeyProvisioned()`。
+
+## Scan Kit：二维码的正确打开方式
+
+不要用相机预览自己解析二维码——**系统已内置专为扫码优化的 Scan Kit**：
+
+```typescript
+import { scanBarcode } from '@kit.ScanKit';
+
+// 方式1：默认扫码视图（有取景框/闪光灯/相册选图）
+scanBarcode.startScanForResult(context, options).then(result => {
+  console.info(result.originalValue); // 解码结果
+});
+
+// 方式2：自定义扫码 UI
+let view = new scanBarcode.CustomScanView();
+view.start(); // 绑定 surfaceId 后启动
+view.on('scanResult', (result) => { /* 拿到结果 */ });
+```
+
+**选型原则**：默认视图能满足 90% 场景（取景框+闪光灯+相册），只有需要自定义取景框 UI 时才用 CustomScanView。
+
+## 排查清单
+
+1. **播控中心不显示我的应用** → 确认 `activate()` 已调 + metadata.mediaId 非空
+2. **手表/耳机按键控制不生效** → AVSession 的 `on('controlCommand')` 未注册对应事件
+3. **投屏失败"设备不可达"** → 分布式五条前置清单逐条核对
+4. **DRM 视频花屏或无声** → 检查 `decryptConfig` 是否正确绑定到 AVCodec 的 configure 步骤
+5. **扫码识别率低** → 检查 ScanKit 版本（API 18+ 有明显优化），设置合适的 `scanType` (QR_CODE / AZTEC)
+
+> 官方文档：[AVSession Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-kit) · [DRM Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/drm-kit) · [Scan Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/scan-kit-guide)

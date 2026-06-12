@@ -1,0 +1,64 @@
+// hvigor-build/assets/build-profile-sample.json5
+// 多模块 HarmonyOS 6 工程 build-profile.json5 模板
+// 覆盖 debug/release 混淆、HAR/HSP 声明、targetSdk、签名配置
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "debug",
+        "material": {
+          "storeFile": "debug.p12",
+          "storePassword": "0000001A2B3C4D5E6F7G8H9I0J1K2L3M4N5O6P7Q8R9S0T1U2V3W4X5Y6Z7",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001A2B3C4D5E6F7G8H9I0J1K2L3M4N5O6P7Q8R9S0T1U2V3W4X5Y6Z7",
+          "profile": "debug.p7b",
+          "certpath": "debug.cer"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "debug",
+        "compatibleSdkVersion": 24,
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          },
+          "arkOptions": {
+            "runtimeOnly": {
+              "sources": ["./src/main/ets/**/*.ets"],
+              "obfuscation": {
+                "enable": false,
+                "ruleOptions": {
+                  "enable": true,
+                  "files": ["./obfuscation-rules.txt"]
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "type": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": ["default"]
+        }
+      ]
+    },
+    {
+      "name": "common",
+      "type": "har",
+      "srcPath": "./common"
+    }
+  ]
+}

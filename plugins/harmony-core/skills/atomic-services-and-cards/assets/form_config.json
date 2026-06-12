@@ -1,0 +1,22 @@
+{
+  "_comment": "ArkTS 服务卡片配置样板。实际路径:<module>/src/main/resources/base/profile/form_config.json,并在 module.json5 的 extensionAbilities[].metadata 中以 $profile:form_config 引用。字段以当期官方文档为准。",
+  "forms": [
+    {
+      "name": "widget",
+      "displayName": "$string:widget_display_name",
+      "description": "$string:widget_desc",
+      "src": "./ets/widget/pages/WidgetCard.ets",
+      "uiSyntax": "arkts",
+      "window": { "designWidth": 720, "autoDesignWidth": true },
+      "colorMode": "auto",
+      "isDefault": true,
+      "updateEnabled": true,
+      "scheduledUpdateTime": "10:30",
+      "_updateDuration_comment": "周期刷新:单位为 30 分钟的倍数(自然数);与 scheduledUpdateTime 同配时 updateDuration 优先。0 表示不按周期刷新。",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": ["2*2", "2*4", "4*4"],
+      "formConfigAbility": "ability://EntryAbility"
+    }
+  ]
+}

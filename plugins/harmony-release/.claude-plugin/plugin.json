@@ -1,6 +1,6 @@
 {
   "name": "harmony-release",
-  "version": "0.2.2",
+  "version": "0.4.0",
   "description": "HarmonyOS 签名证书与发布:密钥/证书/Profile 全链路配置、调试设备注册、签名类错误排查。",
   "author": "HarmonyOS Skills",
   "skills": ["0-release-index", "performance-tuning", "testing-harmony", "signing-and-certificates", "release-and-compliance"]

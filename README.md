@@ -4,7 +4,7 @@ HarmonyOS 6（API 20–24）开发专家技能集。让你的 AI 编码 agent �
 
 技能本体遵循 **Agent Skills 开放标准**（SKILL.md），采用**三层渐进式架构**避免 context 爆炸，可在 Claude Code、Codex、OpenCode 等所有兼容工具中使用。
 
-当前版本：**0.2.2** — 8 plugin / 47 skill / 6 命令 / 2 hook / 自进化工具链。
+当前版本：**0.4.0** — 8 plugin / 50 skill / 6 命令 / 2 hook / 自进化工具链。Phase 3 覆盖率扩展完成，50% Kit 覆盖。
 
 ## 架构
 
@@ -43,6 +43,7 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 | harmony-debugging | 六层诊断法、hdc/hilog、错误对照表、自检脚本 |
 | atomic-services-and-cards | 元服务约束、卡片生命周期与三条刷新通路 |
 | multi-device-adaptation | 断点响应式、折叠屏/PC 形态、一多工程组织 |
+| accessibility-i18n ★ | 无障碍属性标注/屏幕朗读、多语言资源/RTL/长辈关怀 |
 
 ### harmony-system — 系统能力（10 skills）
 
@@ -58,6 +59,8 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 | connectivity ★ | 蓝牙（BLE）、WiFi、星闪（NearLink）、NFC |
 | distributed | 流转/接续、分布式前置五条清单 |
 | native-ndk | N-API 线程约束、CMake、C++ 库移植 |
+| sensors-input ★ | 加速度/陀螺仪/光线传感器、振动、多模输入(键鼠/手柄)、手写笔 |
+| telephony ★ | 拨打电话、短信(验证码自动填充)、SIM管理、网络状态监听 |
 
 ### harmony-media — 多媒体（5 skills）
 
@@ -65,9 +68,9 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 |-------|---------|
 | **0-media-index** † | 领域索引 |
 | audio-playback ★ | 音频播放/录制、焦点管理、设备路由、MIDI |
-| camera-capture ○ | 相机预览/拍照/录像、影随人动追焦 |
-| media-processing ○ | 音视频编解码、图片处理、媒体播放 |
-| media-system ○ | AVSession 播控/投屏、DRM、扫码 |
+| camera-capture ★ | 相机预览/拍照/录像、CameraPicker vs 会话模型、影随人动追焦 |
+| media-processing ★ | 音视频编解码(AVCodec)、图片处理(Image Kit)、封装解封装 |
+| media-system ★ | AVSession 播控/投屏、DRM、扫码(Scan Kit) |
 
 ### harmony-ecosystem — 应用服务（6 skills）
 
@@ -95,22 +98,21 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 | Skill | 核心内容 |
 |-------|---------|
 | **0-graphics-index** † | 领域索引 |
-| 2d-graphics ○ | ArkGraphics 2D 绘制/显示 |
-| 3d-ar ○ | 3D 渲染、AR Engine、空间感知 |
+| 2d-graphics ★ | ArkGraphics 2D Canvas/RenderNode/DisplaySync 三层渲染 |
+| 3d-ar ★ | 3D 渲染(ArkGraphics 3D)、AR Engine 空间感知与虚实融合 |
 
 ### harmony-ai — AI 智能（5 skills）
 
 | Skill | 核心内容 |
 |-------|---------|
 | **0-ai-index** † | 领域索引 |
-| ai-vision ○ | 视觉 AI（OCR、图像检测） |
-| ai-speech ○ | 语音 AI（识别、合成、字幕） |
-| ai-nlp ○ | NLP 自然语言处理 |
-| ai-inference ○ | 端侧推理（MindSpore Lite/CANN/NNRt） |
+| ai-vision ★ | Core Vision Kit 人脸/文字/物体检测 + Vision Kit 文档/超分 |
+| ai-speech ★ | Core Speech Kit 语音识别/合成 + Speech Kit 唤醒/声纹 |
+| ai-nlp ★ | Natural Language Kit 分词/实体抽取/文本向量化 |
+| ai-inference ★ | MindSpore Lite 端侧推理/训练、NPU 加速、模型量化 |
 
 > † = 领域索引（轻量路由，≤300 词）  
-> ★ = v0.2.0 新增（P0/P1 深度）  
-> ○ = v0.2.0 新增（P2 占位，待补充完整内容）
+> ★ = v0.3.0 转正（方法论驱动，600-1200 词）
 
 ## 安装
 

@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 38 条(含 3 负样本)。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 68 条(含 3 负样本)。",
   "evals": [
     {
       "id": 1,
@@ -216,19 +216,199 @@
       "id": 36,
       "skill": "0-media-index",
       "prompt": "鸿蒙应用怎么做视频录制然后压缩上传?",
-      "expected_output": "触发 0-media-index;路由到 camera-capture(录制)+media-processing(压缩);占位技能应引导官方文档而非编造 API"
+      "expected_output": "触发 0-media-index;路由到 camera-capture(录制) + media-processing(压缩);深层次技能应给出 Camera Kit 会话五步法 + AVCodec 编码参数七件套"
     },
     {
       "id": 37,
       "skill": "0-ai-index",
       "prompt": "想在鸿蒙 App 里加一个拍照识别文字的功能",
-      "expected_output": "触发 0-ai-index;路由到 ai-vision(OCR);占位技能应引导官方 Vision Kit 文档而非编造 API"
+      "expected_output": "触发 0-ai-index;路由到 ai-vision(Core Vision Kit OCR);深层次技能应给出 textRecognition 初始化→recognizeText→TextBlock 解析流程"
     },
     {
       "id": 38,
       "skill": "none(负样本)",
       "prompt": "Android 项目里 WorkManager 的后台任务总被系统杀掉,怎么保活?",
       "expected_output": "不触发任何鸿蒙技能(Android 项目)"
+    },
+    {
+      "id": 39,
+      "skill": "camera-capture",
+      "prompt": "鸿蒙自定义相机,切到后台再回来预览就冻结了,怎么修?",
+      "expected_output": "触发 camera-capture;定位为生命周期联动问题;给出 onForeground session.start() + onBackground releaseCamera 方案"
+    },
+    {
+      "id": 40,
+      "skill": "camera-capture",
+      "prompt": "做一个扫码功能,是直接拿相机预览自己解析还是用系统能力?",
+      "expected_output": "触发 camera-capture;优先推荐 Scan Kit;深度控制才用 Camera Kit 会话模型"
+    },
+    {
+      "id": 41,
+      "skill": "media-processing",
+      "prompt": "鸿蒙视频编辑器,怎么把一个 MP4 里的音视频轨道分离后分别处理?",
+      "expected_output": "触发 media-processing;给出 AVCodec Demuxer→编解码→Muxer 流水线;强调 pts 严格递增"
+    },
+    {
+      "id": 42,
+      "skill": "media-processing",
+      "prompt": "想把一批 JPEG 图片批量转成 WebP 格式缩小体积,鸿蒙怎么做?",
+      "expected_output": "触发 media-processing;给出 Image Kit createImageSource→decode→createImagePacker→packToFile 流水线;提醒 PixelMap 及时 release"
+    },
+    {
+      "id": 43,
+      "skill": "media-system",
+      "prompt": "鸿蒙音乐 App 想在锁屏和控制中心显示播放控制按钮,怎么实现?",
+      "expected_output": "触发 media-system;给出 AVSession createSession→setMetadata→activate→注册 controlCommand 的完整流程"
+    },
+    {
+      "id": 44,
+      "skill": "media-system",
+      "prompt": "想把手机上正在播放的音乐投到电视上继续播,鸿蒙怎么实现?",
+      "expected_output": "触发 media-system;给出分布式 AVSession 方案;先过分布式前置五条清单再 castAudio"
+    },
+    {
+      "id": 45,
+      "skill": "ai-vision",
+      "prompt": "做一个身份证识别功能,OCR 取到文字后怎么提取姓名和身份证号?",
+      "expected_output": "触发 ai-vision;Core Vision Kit OCR→TextBlock 解析 + Natural Language Kit 实体抽取(PERSON+ID_CARD_NUMBER)"
+    },
+    {
+      "id": 46,
+      "skill": "ai-vision",
+      "prompt": "用相机实时检测画面中的人脸并标记五官位置,鸿蒙怎么做?",
+      "expected_output": "触发 ai-vision;给出 faceDetection.init→detect→Face.landmarks(106点) 流程;提示 trackerMode 用于视频场景"
+    },
+    {
+      "id": 47,
+      "skill": "ai-speech",
+      "prompt": "鸿蒙 App 里要做语音输入功能,在线识别和离线识别怎么选?",
+      "expected_output": "触发 ai-speech;给出在线(97%精度/需网络)vs 离线(90%/实时)对比表;强调 MICROPHONE 权限"
+    },
+    {
+      "id": 48,
+      "skill": "ai-speech",
+      "prompt": "做一个朗读文章的 TTS 功能,长文本自动分段播放,鸿蒙怎么做?",
+      "expected_output": "触发 ai-speech;给出 speechSynthesis.createSpeechPlayer→speak 流式合成;长文本分段(≤2000字)+delay 200ms 方案"
+    },
+    {
+      "id": 49,
+      "skill": "ai-nlp",
+      "prompt": "鸿蒙 App 里要实现搜索功能,用户输入一个句子,怎么匹配知识库里的相关文章?",
+      "expected_output": "触发 ai-nlp;给出 textEmbedding.getEmbedding→余弦相似度→TopK 检索方案;大规模数据建议两级检索(关键词+向量)"
+    },
+    {
+      "id": 50,
+      "skill": "ai-nlp",
+      "prompt": "一段用户填的文本,自动提取里面的手机号和地址,鸿蒙怎么做?",
+      "expected_output": "触发 ai-nlp;给出 textProcessing.getEntity→提取 PHONE_NUMBER/LOCATION 实体类型;提示文本长度≤1000字符"
+    },
+    {
+      "id": 51,
+      "skill": "ai-inference",
+      "prompt": "想把一个 ONNX 图像分类模型部署到鸿蒙手机上端侧推理,怎么做?",
+      "expected_output": "触发 ai-inference;给出 mindspore-lite-converter(ONNX→MS)→MindSpore Lite loadModel→predict 完整流程;CPU/NPU 选型依据"
+    },
+    {
+      "id": 52,
+      "skill": "ai-inference",
+      "prompt": "MindSpore Lite 推理速度太慢,ImageNet 模型一张图要 500ms,怎么加速?",
+      "expected_output": "触发 ai-inference;给出 NPU 加速/Int8 量化/warmup 预热/张量复用 优化方案;检查 target:['npu','cpu'] 自动回退"
+    },
+    {
+      "id": 53,
+      "skill": "2d-graphics",
+      "prompt": "鸿蒙里做一个实时股票 K 线图,数据每秒更新,用 Canvas 组件画都卡了,怎么办?",
+      "expected_output": "触发 2d-graphics;推荐 RenderNode 自绘制+DisplaySync 帧同步方案;给出 markContentDirty 脏区优化"
+    },
+    {
+      "id": 54,
+      "skill": "2d-graphics",
+      "prompt": "用 Canvas 画了一个签名板,导出的图很模糊,为什么?",
+      "expected_output": "触发 2d-graphics;检查 Canvas 物理像素(vp2px),Retina 屏需 2x/3x;给出 OffscreenCanvas 高分辨率导出方案"
+    },
+    {
+      "id": 55,
+      "skill": "3d-ar",
+      "prompt": "想在桌面上虚拟放置一个 3D 模型,用手机移动视角看不同角度,鸿蒙怎么做?",
+      "expected_output": "触发 3d-ar;AR Engine 平面检测→创建锚点→ArkGraphics 3D 加载模型→每帧更新 Camera 位姿;提醒加灯光"
+    },
+    {
+      "id": 56,
+      "skill": "3d-ar",
+      "prompt": "AR 场景里虚拟物体一直漂移不固定,怎么解决?",
+      "expected_output": "触发 3d-ar;检查平面纹理(白墙/黑暗不行)+锚点固定模式 updateMode:'FIXED'+等待特征点积累(1-3s)"
+    },
+    {
+      "id": 57,
+      "skill": "accessibility-i18n",
+      "prompt": "鸿蒙应用上架被驳回,说无障碍不合规,按钮没有可读标签,怎么改?",
+      "expected_output": "触发 accessibility-i18n;给出 accessibilityText 标注 + accessibilityLevel('yes') 方案;装饰性元素设 'no' + 卡片用 accessibilityGroup"
+    },
+    {
+      "id": 58,
+      "skill": "accessibility-i18n",
+      "prompt": "App 要出海,支持英文和阿拉伯语,日期和数字格式要跟着语言变,怎么做?",
+      "expected_output": "触发 accessibility-i18n;给出 base→en_US→ar 资源文件组织 + Intl.DateTimeFormat/Intl.NumberFormat + Direction.Auto RTL 适配"
+    },
+    {
+      "id": 59,
+      "skill": "accessibility-i18n",
+      "prompt": "鸿蒙应用设置了多语言 resource,但切换到英文后有些文字还是中文,哪里不对?",
+      "expected_output": "触发 accessibility-i18n;定位硬编码字符串;全局搜索 fontSize()/fontColor() 等找出未用 $r() 的文本;base/ 必须有全部 key 作为回退"
+    },
+    {
+      "id": 60,
+      "skill": "sensors-input",
+      "prompt": "做一个摇一摇功能,手机晃动时触发随机换一换,鸿蒙怎么实现?",
+      "expected_output": "触发 sensors-input;给传感器订阅加速度计(sensor.on ACCELEROMETER);interval 单位纳秒(20ms=20000000ns);摇动检测用合加速度 >15 阈值"
+    },
+    {
+      "id": 61,
+      "skill": "sensors-input",
+      "prompt": "鸿蒙平板配合手写笔做手写笔记,笔画怎么拿到压感和倾角?",
+      "expected_output": "触发 sensors-input;Pen Kit pen.startHandwriting→on('stroke') 获取 {pressure,tiltX,tiltY};一笔成形 enablePrediction:true 减延迟"
+    },
+    {
+      "id": 62,
+      "skill": "sensors-input",
+      "prompt": "鸿蒙应用要在 PC 模式下支持键盘快捷键 Ctrl+S 保存,怎么拦截按键?",
+      "expected_output": "触发 sensors-input;Input Kit inputDevice.on('keyDown') 监听;检查 isCtrlKeyPressed + keyCode"
+    },
+    {
+      "id": 63,
+      "skill": "telephony",
+      "prompt": "鸿蒙 App 里做一个一键拨打客服电话的功能,怎么实现?",
+      "expected_output": "触发 telephony;推荐 ohos.want.action.dial 拉起拨号盘(免权限);应用内 makeCall 需要 PLACE_CALL(system_basic 权限不可得)"
+    },
+    {
+      "id": 64,
+      "skill": "telephony",
+      "prompt": "鸿蒙应用收到短信验证码后自动填充到输入框,怎么做?",
+      "expected_output": "触发 telephony;监听 sms.on('smsChange')→正则提取→填入输入框;需要 READ_MESSAGES 权限且上架声明用途"
+    },
+    {
+      "id": 65,
+      "skill": "telephony",
+      "prompt": "鸿蒙 App 怎么检测当前是 WiFi 还是 5G 网络?信号弱要提醒用户切换",
+      "expected_output": "触发 telephony;radio.getNetworkState()→radioTech 字段判断;signalStrength<-100 视为弱信号"
+    },
+    {
+      "id": 66,
+      "skill": "ipc-ime",
+      "prompt": "鸿蒙多进程架构里,主进程怎么调用子进程的方法?",
+      "expected_output": "触发 ipc-ime;IPC Kit:服务端 RemoteObject stub→客户端 createProxy→sendMessageRequest;跨进程检查+序列化限制(Map/Set需手动)"
+    },
+    {
+      "id": 67,
+      "skill": "ipc-ime",
+      "prompt": "用 Canvas 自绘了一个编辑器,怎么在点击编辑区时弹出系统输入法?",
+      "expected_output": "触发 ipc-ime;IME Kit:inputMethod.attach(true)+注册 inputAttribute;监听 insertText/deleteLeft 回调;通过 updateCursor 同步光标位置"
+    },
+    {
+      "id": 68,
+      "skill": "ipc-ime",
+      "prompt": "开发一个鸿蒙第三方输入法应用,需要继承哪个 Ability?",
+      "expected_output": "触发 ipc-ime;继承 InputMethodExtensionAbility;module.json5 metadata 设 inputMethodType=INPUT_METHOD;键盘窗口用 startAbility 启动"
     }
   ]
 }

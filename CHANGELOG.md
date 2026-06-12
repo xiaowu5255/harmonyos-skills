@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.4.0] - 2026-06-12
+
+### Phase 3 覆盖率扩展完成（45%→50% Kit 覆盖）
+- **accessibility-i18n**（新 skill，P1）：上架合规双支柱——Accessibility Kit 三要素 + Localization Kit 格式化/RTL/自检
+- **sensors-input**（新 skill，P2）：Sensor Kit(加速度/陀螺仪/光线/距离/振动/心率) + Input Kit(键鼠/手柄) + Pen Kit(手写笔/一笔成形)
+- **telephony**（新 skill，P2）：拨打电话(拨号盘/应用内)、短信收发/验证码填充、网络状态、SIM 管理
+- **ipc-ime**（新 skill，P2）：IPC RPC三步法(Stub/Proxy/远端订阅) + IME Kit(输入法开发/自绘编辑器集成)；Localization 已并入 accessibility-i18n
+- **assets/**：build-profile-sample.json5 多模块模板；卡片样板基础结构
+- evals 59→68 条（新增 9 条覆盖 4 个新 skill）
+- 索引路由表：0-core-index +2、0-system-index +2
+- README/100+→50 skill / 版本号 0.4.0
+- ROADMAP Phase 3 全部完成
+
+## [0.3.0] - 2026-06-12
+
+### 九个 P2 占位 Skill 转正（ROADMAP Phase 2 完成）
+- **camera-capture**：从占位重写为 600+ 词深层次 skill——会话五步法、CameraPicker vs Camera Kit 决策树、输入输出流选型、生命周期四状态硬约束、折叠屏适配、8 大进阶场景速查、5 条排查清单
+- **media-processing**：三 Kit 边界速判(AVCodec/Image/Media)、同步 vs 异步编码模型、编码参数七件套、Image Kit Source→Decoder→Packer 流水线、Demuxer/Muxer 容器操作、5 条排查清单
+- **media-system**：AVSession 心智模型、本地 vs 分布式会话选型、播控自检清单 6 项、DRM Kit 三流程、Scan Kit 正确打开方式、分布式流转五步排查
+- **ai-vision**：双 Kit 分工(Core Vision 基础层+Vision 场景层)、五大能力(Face/OCR/Object/Barcode/Segmentation)、性能调优六条、5 条排查清单；Kit 名已按官方文档核实为 Core Vision Kit / Vision Kit
+- **ai-speech**：双 Kit 分工(Core Speech+Speech)、ASR 在线/离线选型表、TTS 流式合成+离线合成、实时转写、语音唤醒+声纹验证、权限清单、5 条排查清单；Kit 名已按官方文档核实为 Core Speech Kit / Speech Kit
+- **ai-nlp**：四大能力矩阵(分词/实体抽取/词性标注/文本向量化)、10 种实体类型速查、余弦相似度检索实现、端侧 NLP+云侧大模型混合策略、5 条排查清单
+- **ai-inference**：推理流水线五步法、CPU vs NPU 选型表、张量处理、模型转换三板斧(ONNX→MS+量化+NPU适配)、性能优化五条、5 条排查清单
+- **2d-graphics**：三条渲染路径(Canvas/RenderNode/DisplaySync)、选型原则、V-Sync 级帧率控制、离屏渲染与截图、5 条排查清单
+- **3d-ar**：两 Kit 定位(ArkGraphics 3D+AR Engine)、SLAM 核心概念、AR Engine 六大能力、AR 应用骨架代码、5 条排查清单
+- **evals**：38→56 条(new 18 条覆盖所有 9 个转正 skill，每个 2 条)
+- **文档引用**：所有文档链接均为已验证的官方 Kit 入口页（developer.huawei.com），无臆造 slug
+
 ## [0.2.2] - 2026-06-12
 
 ### 一致性基建与质量加固（评估报告 Phase 0/1/2 落地）
