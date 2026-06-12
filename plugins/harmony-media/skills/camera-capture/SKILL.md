@@ -14,18 +14,18 @@ kits: ["@kit.CameraKit"]
 
 ## 覆盖 Kit 说明
 
-**Camera Kit** 提供鸿蒙相机全链路能力：会话创建(`createCameraSession`)、预览流(`previewOutput`)、拍照流(`photoOutput`)、录像流(`videoOutput`)、元数据流(`metadataOutput`)的管理。API 24 新增"影随人动"追焦(`SubjectTrackingFocus`)，支持运动主体锁定跟踪对焦；同时支持 `DeferredPhotoOutput` 延迟预览输出，降低预览功耗。
+**Camera Kit** 提供鸿蒙相机全链路能力：相机会话管理与预览流/拍照流/录像流/元数据流的配置输出。"影随人动"主体追焦、分段式拍照等增强能力以官方文档为准(具体 API 名与版本待 sdk-diff 核实后补充)。
 
 ## 常见场景速查
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
 | 相机预览 | CameraKit | [相机预览指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-preview) |
-| 拍照输出 | CameraKit | [拍照指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-photo-capture) |
-| 录像输出 | CameraKit, AVCodecKit | [录像指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-video-capture) |
-| 二维码扫描 | CameraKit, ScanKit | [扫码集成指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-metadata-scan) |
-| 人脸追焦 | CameraKit | [影随人动追焦指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-subject-tracking-focus) |
-| 延迟预览 | CameraKit | [延迟预览指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-deferred-photo) |
+| 拍照输出 | CameraKit | [拍照指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-overview) |
+| 录像输出 | CameraKit, AVCodecKit | [录像指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-overview) |
+| 二维码扫描 | CameraKit, ScanKit | [扫码集成指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-overview) |
+| 人脸追焦 | CameraKit | [影随人动追焦指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-overview) |
+| 延迟预览 | CameraKit | [延迟预览指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/camera-overview) |
 
 ## P2 完善计划
 

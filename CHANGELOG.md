@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.2.2] - 2026-06-12
+
+### 一致性基建与质量加固（评估报告 Phase 0/1/2 落地）
+- **版本与元数据统一**：marketplace.json owner 占位符替换、8 个 plugin.json 版本统一 0.2.2、
+  修复 harmony-core/plugin.json 中 `harmonic-debugging` 拼写错误、
+  修复 security-permissions 的 frontmatter name 旧名残留
+- **lint 升级为 10 项检查**（tools/lint-skills.sh）：新增 plugin.json 清单↔目录双向一致、
+  SKILL.md 引用路径存在性、索引路由表目标存在性、JSON 严格解析、尺寸约束;修复 evals 检查恒过缺陷
+- **新增 CI**（.github/workflows/ci.yml）：push/PR 自动运行 lint
+- **evals 扩充 22→38 条**：补齐 13 个深度 skill、占位域路由与 Android 负样本
+- **占位 skill 文档链接全量核实**：52 个官方文档 URL 经实测 49 个失效（404/臆造 slug），
+  全部替换为从官方文档中心目录页提取并逐一验证的 Kit 级入口（25 个，0 失效）;
+  清除正文中未经核实的 API 类名（保留 SpeechRecognizer/AVPlayer/PixelMap 等已确认项），
+  并修正 TTS 能力归属（属 Core Speech Kit 而非 Speech Kit）
+- **ARCHITECTURE.md**：共享数据改为 skill 内 references/（可移植性）、修正模板中非法 YAML 示例、
+  新增"目录规约"与"发布 Checklist"两节
+- **sync-skills.sh**：同步目录名加 harmony- 前缀，避免与其他技能集冲突
+
+## [0.2.1] - 2026-06-12
+
+### 评估报告反馈修复（P0 阻断级）
+- marketplace.json 重写为 8-plugin 清单（修复 README 安装命令全部不可用的问题）
+- 20 个新 skill 的 kits 字段加引号（`@` 为 YAML 保留字符，裸值导致 frontmatter 解析失败）
+- evals.json 同步旧 skill 名、README 命令计数修正、迁移 skill 的 name 与目录统一
+- 9 个占位 skill 清除虚构 API 速查表
+- ARCHITECTURE.md 修正"全量加载 38KB"的不成立论证基准
+
 ## [0.2.0] - 2026-06-12
 
 ### 架构重构：三层渐进式

@@ -20,12 +20,12 @@ kits: ["@kit.AVCodecKit", "@kit.ImageKit", "@kit.MediaKit", "@kit.MediaLibraryKi
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
-| 视频转码 | AVCodecKit | [视频编解码指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avcodec-video-codec) |
-| 图片压缩 | ImageKit | [图片压缩指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/image-compression) |
-| 图片裁剪/旋转 | ImageKit | [像素处理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/image-pixelmap) |
-| 音视频播放 | MediaKit | [播放指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-playback) |
-| 录音/录像 | MediaKit, AudioKit | [录制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-recorder) |
-| 媒体文件查询 | MediaLibraryKit | [媒体库指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-library) |
+| 视频转码 | AVCodecKit | [视频编解码指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avcodec-kit-intro) |
+| 图片压缩 | ImageKit | [图片压缩指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/image-overview) |
+| 图片裁剪/旋转 | ImageKit | [像素处理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/image-overview) |
+| 音视频播放 | MediaKit | [播放指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-kit-intro) |
+| 录音/录像 | MediaKit, AudioKit | [录制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/media-kit-intro) |
+| 媒体文件查询 | MediaLibraryKit | [媒体库指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/photoaccesshelper-overview) |
 
 ## P2 完善计划
 

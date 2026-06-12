@@ -14,18 +14,18 @@ kits: ["@kit.SpeechKit", "@kit.CoreSpeechKit"]
 
 ## 覆盖 Kit 说明
 
-**Speech Kit** 提供场景化语音服务：文本转语音(`TextToSpeechEngine`)支持多语种朗读、语速/音调调节；AI 字幕(`AISubtitle`)可从音频流中实时生成字幕文本，支持离线引擎。**Core Speech Kit** 提供基础语音识别(`SpeechRecognizer`)能力，支持实时流式识别与离线短句识别，可配置语言模型适应不同场景(搜索/输入/对话)。
+**Speech Kit** 提供场景化语音服务：AI 字幕可从音频流中实时生成字幕文本，支持离线引擎。**Core Speech Kit** 提供文本转语音(TextToSpeech)与语音识别(SpeechRecognizer)基础能力，支持多语种朗读、语速/音调调节，支持实时流式识别与离线短句识别，可配置语言模型适应不同场景(搜索/输入/对话)。
 
 ## 常见场景速查
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
-| TTS 文本朗读 | SpeechKit | [TTS 朗读指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-tts) |
-| 实时语音识别 | CoreSpeechKit | [语音识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-recognition) |
-| AI 字幕生成 | SpeechKit | [AI 字幕指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-ai-subtitle) |
-| 离线语音识别 | CoreSpeechKit | [离线识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-offline-recognition) |
-| 多语种朗读 | SpeechKit | [TTS 语种配置](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-tts-language) |
-| 语音指令控制 | CoreSpeechKit, NaturalLanguageKit | [语音指令集成](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-voice-command) |
+| TTS 文本朗读 | SpeechKit | [TTS 朗读指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-speech-introduction) |
+| 实时语音识别 | CoreSpeechKit | [语音识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-speech-introduction) |
+| AI 字幕生成 | SpeechKit | [AI 字幕指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-production) |
+| 离线语音识别 | CoreSpeechKit | [离线识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-speech-introduction) |
+| 多语种朗读 | SpeechKit | [TTS 语种配置](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-speech-introduction) |
+| 语音指令控制 | CoreSpeechKit, NaturalLanguageKit | [语音指令集成](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-production) |
 
 ## P2 完善计划
 

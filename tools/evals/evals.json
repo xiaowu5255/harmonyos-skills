@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 22 条(含 2 负样本)。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 38 条(含 3 负样本)。",
   "evals": [
     {
       "id": 1,
@@ -133,6 +133,102 @@
       "skill": "none(负样本)",
       "prompt": "用 Python 帮我写个爬虫抓取京东商品价格",
       "expected_output": "不触发任何鸿蒙技能"
+    },
+    {
+      "id": 23,
+      "skill": "arkts-concurrency",
+      "prompt": "鸿蒙里想把图片压缩放到子线程跑,TaskPool 和 Worker 怎么选?对象传过去还报 not sendable 错误",
+      "expected_output": "触发 arkts-concurrency;给出 TaskPool/Worker 选型依据;解释 @Sendable 约束与序列化边界"
+    },
+    {
+      "id": 24,
+      "skill": "arkui-window",
+      "prompt": "做视频播放页,进入时要强制横屏并保持屏幕常亮,退出恢复,怎么实现?",
+      "expected_output": "触发 arkui-window;给出窗口方向设置与常亮方案;提醒退出时恢复状态"
+    },
+    {
+      "id": 25,
+      "skill": "arkweb",
+      "prompt": "App 里嵌了 H5 页面,H5 需要拿原生的登录态,JS 和 ArkTS 怎么互相调用?",
+      "expected_output": "触发 arkweb;给出 JS Bridge 双向通信方案(javaScriptProxy/runJavaScript);提示安全域名校验"
+    },
+    {
+      "id": 26,
+      "skill": "stage-model",
+      "prompt": "UIAbility 的 onCreate 和 onWindowStageCreate 有什么区别?全局初始化代码应该放在哪里?",
+      "expected_output": "触发 stage-model;讲清生命周期次序与职责边界;给出初始化代码归属建议"
+    },
+    {
+      "id": 27,
+      "skill": "arkui-patterns",
+      "prompt": "鸿蒙长列表滑动卡顿严重,几千条数据一滑就掉帧,怎么优化?",
+      "expected_output": "触发 arkui-patterns;给出列表性能三件套(LazyForEach/cachedCount/组件复用)而非泛泛建议"
+    },
+    {
+      "id": 28,
+      "skill": "hvigor-build",
+      "prompt": "工程要拆出公共模块给两个 App 复用,HAR 和 HSP 应该怎么选?",
+      "expected_output": "触发 hvigor-build;按共享方式/独立进程/按需加载给出 HAR vs HSP 决策依据"
+    },
+    {
+      "id": 29,
+      "skill": "file-system",
+      "prompt": "用户从相册选了一张图片拿到 URI,我想复制到应用沙箱里再处理,怎么写?",
+      "expected_output": "触发 file-system;给出 URI→沙箱拷贝路径;提示 Picker 返回 URI 的访问时效约束"
+    },
+    {
+      "id": 30,
+      "skill": "connectivity",
+      "prompt": "鸿蒙应用怎么扫描并连接 BLE 蓝牙设备,读取它的传感数据?",
+      "expected_output": "触发 connectivity;给出 BLE 扫描/连接/GATT 读写流程;提示蓝牙权限申请"
+    },
+    {
+      "id": 31,
+      "skill": "distributed",
+      "prompt": "想做手机上看一半的文章,无缝接续到平板上继续看,鸿蒙怎么实现?",
+      "expected_output": "触发 distributed;先过分布式前置五条清单(同账号/组网等);再给接续实现路径"
+    },
+    {
+      "id": 32,
+      "skill": "data-storage",
+      "prompt": "App 的设置项和用户数据存哪里?本地数据库后续还要能升级表结构",
+      "expected_output": "触发 data-storage;设置项用 Preferences;结构化数据用 RDB 并给出版本迁移方案"
+    },
+    {
+      "id": 33,
+      "skill": "native-ndk",
+      "prompt": "把一个 C++ 图像处理库移植到鸿蒙,在 native 回调里更新 JS 侧数据就崩溃",
+      "expected_output": "触发 native-ndk;定位 N-API 线程约束问题;给出 napi_threadsafe_function 方案"
+    },
+    {
+      "id": 34,
+      "skill": "location-map",
+      "prompt": "App 里要集成地图,显示当前定位和周边餐厅 POI,怎么接?",
+      "expected_output": "触发 location-map;给出定位授权+地图显示+POI 搜索路径;提示模糊/精确定位权限差异"
+    },
+    {
+      "id": 35,
+      "skill": "sharing-social",
+      "prompt": "实现把一张图分享到系统分享面板,还要支持从短信里的链接直接拉起 App 指定页面",
+      "expected_output": "触发 sharing-social;分享走 Share Kit;拉起走 App Linking/DeepLink 并给出校验配置"
+    },
+    {
+      "id": 36,
+      "skill": "0-media-index",
+      "prompt": "鸿蒙应用怎么做视频录制然后压缩上传?",
+      "expected_output": "触发 0-media-index;路由到 camera-capture(录制)+media-processing(压缩);占位技能应引导官方文档而非编造 API"
+    },
+    {
+      "id": 37,
+      "skill": "0-ai-index",
+      "prompt": "想在鸿蒙 App 里加一个拍照识别文字的功能",
+      "expected_output": "触发 0-ai-index;路由到 ai-vision(OCR);占位技能应引导官方 Vision Kit 文档而非编造 API"
+    },
+    {
+      "id": 38,
+      "skill": "none(负样本)",
+      "prompt": "Android 项目里 WorkManager 的后台任务总被系统杀掉,怎么保活?",
+      "expected_output": "不触发任何鸿蒙技能(Android 项目)"
     }
   ]
 }

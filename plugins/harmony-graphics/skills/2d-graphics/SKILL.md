@@ -20,12 +20,12 @@ kits: ["@kit.ArkGraphics2D", "@kit.GraphicsAccelerateKit"]
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
-| 自定义绘制 | ArkGraphics2D | [Canvas 绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-canvas-drawing) |
-| 离屏渲染缓冲 | ArkGraphics2D | [离屏渲染指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-offscreen) |
-| 高性能动画 | ArkGraphics2D, GraphicsAccelerateKit | [DisplaySync 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-display-sync) |
-| 图表绘制 | ArkGraphics2D | [图表绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-chart) |
-| 图片合成 | ArkGraphics2D | [图片合成指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-2d-image) |
-| GPU 加速 | GraphicsAccelerateKit | [图形加速指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/graphics-accelerate) |
+| 自定义绘制 | ArkGraphics2D | [Canvas 绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
+| 离屏渲染缓冲 | ArkGraphics2D | [离屏渲染指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
+| 高性能动画 | ArkGraphics2D, GraphicsAccelerateKit | [DisplaySync 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
+| 图表绘制 | ArkGraphics2D | [图表绘制指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
+| 图片合成 | ArkGraphics2D | [图片合成指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction) |
+| GPU 加速 | GraphicsAccelerateKit | [图形加速指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/graphics-accelerate-introduction) |
 
 ## P2 完善计划
 

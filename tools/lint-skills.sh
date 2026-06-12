@@ -1,65 +1,158 @@
 #!/bin/bash
 # harmonyos-skills 一致性校验脚本
 # 用法: bash tools/lint-skills.sh
+# 检查项:
+#   1. skill 目录名与 frontmatter name 一致
+#   2. requires 目标存在
+#   3. kits 字段无裸 @(YAML 合法性)
+#   4. evals.json 引用的 skill 存在
+#   5. marketplace.json 与 plugins/ 目录一致
+#   6. plugin.json 的 skills 清单与目录双向一致
+#   7. SKILL.md 正文引用的 references/、scripts/ 相对路径存在
+#   8. 索引 skill 路由表指向的技能存在
+#   9. JSON 文件可被严格解析
+#  10. 尺寸约束(索引 ≤4KB,深度 ≤12KB)
 
-set -euo pipefail
+set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0; FAIL=0
 
 section() { echo ""; echo "=== $1 ==="; }
 check() { if [ "$1" -eq 0 ]; then PASS=$((PASS+1)); echo "  OK: $2"; else FAIL=$((FAIL+1)); echo "  FAIL: $2"; fi; }
 
-# 1. 目录名与 name 一致
+# 收集所有 skill 名(目录名为准)
+declare -A skill_names
+while IFS= read -r f; do
+  skill_names["$(basename "$(dirname "$f")")"]=1
+done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
+
+# ── 1. 目录名与 frontmatter name 一致 ──
 section "1. Skill 目录名与 frontmatter name 一致性"
+mismatch=0
 while IFS= read -r f; do
   dirname=$(basename "$(dirname "$f")")
   fm_name=$(head -5 "$f" | grep '^name:' | awk '{print $2}')
-  if [ "$dirname" = "$fm_name" ]; then check 0 "$dirname"; else check 1 "$dirname != $fm_name"; fi
+  if [ "$dirname" != "$fm_name" ]; then check 1 "$dirname != $fm_name"; mismatch=1; fi
 done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
+[ "$mismatch" -eq 0 ] && check 0 "全部 ${#skill_names[@]} 个 skill 目录名与 name 一致"
 
-# 2. 收集所有 skill names
-declare -A skill_names
-while IFS= read -r f; do
-  dirname=$(basename "$(dirname "$f")")
-  skill_names["$dirname"]=1
-done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
-
-# 3. requires 目标存在
+# ── 2. requires 目标存在 ──
 section "2. requires 目标存在性"
+bad=0
 while IFS= read -r f; do
   bname=$(basename "$(dirname "$f")")
   req=$(grep '^requires:' "$f" 2>/dev/null | awk '{print $2}')
-  if [ -n "$req" ] && [ -n "${skill_names[$req]:-}" ] 2>/dev/null; then check 0 "$bname -> $req"; elif [ -n "$req" ]; then check 1 "$bname requires '$req' 不存在"; fi
+  if [ -n "$req" ] && [ -z "${skill_names[$req]:-}" ]; then check 1 "$bname requires '$req' 不存在"; bad=1; fi
 done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
+[ "$bad" -eq 0 ] && check 0 "全部 requires 目标有效"
 
-# 4. kits 无裸 @ (YAML 安全)
+# ── 3. kits 无裸 @(YAML 合法性) ──
 section "3. kits 字段 YAML 安全性"
-bad_count=0
+bad=0
 while IFS= read -r line; do
-  f=$(echo "$line" | cut -d: -f1)
-  echo "  FAIL: $f 包含未加引号的 @kit 值" 
-  bad_count=1
+  echo "  FAIL: ${line%%:*} 包含未加引号的 @kit 值"; bad=1
 done < <(grep -rn 'kits: \[@kit\.' "$ROOT/plugins" --include="*.md" | grep -v '"@' || true)
-check $bad_count "所有 kits 已加引号防护"
+check $bad "所有 kits 已加引号防护"
 
-# 5. evals 中 skill 名真实存在
+# ── 4. evals 引用 skill 存在 ──
 section "4. evals.json 引用 skill 存在性"
+bad=0
 if [ -f "$ROOT/tools/evals/evals.json" ]; then
-  for name in $(grep '"skill":' "$ROOT/tools/evals/evals.json" | sed 's/.*"skill": *"\([^"]*\)".*/\1/'); do
-    if [ "$name" = "none(负样本)" ]; then continue; fi
-    if [ -n "${skill_names[$name]:-}" ] 2>/dev/null; then : ; else check 1 "evals 引用未知 skill: $name"; fi
-  done
-  check 0 "evals 引用全部有效"  # will overwrite if there were failures above
+  while IFS= read -r name; do
+    case "$name" in none*|harmony-index) continue;; esac
+    if [ -z "${skill_names[$name]:-}" ]; then check 1 "evals 引用未知 skill: $name"; bad=1; fi
+  done < <(grep '"skill":' "$ROOT/tools/evals/evals.json" | sed 's/.*"skill": *"\([^"]*\)".*/\1/')
+  [ "$bad" -eq 0 ] && check 0 "evals 引用全部有效"
 fi
 
-# 6. marketplace.json 插件数与实际一致
+# ── 5. marketplace.json 与目录一致 ──
 section "5. marketplace.json 对齐"
 mj="$ROOT/.claude-plugin/marketplace.json"
 if [ -f "$mj" ]; then
-  mj_count=$(grep -c '"name": "harmony-' "$mj" || echo 0)
+  bad=0
+  for src in $(grep -oE '"source": *"\./plugins/[^"]+"' "$mj" | sed 's/.*"\.\///;s/"//'); do
+    [ -d "$ROOT/$src" ] || { check 1 "marketplace source 不存在: $src"; bad=1; }
+  done
+  mj_count=$(grep -c '"source":' "$mj" || echo 0)
   actual_count=$(find "$ROOT/plugins" -maxdepth 1 -name "harmony-*" -type d | wc -l)
-  [ "$mj_count" = "$actual_count" ]; check $? "marketplace.json: $mj_count 个插件 vs 实际 $actual_count 个目录"
+  if [ "$mj_count" != "$actual_count" ]; then check 1 "marketplace $mj_count 个插件 vs 实际 $actual_count 个目录"; bad=1; fi
+  [ "$bad" -eq 0 ] && check 0 "marketplace.json 与 plugins/ 目录一致($mj_count 个)"
 fi
+
+# ── 6. plugin.json skills 清单与目录双向一致 ──
+section "6. plugin.json skills 清单一致性"
+bad=0
+for pj in "$ROOT"/plugins/*/.claude-plugin/plugin.json; do
+  pdir="$(dirname "$(dirname "$pj")")"
+  pname="$(basename "$pdir")"
+  # 清单 → 目录
+  for s in $(grep -oE '"skills": *\[[^]]*\]' "$pj" | grep -oE '"[a-z0-9-]+"' | tr -d '"' | grep -v '^skills$'); do
+    [ -d "$pdir/skills/$s" ] || { check 1 "$pname/plugin.json 声明的 skill 目录不存在: $s"; bad=1; }
+  done
+  # 目录 → 清单
+  for d in "$pdir"/skills/*/; do
+    s="$(basename "$d")"
+    grep -q "\"$s\"" "$pj" || { check 1 "$pname/skills/$s 未在 plugin.json 中声明"; bad=1; }
+  done
+done
+[ "$bad" -eq 0 ] && check 0 "全部 plugin.json 清单与目录双向一致"
+
+# ── 7. SKILL.md 引用的相对路径存在 ──
+section "7. SKILL.md 引用路径存在性"
+bad=0
+while IFS= read -r f; do
+  sdir="$(dirname "$f")"
+  bname="$(basename "$sdir")"
+  while IFS= read -r ref; do
+    [ -f "$sdir/$ref" ] || { check 1 "$bname 引用的文件不存在: $ref"; bad=1; }
+  done < <(grep -oE '\`?(references|scripts)/[A-Za-z0-9_.-]+\`?' "$f" | tr -d '\`' | sort -u)
+done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
+[ "$bad" -eq 0 ] && check 0 "全部 SKILL.md 引用路径有效"
+
+# ── 8. 索引路由表目标存在 ──
+section "8. 索引 skill 路由表目标存在性"
+bad=0
+while IFS= read -r f; do
+  bname="$(basename "$(dirname "$f")")"
+  # 提取正文反引号内的候选 skill 名(全小写连字符、不含点/斜杠/@)
+  while IFS= read -r tok; do
+    case "$tok" in *.*|*/*|@*) continue;; esac
+    echo "$tok" | grep -qE '^(0-)?[a-z][a-z0-9]*(-[a-z0-9]+)+$' || continue
+    if [ -z "${skill_names[$tok]:-}" ]; then check 1 "$bname 路由表指向未知技能: $tok"; bad=1; fi
+  done < <(sed '1,/^---$/d' "$f" | sed '1,/^---$/d' | grep -oE '\`[^\`]+\`' | tr -d '\`' | sort -u)
+done < <(find "$ROOT/plugins" -path "*skills*" -name "SKILL.md" | grep -E '(harmony-index|0-[a-z]+-index)')
+[ "$bad" -eq 0 ] && check 0 "全部索引路由表目标有效"
+
+# ── 9. JSON 可解析 ──
+section "9. JSON 严格解析"
+bad=0
+PY=""
+for cand in python python3 py; do
+  if command -v "$cand" >/dev/null 2>&1 && "$cand" -c "import json" >/dev/null 2>&1; then PY="$cand"; break; fi
+done
+if [ -n "$PY" ]; then
+  for j in "$mj" "$ROOT"/plugins/*/.claude-plugin/plugin.json "$ROOT/tools/evals/evals.json"; do
+    "$PY" -c "import json,sys;json.load(open(sys.argv[1],encoding='utf-8'))" "$j" 2>/dev/null \
+      || { check 1 "JSON 解析失败: ${j#$ROOT/}"; bad=1; }
+  done
+  [ "$bad" -eq 0 ] && check 0 "全部 JSON 可严格解析"
+else
+  echo "  SKIP: 无 python,跳过 JSON 解析检查"
+fi
+
+# ── 10. 尺寸约束 ──
+section "10. 尺寸约束(索引 ≤4KB,深度 ≤12KB)"
+bad=0
+while IFS= read -r f; do
+  bname="$(basename "$(dirname "$f")")"
+  size=$(wc -c < "$f")
+  case "$bname" in
+    harmony-index|0-*-index) limit=4096;;
+    *) limit=12288;;
+  esac
+  [ "$size" -le "$limit" ] || { check 1 "$bname 超出尺寸约束: ${size}B > ${limit}B"; bad=1; }
+done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
+[ "$bad" -eq 0 ] && check 0 "全部 skill 在尺寸约束内"
 
 echo ""
 echo "===== 结果: $PASS PASS / $FAIL FAIL ====="

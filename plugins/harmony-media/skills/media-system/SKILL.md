@@ -14,17 +14,17 @@ kits: ["@kit.AVSessionKit", "@kit.DRMKit", "@kit.ScanKit"]
 
 ## 覆盖 Kit 说明
 
-**AVSession Kit** 提供系统级音视频播控服务：锁屏/通知栏媒体控件、媒体元数据(`AVSessionMetadata`)设置、播放状态同步。支持投屏(`Cast+`)能力，将音频/视频流投射到远端设备。**DRM Kit** 为受版权保护的音视频内容提供数字版权解密与许可管理，支持主流 DRM 方案(Widevine/ChinaDRM)。**Scan Kit** 提供统一扫码能力，支持二维码/条形码的相机扫码与图片解码两种模式。
+**AVSession Kit** 提供系统级音视频播控服务：锁屏/通知栏媒体控件、媒体元数据设置、播放状态同步。支持投屏能力，将音频/视频流投射到远端设备。**DRM Kit** 为受版权保护的音视频内容提供数字版权解密与许可管理，支持主流 DRM 方案(Widevine/ChinaDRM)。**Scan Kit** 提供统一扫码能力，支持二维码/条形码的相机扫码与图片解码两种模式。
 
 ## 常见场景速查
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
 | 媒体播控 | AVSessionKit | [播控框架指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-overview) |
-| 投屏到电视 | AVSessionKit | [投屏指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-cast) |
+| 投屏到电视 | AVSessionKit | [投屏指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-overview) |
 | DRM 视频播放 | DRMKit | [DRM 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/drm-overview) |
-| 二维码扫码 | ScanKit | [统一扫码指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/scan-barcode) |
-| 铃声设置 | RingtoneKit | [铃声服务指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ringtone) |
+| 二维码扫码 | ScanKit | [统一扫码指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/scan-introduction) |
+| 铃声设置 | RingtoneKit | [铃声服务指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ringtone-introduction) |
 
 ## P2 完善计划
 

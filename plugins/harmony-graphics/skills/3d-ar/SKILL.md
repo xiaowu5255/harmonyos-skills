@@ -20,11 +20,11 @@ kits: ["@kit.ArkGraphics3D", "@kit.AREngine", "@kit.SpatialReconKit", "@kit.XEng
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
-| 3D 模型展示 | ArkGraphics3D | [3D 场景渲染指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics-3d-model) |
-| AR 平面放置 | AREngine | [AR 平面检测指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ar-engine-hit-test) |
-| AR 人脸特效 | AREngine | [AR 人脸跟踪指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/ar-engine-face-tracking) |
-| 空间扫描 | SpatialReconKit | [空间建模指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/spatial-recon) |
-| GPU 加速计算 | XEngineKit | [GPU 加速指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/xengine-overview) |
+| 3D 模型展示 | ArkGraphics3D | [3D 场景渲染指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics3d-overview) |
+| AR 平面放置 | AREngine | [AR 平面检测指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arengine-overview) |
+| AR 人脸特效 | AREngine | [AR 人脸跟踪指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arengine-overview) |
+| 空间扫描 | SpatialReconKit | [空间建模指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/spatial-recon-introduction) |
+| GPU 加速计算 | XEngineKit | [GPU 加速指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/xengine-kit-introduction) |
 
 ## P2 完善计划
 

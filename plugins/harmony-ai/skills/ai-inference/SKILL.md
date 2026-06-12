@@ -20,12 +20,12 @@ kits: ["@kit.MindSporeLiteKit", "@kit.NeuralNetworkRuntimeKit", "@kit.CANNKit", 
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
-| 模型推理 | MindSporeLiteKit | [模型推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/mindspore-lite-inference) |
-| 模型量化部署 | MindSporeLiteKit | [模型量化指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/mindspore-lite-quantization) |
-| 异构推理 | NeuralNetworkRuntimeKit | [异构推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/neural-network-runtime) |
-| NPU 加速 | CANNKIT | [NPU 推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/cann-npu) |
-| 智能体构建 | AgentFrameworkKit | [智能体框架指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/agent-framework) |
-| 多智能体协作 | AgentFrameworkKit | [多智能体协作指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/agent-framework-multi-agent) |
+| 模型推理 | MindSporeLiteKit | [模型推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/mindspore-lite-kit-introduction) |
+| 模型量化部署 | MindSporeLiteKit | [模型量化指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/mindspore-lite-kit-introduction) |
+| 异构推理 | NeuralNetworkRuntimeKit | [异构推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/neural-network-runtime-kit-introduction) |
+| NPU 加速 | CANNKIT | [NPU 推理指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/hiaifoundation-introduction) |
+| 智能体构建 | AgentFrameworkKit | [智能体框架指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/hmaf-introduction) |
+| 多智能体协作 | AgentFrameworkKit | [多智能体协作指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/hmaf-introduction) |
 
 ## P2 完善计划
 

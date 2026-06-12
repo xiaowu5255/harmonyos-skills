@@ -1,6 +1,6 @@
 {
   "name": "harmony-graphics",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "HarmonyOS 6.x 图形渲染 — 2D/3D/AR/空间感知",
   "author": "HarmonyOS Skills",
   "skills": ["0-graphics-index", "2d-graphics", "3d-ar"]

@@ -14,18 +14,18 @@ kits: ["@kit.VisionKit", "@kit.CoreVisionKit"]
 
 ## 覆盖 Kit 说明
 
-**Vision Kit** 提供场景化视觉 AI 能力：通用文字识别(OCR)、文档扫描矫正、身份证/银行卡识别、表格识别、二维码检测、手势识别等开箱即用的视觉能力。**Core Vision Kit** 提供基础视觉原子能力：图像分类(`ImageClassifier`)、目标检测(`ObjectDetector`)、图像分割(`ImageSegmenter`)，允许开发者自定义模型替换默认模型进行端侧推理。
+**Vision Kit** 提供场景化视觉 AI 能力：通用文字识别(OCR)、文档扫描矫正、身份证/银行卡识别、表格识别、二维码检测、手势识别等开箱即用的视觉能力。**Core Vision Kit** 提供基础视觉原子能力：图像分类、目标检测、图像分割，允许开发者自定义模型替换默认模型进行端侧推理。
 
 ## 常见场景速查
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
-| 拍照 OCR 识别 | VisionKit | [通用文字识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-text-recognition) |
-| 身份证扫描 | VisionKit | [卡证识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-card-identification) |
-| 文档矫正扫描 | VisionKit | [文档矫正指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-document-reflection) |
-| 图像分类 | CoreVisionKit | [图像分类指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-image-classification) |
-| 目标检测 | CoreVisionKit | [目标检测指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-object-detection) |
-| 手势识别 | VisionKit | [手势识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-gesture-detection) |
+| 拍照 OCR 识别 | VisionKit | [通用文字识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
+| 身份证扫描 | VisionKit | [卡证识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
+| 文档矫正扫描 | VisionKit | [文档矫正指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
+| 图像分类 | CoreVisionKit | [图像分类指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-vision-introduction) |
+| 目标检测 | CoreVisionKit | [目标检测指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-vision-introduction) |
+| 手势识别 | VisionKit | [手势识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-introduction) |
 
 ## P2 完善计划
 

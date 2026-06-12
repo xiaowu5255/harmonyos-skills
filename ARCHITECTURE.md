@@ -101,10 +101,8 @@ name: network-requests
 description: >-
   鸿蒙网络请求: HTTP 数据请求、WebSocket 双向连接、Socket 连接、
   弱网优化、网络状态监听。涉及网络、API 调用、上传下载时使用。
-requires: system-index
-kits:
-  - @kit.NetworkKit
-  - @kit.NetworkBoostKit
+requires: 0-system-index
+kits: ["@kit.NetworkKit", "@kit.NetworkBoostKit"]   # @ 为 YAML 保留字符,必须加引号
 ```
 
 ---
@@ -201,20 +199,22 @@ harmonyos-skills/
 │           ├── signing/            # 已有
 │           └── release-compliance/ # 已有
 │
-├── references/                     ← 🆕 跨 skill 共享数据
-│   ├── kit-mapping.json            # Kit ↔ Skill 映射表
-│   ├── api-version-changelog.md    # API 版本变更（SDK diff 产出）
-│   └── error-reference.md          # 错误对照表（feedback 回流）
-│
 ├── tools/
 │   ├── sdk-diff/
 │   ├── sync-skills.sh
+│   ├── lint-skills.sh              # 一致性校验（CI 强制）
 │   └── evals/
 │       └── evals.json
 │
 └── .github/workflows/
+    ├── ci.yml                      # push/PR 触发 lint
     └── weekly-sdk-watch.yml
 ```
+
+> **共享数据放在 skill 内部，不放仓库根**：错误对照表在 `harmony-debugging/references/common-errors.md`，
+> TS 迁移对照在 `arkts-syntax/references/ts-to-arkts.md`，API 版本变更清单（SDK diff 产出）落
+> `version-guide/references/`。原因：`sync-skills.sh` 以 skill 目录为单位复制，仓库根级文件
+> 同步到 Codex / OpenCode 等工具时会丢失，skill 内的 references/ 才可移植。
 
 ---
 
@@ -233,9 +233,7 @@ description: >-
     - deep-skill-name-1
     - deep-skill-name-2
 requires: harmony-index
-kits:
-  - @kit.XXX
-  - @kit.YYY
+kits: ["@kit.XXX", "@kit.YYY"]   # 必须加引号: @ 是 YAML 保留字符,裸值无法解析
 ---
 
 # {领域名称} 索引
@@ -362,3 +360,33 @@ kits:
 > **关于 context 开销**：Agent Skills 的 body 内容按 description 触发按需加载，不会全量载入。
 > 重构前后的真实变化是：47 个 skill 的 name+description 元数据常驻 context（约 3-5KB，vs 旧版 19 个约 1.5KB），
 > 对终端用户影响可忽略。收益在于更精准的路由和索引层的全景发现兜底。
+
+---
+
+## 九、Skill 目录规约
+
+遵循 Agent Skills 标准目录结构（SKILL.md 必需，scripts/、references/、assets/ 可选），但**按内容驱动，禁止为合规建空目录**：
+
+| 目录 | 何时建 | 本仓库实例 |
+|------|--------|-----------|
+| `references/` | 被字数上限（深度 skill ≤1200 词）挤出的权威长尾内容：错误对照表、API 明细、逐条迁移示例 | `harmony-debugging/references/common-errors.md`、`arkts-syntax/references/ts-to-arkts.md`、`testing-harmony/references/qa-checklist.md` |
+| `scripts/` | 确定性检查类可执行逻辑（可随 skill 同步到 Codex/OpenCode，弥补 commands 仅 Claude Code 可用） | `harmony-debugging/scripts/check_project_config.sh` |
+| `assets/` | 真实模板/样板文件（build-profile 模板、卡片样板） | 暂无，待 Phase 3 |
+
+硬规则（`tools/lint-skills.sh` 强制，CI 拦截）：
+
+1. SKILL.md 正文引用的 `references/`、`scripts/` 相对路径**必须存在**（check #7）
+2. 索引 skill（harmony-index、`0-*-index`）**永远单文件**，不建子目录
+3. frontmatter 的 `kits` 值必须加引号——`@` 是 YAML 保留字符（check #3）
+4. 任何具体 API 名必须经 `tools/sdk-diff` 或官方文档核实后才能写入；未核实内容只能以"参考官方文档"指引形式存在
+
+## 十、发布 Checklist
+
+每次发版前依次执行：
+
+- [ ] `bash tools/lint-skills.sh` 全部 PASS（10 项检查）
+- [ ] 版本号三处同步：marketplace.json（metadata + 各 plugin 条目）、8 个 plugin.json、README"当前版本"行
+- [ ] README 技能矩阵、命令表与目录树一致（lint 部分覆盖，人工复核新增/删除项）
+- [ ] CHANGELOG.md 新增本版本条目
+- [ ] evals.json：新增 skill 已补 2-3 条用例（含触发与预期输出）
+- [ ] 本地实测：`/plugin install <每个新增/改动插件>@harmonyos-skills` 安装成功且 skill 可触发

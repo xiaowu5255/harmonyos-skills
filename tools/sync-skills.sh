@@ -26,7 +26,10 @@ COUNT=0
 for skill_md in "$REPO_DIR"/plugins/*/skills/*/SKILL.md; do
   src_dir="$(dirname "$skill_md")"
   name="$(basename "$src_dir")"
-  dst="$TARGET/$name"
+  # 目录名加 harmony- 前缀防止与其他技能集冲突(notification/file-system 等过于通用);
+  # skill 实际名称仍以 frontmatter 的 name 字段为准,不受目录名影响
+  case "$name" in harmony-*) dst_name="$name";; *) dst_name="harmony-$name";; esac
+  dst="$TARGET/$dst_name"
   rm -rf "$dst"
   if [ "$MODE" = "link" ]; then
     ln -s "$src_dir" "$dst"

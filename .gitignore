@@ -19,3 +19,7 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# WorkBuddy 抓取缓存
+.workbuddy/*.md
+.workbuddy/*.json

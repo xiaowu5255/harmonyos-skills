@@ -14,18 +14,18 @@ kits: ["@kit.NaturalLanguageKit"]
 
 ## 覆盖 Kit 说明
 
-**Natural Language Kit** 提供端侧自然语言处理能力：分词(`WordSegmenter`)支持多种粒度的中文/英文分词策略；词性标注(`POSTagger`)识别实词与虚词；实体识别(`EntityExtractor`)提取人名、地名、组织、时间、数量等实体；意图理解(`IntentDetector`)匹配用户输入意图类别；文本相似度(`TextEmbedding`)计算语义向量用于检索与聚类。
+**Natural Language Kit** 提供端侧自然语言处理能力：分词支持多种粒度的中文/英文分词策略；词性标注识别实词与虚词；实体识别提取人名、地名、组织、时间、数量等实体；意图理解匹配用户输入意图类别；文本向量化用于相似度检索与聚类。具体类名待 sdk-diff 核实后补充。
 
 ## 常见场景速查
 
 | 场景 | 需关注的 Kit | 官方文档入口 |
 |------|-------------|------------|
-| 中文分词 | NaturalLanguageKit | [分词指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-word-segmentation) |
-| 实体提取 | NaturalLanguageKit | [实体识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-entity-extraction) |
-| 意图识别 | NaturalLanguageKit | [意图理解指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-intent-detection) |
-| 文本分类 | NaturalLanguageKit | [文本分类指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-text-classification) |
-| 语义相似度 | NaturalLanguageKit | [文本嵌入指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-text-embedding) |
-| 搜索关键词提取 | NaturalLanguageKit | [关键词提取指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/nlp-keyword-extraction) |
+| 中文分词 | NaturalLanguageKit | [分词指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/natural-language-introduction) |
+| 实体提取 | NaturalLanguageKit | [实体识别指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/natural-language-introduction) |
+| 意图识别 | NaturalLanguageKit | [意图理解指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/natural-language-introduction) |
+| 文本分类 | NaturalLanguageKit | [文本分类指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/natural-language-introduction) |
+| 语义相似度 | NaturalLanguageKit | [文本嵌入指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/natural-language-introduction) |
+| 搜索关键词提取 | NaturalLanguageKit | [关键词提取指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/natural-language-introduction) |
 
 ## P2 完善计划
 
@@ -34,7 +34,7 @@ kits: ["@kit.NaturalLanguageKit"]
 - [ ] 中文分词的多粒度策略选型(词粒度/字粒度/细粒度)与性能对比
 - [ ] 实体识别的完整输出解析与归一化处理
 - [ ] 意图检测器的自定义意图训练与注册流程
-- [ ] TextEmbedding 的向量存储与检索(结合向量数据库)的应用示例
+- [ ] 文本向量化的存储与检索(结合向量数据库)的应用示例
 - [ ] 多 Kit 联合：语音识别 → 分词 → 实体提取 → 意图执行 的端到端流水线
 - [ ] 端侧 NLP 与云侧大模型的混合推理策略
 - [ ] 用 sdk-diff 验证所有 API 名后再补回速查表

@@ -4,7 +4,7 @@ HarmonyOS 6（API 20–24）开发专家技能集。让你的 AI 编码 agent �
 
 技能本体遵循 **Agent Skills 开放标准**（SKILL.md），采用**三层渐进式架构**避免 context 爆炸，可在 Claude Code、Codex、OpenCode 等所有兼容工具中使用。
 
-当前版本：**0.2.0** — 8 plugin / 47 skill / 6 命令 / 2 hook / 自进化工具链。
+当前版本：**0.2.2** — 8 plugin / 47 skill / 6 命令 / 2 hook / 自进化工具链。
 
 ## 架构
 

@@ -1,5 +1,5 @@
 ---
-name: security-and-permissions
+name: security-permissions
 description: >-
   鸿蒙权限与安全体系:权限分级与 ACL、动态申请流程、Picker 与安全控件免权限
   方案、应用沙箱、数据加密。凡是涉及申请任何权限、访问相册/文件/位置/剪贴板/
