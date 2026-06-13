@@ -129,7 +129,7 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 在 Claude Code 会话中执行：
 
 ```
-/marketplace add harmonyos-skills https://github.com/<你的用户名>/harmonyos-skills
+/marketplace add harmonyos-skills https://github.com/xiaowu5255/harmonyos-skills
 ```
 
 或手动编辑 `~/.claude/claude.json`，在 `marketplaceSources` 中添加：
@@ -139,7 +139,7 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
   "marketplaceSources": [
     {
       "name": "harmonyos-skills",
-      "source": "https://github.com/<你的用户名>/harmonyos-skills"
+      "source": "https://github.com/xiaowu5255/harmonyos-skills"
     }
   ]
 }
@@ -174,7 +174,7 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 适用于本地开发、离线环境或自定义修改：
 
 ```bash
-git clone https://github.com/<你的用户名>/harmonyos-skills
+git clone https://github.com/xiaowu5255/harmonyos-skills
 
 # 在 Claude Code 中
 /plugin install harmony-platform /path/to/harmonyos-skills/plugins/harmony-platform
@@ -187,7 +187,7 @@ git clone https://github.com/<你的用户名>/harmonyos-skills
 适合非 Claude Code 工具（Codex / OpenCode 等）：
 
 ```bash
-git clone https://github.com/<你的用户名>/harmonyos-skills && cd harmonyos-skills
+git clone https://github.com/xiaowu5255/harmonyos-skills && cd harmonyos-skills
 ./tools/sync-skills.sh           # 复制全部 53 个 skill 到 ~/.agents/skills
 ./tools/sync-skills.sh --link    # 或软链接（修改仓库即生效）
 ```
@@ -197,7 +197,7 @@ git clone https://github.com/<你的用户名>/harmonyos-skills && cd harmonyos-
 如果只需要环境诊断 / 签名检查等工具，直接用独立脚本，无需安装任何 plugin：
 
 ```bash
-git clone https://github.com/<你的用户名>/harmonyos-skills && cd harmonyos-skills
+git clone https://github.com/xiaowu5255/harmonyos-skills && cd harmonyos-skills
 
 # 环境健康诊断
 bash tools/commands/harmony-doctor.sh /path/to/harmony-project
