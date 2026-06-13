@@ -34,7 +34,7 @@ metadata:
 
 ```ts
 const audioSession = audio.createAudioSession({
-  strategy: audio.AudioSessionStrategy.CONCURRENCY_PAUSE, // 被抢占时暂停
+  strategy: audio.AudioConcurrencyMode.CONCURRENCY_PAUSE_OTHERS, // 被抢占时暂停
 });
 
 audioSession.on('audioSessionDeactivated', (reason) => {
@@ -46,8 +46,8 @@ audioSession.on('audioSessionActivated', () => {
 });
 ```
 
-- 纯音乐播放器用 `CONCURRENCY_PAUSE`——通话来了暂停，通话结束自动恢复
-- 导航语音用 `CONCURRENCY_DUCK`——压低其他音频音量而非抢占焦点
+- 纯音乐播放器用 `CONCURRENCY_PAUSE_OTHERS`——通话来了暂停，通话结束自动恢复
+- 导航语音用 `CONCURRENCY_DUCK_OTHERS`——压低其他音频音量而非抢占焦点
 - **不要忽略 `audioSessionDeactivated` 回调**——不做响应会导致"两个播放器
   同时出声"或"通话结束后不恢复播放"
 

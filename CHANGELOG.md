@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.6.0] - 2026-06-13
+
+### 全量深度审计与质量修复（v3.0）
+- **全量审计**：对 45 个深度 skill 进行逐条 API 正确性审查（7 个并行 agent，跨 8 个领域）
+- **P0 修复（4 项）**：
+  - `media-system`：删除杜撰 API `castAudio`，修正 `createAVSession` 签名
+  - `ipc-ime`：删除杜撰概念 `LocalRPC`，替换为 EventHub/emitter
+  - `crash-diagnostics`：删除杜撰事件名 `BUSSINESS_THREAD_BLOCK`/`SYS_FREEZE`
+  - `arkts-syntax`：修正未核实 API 版本声明示例
+- **P1 修复（6 项）**：
+  - `2d-graphics`：修正 `markContentDirty`→`invalidate()`、`getSnapshot()`→`componentSnapshot`、URL 路径
+  - `audio-playback`：修正 `AudioSessionStrategy`→`AudioConcurrencyMode` 枚举名/值
+  - `arkui-window`：修正 "Activity"→"UIAbility" 术语
+  - `hvigor-build`/`release-and-compliance`：DevEco 版本号改为通用表述
+- **审计报告更新**：AUDIT_REPORT v3.0，含 12 条修复记录与 P0/P1/P2 待处理清单
+- **已确认正确**：`multi-device-adaptation` API 23 平行视界声明、`background-tasks` API 21+ 长时任务限制
+- **待重写**：`3d-ar`（20+ 虚构 API）、`ai-speech`（voiceprint 虚构模块）
+
+## [0.5.0] - 2026-06-12
+
+### 借鉴 HarmonyOS_Skills 官方仓库（agent-rules / agent-skills）的工程模式落地
+- **harmony-docs-retriever**（新 skill，harmony-platform）：官方文档检索层。稳态路径=本地锚点表
+  + `site:` 限定搜索 + web-fetch 取证 + 版本消歧；明确禁止直连 `/doc/search?`（robots 禁止且无公开 JSON）。
+  含 `references/doc-anchors.md`（已核实 URL 种子表）、`scripts/check-doc-urls.sh`（200 巡检）、test-cases。
+- **crash-diagnostics**（新 skill，harmony-release）：故障日志分型诊断。按 CppCrash/JsCrash/AppFreeze/
+  内存泄漏分型路由到 `references/` 各型详解（符号化、主线程栈、两次堆快照 diff 等方法论）。
+- **ArkTS 编译器级校验闭环**：`ets-lint-gate.sh` 升级支持 OpenHarmony 官方 `linter-cli`；新增
+  `arkts-syntax/scripts/arkts-lint.sh` + `references/arkts-linter-setup.md`（来自 agent-rules）。
+- **内容质量审查**：新增 `tools/validate-frontmatter.py`（name 字符集/description what+when/长度），
+  并入 `lint-skills.sh` 第 11 项（CRITICAL 拦截，风格降级 WARN）；第 12 项软提示 test-cases 覆盖。
+- **ts-to-arkts.md 扩充**：借 agent-rules 的 `ArkTS_Rules.md` 补 JSON 边界范式、动态数组窄化、硬禁清单。
+- **约定文档化**：ARCHITECTURE 新增「检索层/开发层分离」「Master 大路由」「test-cases 约定」三节。
+- evals 68→72 条；版本号全量同步至 0.5.0（marketplace + 8 plugin.json + README）。
+
 ## [0.4.1] - 2026-06-12
 
 ### 官方文档核验修正（对照 developer.huawei.com 全量核验 19 个深度 skill）

@@ -20,6 +20,11 @@ provides: index
 | AI | 视觉AI/语音AI/NLP/端侧推理/意图框架 | `0-ai-index` |
 | 发布运维 | 性能优化/QA测试/签名/上架合规 | `0-release-index` |
 
+## 检索层（任意领域均可先用）
+
+- **查官方文档/验证 API 官方说明/确认接口版本/错误码官方解释** → 加载 `harmony-docs-retriever`，
+  它以稳态路径（本地锚点表 + site 限定搜索 + web-fetch）取回官方原文证据，再交给开发技能编码。
+
 ## 业务定制路由（直接在本索引处理）
 
 - **AGC 平台**：AppGallery Connect 配置、质量服务、分析、崩溃等 → 参考 AGC 官方文档，本技能系列暂不覆盖

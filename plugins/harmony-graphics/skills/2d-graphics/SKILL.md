@@ -63,7 +63,7 @@ class MyRenderNode extends RenderNode {
 
 **与声明式 Canvas 的关键差异**：
 - `draw()` 由渲染管线主动调用，不用手动 invalidate
-- 可通过 `markContentDirty` 标记脏区，渲染器只重绘该区域——高性能场景的核心优化手段
+- 可通过 `invalidate(rect)` 标记脏区，渲染器只重绘该区域——高性能场景的核心优化手段
 - 多个 RenderNode 按 z-order 叠加，下层先画、上层后画
 
 ## DisplaySync：V-Sync 级同步
@@ -76,7 +76,7 @@ sync.setExpectedFrameRateRange({ min: 30, max: 60, expected: 60 });
 
 sync.on('frame', () => {
   // 每帧在此更新绘制状态——如物理引擎 tick、动画插值计算
-  myNode.markContentDirty(); // 标记 RenderNode 需重绘
+  myNode.invalidate(); // 标记 RenderNode 需重绘
 });
 sync.start();
 ```
@@ -99,8 +99,9 @@ let ctx = offscreen.getContext2D();
 // 导出为 PixelMap
 let pixelMap = offscreen.transferToImageBitmap();
 
-// RenderNode 截图
-let snapshot = renderNode.getSnapshot();
+// RenderNode 截图：通过 componentSnapshot 模块获取
+import { componentSnapshot } from '@kit.ArkUI';
+let snapshot = componentSnapshot.get(componentId);
 ```
 
 **用法**：离屏渲染用于生成分享图片、水印合成——不在屏幕上显示但需要完整的绘制管线。
@@ -113,4 +114,4 @@ let snapshot = renderNode.getSnapshot();
 4. **多次绘制叠加** → 忘记调 `clearRect(0, 0, w, h)` 导致上一帧残留
 5. **文字绘制大小不一致** → 字体加载是异步的，在 `font.loadFont()` 的 then 回调中再绘制
 
-> 官方文档：[ArkGraphics 2D](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2D-introduction)
+> 官方文档：[ArkGraphics 2D](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics2d-introduction)

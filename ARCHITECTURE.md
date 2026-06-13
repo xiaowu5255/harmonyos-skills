@@ -1,13 +1,13 @@
 # harmonyos-skills 渐进式架构设计
 
-> **背景**：官方文档 ~142 个 Kit/专题，当前 3 plugin / 19 skill 的扁平结构无法线性扩展  
+> **背景**：官方文档 ~142 个 Kit/专题，当前 8 plugin / 53 skill 三层渐进式架构，Kit 覆盖率 ~50%  
 > **目标**：让 AI agent 按需加载知识，避免 context 爆炸，同时保持全栈覆盖
 
 ---
 
-## 一、核心问题
+## 一、核心问题（已解决）
 
-### 当前结构的死胡同
+### 重构前
 
 ```
 harmony-core/  (14 skills — 已过重)
@@ -301,38 +301,9 @@ kits: ["@kit.XXX", "@kit.YYY"]   # 必须加引号: @ 是 YAML 保留字符,裸�
 
 ---
 
-## 六、迁移计划
+## 六、迁移计划（已完成）
 
-### Stage 1：创建索引层（本周，不改已有 skill）
-
-| 操作 | 文件 |
-|------|------|
-| 新建 | `plugins/harmony-platform/skills/harmony-index/SKILL.md` |
-| 新建 | `plugins/harmony-core/skills/0-core-index/SKILL.md` |
-| 新建 | `plugins/harmony-system/skills/0-system-index/SKILL.md` |
-| 更新 | 各已有 skill 的 description 增加领域归属关键词 |
-
-### Stage 2：拆分过重内容（1 周）
-
-| 操作 | 说明 |
-|------|------|
-| arkts-syntax → arkts-syntax + arkts-concurrency | 并发内容（TaskPool/Worker/Sendable）独立 |
-| arkui-patterns 内部拆分窗口管理 | 新增 arkui-window skill |
-
-### Stage 3：创建新 plugin + 补齐缺口（2 周）
-
-| 操作 | 说明 |
-|------|------|
-| harmony-system plugin + network-requests, file-system, crypto-security | P0 缺口 |
-| harmony-media plugin + 4 skills | P0 缺口 |
-| harmony-ecosystem plugin + notification | P1 缺口 |
-
-### Stage 4：扩展插件（1 月）
-
-| 操作 | 说明 |
-|------|------|
-| harmony-ai plugin | P2 |
-| harmony-graphics plugin | P2 |
+全部 6 个 Stage 已于 v0.5.0 完成。当前处于 Phase 5 质量打磨期。
 
 ---
 
@@ -349,13 +320,14 @@ kits: ["@kit.XXX", "@kit.YYY"]   # 必须加引号: @ 是 YAML 保留字符,裸�
 
 ## 八、量化目标
 
-| 指标 | v0.1.0 | v0.2.0 | 目标(v0.3.0+) |
-|------|--------|--------|---------------|
-| Skill 数量 | 19 | 47 | ~50（P2 占位升级为深度） |
-| Plugin 数量 | 3 | 8 | 8（稳定，不再扩展） |
-| 深度 skill 数量 | 19 | 35（含 P0+P1 新增 11） | ~45（P2 补齐） |
-| Kit 覆盖率 | ~19% | ~45% | ≥55% |
-| 单 skill 最大字数 | ~1200 词 | 不变 | 不变 |
+| 指标 | v0.1.0 | v0.2.0 | v0.5.0 | v0.6.0 |
+|------|--------|--------|--------|--------|
+| Skill 数量 | 19 | 47 | 53 | 53（质量打磨期） |
+| Plugin 数量 | 3 | 8 | 8 | 8（稳定） |
+| 深度 skill 数量 | 19 | 35 | 45 | 45 |
+| Kit 覆盖率 | ~19% | ~45% | ~50% | ~50% |
+| 单 skill 最大字数 | ~1200 词 | 不变 | 不变 | 不变 |
+| 质量审计 | — | — | v2.0 (抽查) | v3.0 (全量45个skill) |
 
 > **关于 context 开销**：Agent Skills 的 body 内容按 description 触发按需加载，不会全量载入。
 > 重构前后的真实变化是：47 个 skill 的 name+description 元数据常驻 context（约 3-5KB，vs 旧版 19 个约 1.5KB），
@@ -384,9 +356,119 @@ kits: ["@kit.XXX", "@kit.YYY"]   # 必须加引号: @ 是 YAML 保留字符,裸�
 
 每次发版前依次执行：
 
-- [ ] `bash tools/lint-skills.sh` 全部 PASS（10 项检查）
+- [ ] `bash tools/lint-skills.sh` 全部 PASS（12 项检查，含 frontmatter 内容质量）
 - [ ] 版本号三处同步：marketplace.json（metadata + 各 plugin 条目）、8 个 plugin.json、README"当前版本"行
 - [ ] README 技能矩阵、命令表与目录树一致（lint 部分覆盖，人工复核新增/删除项）
 - [ ] CHANGELOG.md 新增本版本条目
 - [ ] evals.json：新增 skill 已补 2-3 条用例（含触发与预期输出）
+- [ ] 新增/改动 skill 已补 `test-cases/test-prompts.md`（见 §十二约定）
 - [ ] 本地实测：`/plugin install <每个新增/改动插件>@harmonyos-skills` 安装成功且 skill 可触发
+
+---
+
+## 十一、检索层 / 开发层分离与 Master 大路由
+
+> 借鉴 `harmonyos-agent-skills`（HarmonyOS_Skills 官方组织）的两个工程模式，落进本仓库。
+
+### 检索层 / 开发层分离
+
+把"取官方证据"与"写业务代码"拆成两类技能，避免开发技能凭记忆编造易过期的 API：
+
+- **检索层**（`layer: retrieval`）：只产出"官方原文 + URL/版本"，不写业务代码。
+  本仓库实例：`harmony-docs-retriever`（官方文档）。它对应 ARCHITECTURE 的第零条原则
+  "先查本地 SDK / 官方文档再写码"——把方法论沉淀成了一个可复用技能。
+- **开发层**：拿检索层给的证据完成编码与验证（`arkts-syntax`、各 Kit 技能等）。
+
+> 稳态检索的关键经验：官方文档站搜索接口 `/doc/search?` 被 robots 禁止且无公开 JSON，
+> 因此检索层走"本地锚点表 + site 限定搜索 + web-fetch"，**绝不直连搜索接口**。
+> 这与官方 `knowledge-retriever` 技能检索本地 KB（而非实时 API）是同一稳态选择。
+
+### Master Skill 大路由模式
+
+当一个主题复杂到需要多份深度内容时，用一个**分型/分场景路由技能**先判型，再指向细分内容：
+
+- 既有实例：`harmony-index`（领域路由）、`0-*-index`（子领域路由）。
+- 新增实例：`crash-diagnostics`——按 CppCrash/JsCrash/AppFreeze/内存泄漏**分型**路由到
+  `references/` 下各型详解。相比官方仓库"每型一个独立 skill"，本仓库用"一个路由技能 +
+  references 分型"，在保留分型价值的同时遵守尺寸与密度纪律。
+
+---
+
+## 十二、test-cases / 触发样本约定
+
+> 借鉴官方仓库"每个 skill 必带测试提示词"的交付件要求，按本仓库密度纪律裁剪落地。
+
+- **位置**：`<skill>/test-cases/test-prompts.md`。
+- **适用**：深度 skill（索引 skill 豁免）。`tools/lint-skills.sh` 第 12 项做**软提示**
+  （缺失仅 WARN，不拦截 CI），鼓励逐步补齐而非一次性强制。
+- **与 evals 的分工**：`tools/evals/evals.json` 是仓库级触发率/质量回归集（跨 skill）；
+  `test-prompts.md` 是 skill 本地的功能/边界/错误场景用例，随 skill 同步到 Codex/OpenCode。
+- **模板**（参考 `harmony-docs-retriever`、`crash-diagnostics` 两个范例）：
+
+```markdown
+# 测试提示词 — <skill-name>
+## 基础功能测试
+### 场景 1：<名称>
+**提示词**：<用户输入>
+**预期输出**：- <期望行为/触发的技能/关键决策点>
+## 边界条件测试
+### 场景 2：<边界场景>
+**提示词**：... / **预期输出**：...
+## 错误处理测试
+### 场景 3：<错误或负向场景>
+**提示词**：... / **预期输出**：<期望的错误处理/不应触发>
+```
+
+---
+
+## 十三、内容质量审查与 ArkTS 校验闭环
+
+- **frontmatter 内容质量**：`tools/validate-frontmatter.py`（被 lint 第 11 项调用）按
+  Claude Skills 规范审查 name 字符集、description 的 what+when、长度等。CRITICAL 拦截，
+  风格问题降级 WARN，不破坏存量 skill。借鉴官方 `.hmos-skill-reviewer` 思路。
+- **ArkTS 编译器级校验闭环**：`arkts-syntax/scripts/arkts-lint.sh` + `hooks/ets-lint-gate.sh`
+  可接入 OpenHarmony 官方 `linter-cli`（来自 `harmonyos-agent-rules`）做真实编译器诊断，
+  回退 codelinter，再回退 grep 快检。接入见 `arkts-syntax/references/arkts-linter-setup.md`。
+
+---
+
+## 十四、Claude Code 市场集成
+
+### 市场结构
+
+```
+harmonyos-skills/
+├── .claude-plugin/
+│   └── marketplace.json         ← 市场清单（8 个 plugin + 元数据）
+├── plugins/
+│   ├── harmony-platform/
+│   │   └── .claude-plugin/
+│   │       └── plugin.json      ← 插件定义（skills 列表 + 版本号）
+│   ├── harmony-core/
+│   │   └── .claude-plugin/
+│   │       ├── plugin.json
+│   │       ├── hooks.json        ← UserPromptSubmit + PostToolUse hooks
+│   │       └── commands/         ← /harmony-doctor 等 Claude Code 命令
+│   ├── harmony-system/
+│   ├── harmony-media/
+│   ├── harmony-ecosystem/
+│   ├── harmony-graphics/
+│   ├── harmony-ai/
+│   └── harmony-release/
+```
+
+### 市场注册
+
+用户将本仓库添加为市场源后，Claude Code 读取 `.claude-plugin/marketplace.json`，自动发现所有可用 plugin。
+
+### 插件安装
+
+每个 plugin 的 `.claude-plugin/plugin.json` 定义其 skills 列表。安装时：
+- SKILL.md 正文 → 按 description 触发按需加载
+- commands/ → 注册为 `/harmony-*` 命令（仅 Claude Code）
+- hooks.json → 注册生命周期钩子（仅本插件作用域）
+- references/ / scripts/ → 随 skill 目录同步
+
+### 跨工具兼容
+
+`tools/sync-skills.sh` 将 skill 目录复制到 `~/.agents/skills`（加 `harmony-` 前缀防止冲突），Codex / OpenCode 等工具直接读取。commands 核心逻辑已抽象到 `tools/commands/*.sh`，终端下可独立运行。

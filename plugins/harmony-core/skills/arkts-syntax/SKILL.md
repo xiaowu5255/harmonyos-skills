@@ -95,14 +95,26 @@ metadata:
 | `oh-package.json5` | ohpm 依赖 | 依赖版本与 API 版本不兼容 |
 | `app.json5`(AppScope) | bundleName、版本号 | bundleName 与签名 Profile 不一致 |
 
+## 校验闭环:用真编译器而非记忆判对错
+
+写完 .ets 别只靠肉眼。配置官方 ArkTS linter 后,写文件会自动触发诊断,也可手动跑:
+
+```bash
+bash scripts/arkts-lint.sh <你的文件>.ets   # 优先用官方 checker,回退 codelinter/grep
+```
+
+接入方法(OpenHarmony linter-cli + 环境变量)见 `references/arkts-linter-setup.md`。
+未配置时仅有 grep 兜底(可能误报),**编译器级结论以官方 linter 输出为准**。
+
 ## 需要深入时读 references/
 
 - `references/ts-to-arkts.md` — TS→ArkTS 迁移常见报错与逐条改写示例。
   当用户在做代码迁移或批量出现 arkts-* 编译错误时再读。
+- `references/arkts-linter-setup.md` — 接入官方 ArkTS linter 做编译器级校验闭环。
 
 ## 输出纪律
 
 - 给出的每段代码标注适用 API 版本(如"API 20+ 可用")。
-- 涉及 API 21-24 新增能力(如 taskpool 任务超时、组件跨 Ability 迁移)时,
-  显式提醒用户检查 compatibleSdkVersion。
+- 涉及 API 21-24 新增能力（如 API 21 起同一 UIAbility 可申请最多 10 个长时任务、
+  API 23 起平行视界应用自主控制分栏）时，显式提醒用户检查 compatibleSdkVersion。
 - 不确定的 API 签名,先建议用户(或自己用工具)在本地 SDK d.ts 中验证。

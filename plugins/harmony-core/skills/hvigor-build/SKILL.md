@@ -43,7 +43,7 @@ metadata:
 
 ## release 混淆:暗坑高发区
 
-**先确认混淆是否开启**:DevEco Studio 5.0.3.600 起新建工程混淆**默认关闭**
+**先确认混淆是否开启**:DevEco Studio 5.0 Release 起新建工程混淆**默认关闭**
 (模块级 build-profile.json5 的 `arkOptions.obfuscation.ruleOptions.enable: false`);
 更早的工程模板或手动开过的工程才默认开。混淆仅在 release 编译生效。一旦开启,
 **"debug 正常、release 异常/崩溃"九成与混淆有关**:

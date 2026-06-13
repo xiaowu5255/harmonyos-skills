@@ -1,6 +1,6 @@
 {
   "name": "harmony-media",
-  "version": "0.4.0",
+  "version": "0.6.0",
   "description": "HarmonyOS 6.x 多媒体 — 音频/相机/编解码/图片/播控/DRM",
   "author": "HarmonyOS Skills",
   "skills": ["0-media-index", "audio-playback", "camera-capture", "media-processing", "media-system"]

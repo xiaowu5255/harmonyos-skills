@@ -17,3 +17,4 @@ requires: harmony-index
 | QA 测试 | Hypium 单元测试、UiTest 自动化测试、稳定性测试、云测、内测分发 | `testing-harmony` |
 | 签名体系 | p12/csr/cer/p7b 全链路签名、调试签名、发布签名 | `signing-and-certificates` |
 | 上架合规 | 隐私政策、权限声明、审核驳回处理、发布流程 | `release-and-compliance` |
+| 故障诊断 | 崩溃(CppCrash/JsCrash)、卡死冻屏(AppFreeze)、内存泄漏(rawheap/heapsnapshot)分型定位 | `crash-diagnostics` |

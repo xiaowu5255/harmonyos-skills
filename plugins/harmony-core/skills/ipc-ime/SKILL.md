@@ -139,7 +139,7 @@ controller.on('updateCursor', (cursor: inputMethod.CursorInfo) => {
 
 ## 排查清单
 
-1. **RPC 调不通** → 检查两端确实是不同进程；用 `getRunningProcesses()` 验证；同一进程走 `LocalRPC`
+1. **RPC 调不通** → 检查两端确实是不同进程；用 `getRunningProcesses()` 验证；同一进程内通信应使用 EventHub / emitter / AppStorage 等机制，而非试图"本地 RPC"
 2. **sendMessageRequest 超时** → 默认同步模式 30s 超时；大数据用 `ASYNC` 异步模式避免阻塞
 3. **自绘编辑框不弹键盘** → 确认 `inputMethod.attach(true)` 已调；检查 InputMethodExtension 在 module.json5 已注册
 4. **IME Extension 无法收到 onCommand** → `InputMethodExtensionAbility` 的 metadata 中 `inputMethodType` 必须设为 `INPUT_METHOD`

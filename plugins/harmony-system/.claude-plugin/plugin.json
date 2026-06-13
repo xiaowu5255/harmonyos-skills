@@ -1,6 +1,6 @@
 {
   "name": "harmony-system",
-  "version": "0.4.0",
+  "version": "0.6.0",
   "description": "HarmonyOS 6.x 系统能力 — 后台/网络/安全/存储/文件/加密/分布式/Native",
   "author": "HarmonyOS Skills",
   "skills": ["0-system-index", "background-tasks", "data-storage", "security-permissions", "network-requests", "crypto-security", "file-system", "connectivity", "distributed", "native-ndk", "sensors-input", "telephony"]

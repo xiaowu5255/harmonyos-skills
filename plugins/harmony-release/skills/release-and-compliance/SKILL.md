@@ -22,7 +22,7 @@ metadata:
 
 1. 签名:发布证书 + 发布 Profile(调试 Profile 签的包提不了审,见
    signing-and-certificates 第 3 步)。
-2. 混淆:DevEco 5.0.3.600 起新建工程混淆默认关闭,发布包应**显式开启**
+2. 混淆:DevEco 5.0 Release 起新建工程混淆默认关闭,发布包应**显式开启**
   (`ruleOptions.enable: true`)保护代码;**开启后必须真机实测 release 包核心流程**——
   "debug 全对 release 崩"专题见 hvigor-build 混淆节。
 3. 构建产物:上架用 App Pack(.app,hvigorw assembleApp),不是单 HAP。

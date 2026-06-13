@@ -12,6 +12,8 @@
 #   8. 索引 skill 路由表指向的技能存在
 #   9. JSON 文件可被严格解析
 #  10. 尺寸约束(索引 ≤4KB,深度 ≤12KB)
+#  11. frontmatter 内容质量(name 字符集/description what+when,CRITICAL 拦截)
+#  12. 深度 skill test-cases 覆盖(软提示,不拦截)
 
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -153,6 +155,26 @@ while IFS= read -r f; do
   [ "$size" -le "$limit" ] || { check 1 "$bname 超出尺寸约束: ${size}B > ${limit}B"; bad=1; }
 done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
 [ "$bad" -eq 0 ] && check 0 "全部 skill 在尺寸约束内"
+
+# ── 11. frontmatter 内容质量审查(CRITICAL 拦截) ──
+section "11. frontmatter 内容质量"
+if [ -n "$PY" ] && [ -f "$ROOT/tools/validate-frontmatter.py" ]; then
+  OUT_FM=$("$PY" "$ROOT/tools/validate-frontmatter.py" "$ROOT/plugins" 2>&1); rc=$?
+  if [ "$rc" -eq 0 ]; then check 0 "frontmatter 内容质量无 CRITICAL"; else check 1 "frontmatter 存在 CRITICAL 问题"; fi
+  echo "$OUT_FM" | grep -E 'CRITICAL|WARN:' || true
+else
+  echo "  SKIP: 无 python 或缺 validate-frontmatter.py,跳过内容质量审查"
+fi
+
+# ── 12. 深度 skill test-cases 覆盖(软提示,不拦截 FAIL) ──
+section "12. 深度 skill test-cases 覆盖(软提示)"
+miss=0
+while IFS= read -r f; do
+  bname="$(basename "$(dirname "$f")")"
+  case "$bname" in harmony-index|0-*-index) continue;; esac
+  [ -f "$(dirname "$f")/test-cases/test-prompts.md" ] || miss=$((miss+1))
+done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
+if [ "$miss" -eq 0 ]; then check 0 "全部深度 skill 均有 test-cases/test-prompts.md"; else echo "  提示: $miss 个深度 skill 暂无 test-cases/test-prompts.md(建议逐步补充,不拦截)"; fi
 
 echo ""
 echo "===== 结果: $PASS PASS / $FAIL FAIL ====="

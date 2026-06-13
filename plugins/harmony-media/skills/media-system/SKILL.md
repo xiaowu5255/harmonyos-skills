@@ -29,14 +29,14 @@ AVSession 是你应用程序与**系统播控中心**之间的桥梁——锁屏
 
 **不变量**：AVSession 是"单例广播"——同一时间只有一个应用是活跃播控。不设 metadata 就被系统忽略，不注册 controlCommand 就收不到用户操作。
 
-## 本地 vs 分布式会话
+## 本地与投播
 
-| 维度 | 本地会话 | 分布式会话 |
-|------|---------|-----------|
+| 维度 | 本地播控 | 投播到远端设备 |
+|------|---------|--------------|
 | 用途 | 本机播控（锁屏/通知栏/控制中心） | 跨设备流转（手机→平板→电视） |
-| 创建 | `createAVSession(context, 'audio', 'local')` | `createAVSession(context, 'audio', 'distributed')`|
+| 会话创建 | `createAVSession(context, 'audio')` | 同上，通过系统播控中心发起投播 |
+| 投播方式 | N/A | 用户从播控中心点选目标设备；应用侧配合 `AVCastController` 处理投播状态 |
 | 前提 | 无额外要求 | 同账号、同 WiFi、开启蓝牙（设备发现） |
-| 迁移 | 不支持 | `castAudio(session, deviceDescriptors)` |
 
 **分布式流转五步排查**（按优先级依次检查）：
 1. 两台设备都已登录同一华为账号

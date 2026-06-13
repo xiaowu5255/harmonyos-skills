@@ -4,7 +4,7 @@ HarmonyOS 6（API 20–24）开发专家技能集。让你的 AI 编码 agent �
 
 技能本体遵循 **Agent Skills 开放标准**（SKILL.md），采用**三层渐进式架构**避免 context 爆炸，可在 Claude Code、Codex、OpenCode 等所有兼容工具中使用。
 
-当前版本：**0.4.0** — 8 plugin / 50 skill / 6 命令 / 2 hook / 自进化工具链。Phase 3 覆盖率扩展完成，50% Kit 覆盖。
+当前版本：**0.6.0** — 8 plugin / 53 skill / 6 命令 / 2 hook / 全量质量审计 + 自进化工具链。
 
 ## 架构
 
@@ -14,7 +14,7 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
     ┌────┼────┬────┬────┬────┬────┐
     ▼    ▼    ▼    ▼    ▼    ▼    ▼
  harmony-core        harmony-system       harmony-media  harmony-ecosystem  harmony-release    harmony-graphics  harmony-ai
- 应用框架(11 skills)  系统能力(10 skills)  多媒体(5)      应用服务(6)       发布运维(5)         图形(3)            AI(5)
+ 应用框架(13 skills)  系统能力(12 skills)  多媒体(5)      应用服务(6)       发布运维(6)         图形(3)            AI(5)
 ```
 
 详见 [ARCHITECTURE.md](./ARCHITECTURE.md)。
@@ -27,8 +27,9 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 |-------|------|
 | **harmony-index** | 总索引：7 领域路由 + AGC/设计/行业实践 |
 | version-guide | API 版本迁移（compatibleSdkVersion、canIUse） |
+| harmony-docs-retriever ★ | 官方文档检索层：本地锚点表 + site 限定搜索 + web-fetch 取证（不直连搜索接口） |
 
-### harmony-core — 应用框架（11 skills）
+### harmony-core — 应用框架（13 skills）
 
 | Skill | 核心内容 |
 |-------|---------|
@@ -44,8 +45,9 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 | atomic-services-and-cards | 元服务约束、卡片生命周期与三条刷新通路 |
 | multi-device-adaptation | 断点响应式、折叠屏/PC 形态、一多工程组织 |
 | accessibility-i18n ★ | 无障碍属性标注/屏幕朗读、多语言资源/RTL/长辈关怀 |
+| ipc-ime ★ | IPC RPC 三步法(Stub/Proxy/远端订阅) + IME Kit 输入法/自绘编辑器集成 |
 
-### harmony-system — 系统能力（10 skills）
+### harmony-system — 系统能力（12 skills）
 
 | Skill | 核心内容 |
 |-------|---------|
@@ -83,7 +85,7 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 | location-map ★ | 高精度定位、地图显示、POI 搜索、路线规划 |
 | sharing-social ★ | 系统分享、DeepLink、联系人、日历 |
 
-### harmony-release — 发布运维（5 skills）
+### harmony-release — 发布运维（6 skills）
 
 | Skill | 核心内容 |
 |-------|---------|
@@ -92,6 +94,7 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 | testing-harmony | Hypium/UiTest/稳定性/云测兼容性/内测（含 QA 检查清单） |
 | signing-and-certificates | 签名四件套心智模型 + 五步排查 |
 | release-and-compliance | 上架与隐私合规驳回整改 |
+| crash-diagnostics ★ | 故障日志分型：CppCrash/JsCrash/AppFreeze/内存泄漏定位（faultlog/rawheap/heapsnapshot） |
 
 ### harmony-graphics — 图形（3 skills）
 
@@ -111,44 +114,141 @@ harmony-platform (入口层)     → harmony-index 总索引            [必装]
 | ai-nlp ★ | Natural Language Kit 分词/实体抽取/文本向量化 |
 | ai-inference ★ | MindSpore Lite 端侧推理/训练、NPU 加速、模型量化 |
 
-> † = 领域索引（轻量路由，≤300 词）  
-> ★ = v0.3.0 转正（方法论驱动，600-1200 词）
+> † = 领域索引（轻量路由，≤300 词，随所属 plugin 自动安装）  
+> ★ = 方法论驱动的深度 skill（600–1200 词）；其余为基础深度 skill  
+> 每个深度 skill 目录含 `SKILL.md`，多数另带 `references/`（长尾详情）、`scripts/`（可执行检查）、`test-cases/test-prompts.md`（触发样例）
+
+---
 
 ## 安装
 
-### Claude Code（完整体验）
+### 方式一：Claude Code 添加本市场并安装插件（推荐）
 
-```bash
-# 必装：平台入口 + 应用框架
-/plugin install harmony-platform@harmonyos-skills
-/plugin install harmony-core@harmonyos-skills
+#### 1. 添加市场源
 
-# 按需（取决于你的业务场景）
-/plugin install harmony-system@harmonyos-skills        # 网络/安全/存储
-/plugin install harmony-media@harmonyos-skills         # 音视频/相机
-/plugin install harmony-ecosystem@harmonyos-skills     # 通知/云开发/支付
-/plugin install harmony-release@harmonyos-skills       # 测试/性能/上架
-/plugin install harmony-graphics@harmonyos-skills      # 2D/3D/AR
-/plugin install harmony-ai@harmonyos-skills            # 视觉/语音/NLP
+在 Claude Code 会话中执行：
+
+```
+/marketplace add harmonyos-skills https://github.com/<你的用户名>/harmonyos-skills
 ```
 
-### Codex / OpenCode / 其他兼容工具
+或手动编辑 `~/.claude/claude.json`，在 `marketplaceSources` 中添加：
+
+```json
+{
+  "marketplaceSources": [
+    {
+      "name": "harmonyos-skills",
+      "source": "https://github.com/<你的用户名>/harmonyos-skills"
+    }
+  ]
+}
+```
+
+#### 2. 安装插件
+
+在 Claude Code 会话中执行 `/plugin` 命令：
+
+```
+# 必装：平台入口（含官方文档检索）+ 应用框架
+/plugin install harmony-platform@harmonyos-skills
+/plugin install harmony-core@harmonyos-skills
+```
+
+#### 3. 按需加装
+
+| 你要做的事 | 加装 plugin |
+|-----------|------------|
+| 写页面/状态管理/布局/动画、改 .ets 报错 | （已含于 harmony-core） |
+| 网络请求、权限、加密、文件、存储、蓝牙、传感器、电话短信 | `harmony-system@harmonyos-skills` |
+| 音频、相机、音视频编解码、播控投屏、扫码 | `harmony-media@harmonyos-skills` |
+| 账号登录、推送、支付、通知、地图定位、分享、端云一体化 | `harmony-ecosystem@harmonyos-skills` |
+| 2D 绘制、3D 渲染、AR | `harmony-graphics@harmonyos-skills` |
+| 视觉/语音/NLP AI、端侧推理 | `harmony-ai@harmonyos-skills` |
+| 性能优化、测试、签名、上架合规、**崩溃/卡死/内存泄漏诊断** | `harmony-release@harmonyos-skills` |
+
+安装完成后,在任意 Claude Code 工程中说"帮我写一个鸿蒙 Navigation 多页应用"或"鸿蒙 HTTP 请求一直超时怎么排查"即可自动触发对应技能。
+
+### 方式二：本地目录安装
+
+适用于本地开发、离线环境或自定义修改：
+
+```bash
+git clone https://github.com/<你的用户名>/harmonyos-skills
+
+# 在 Claude Code 中
+/plugin install harmony-platform /path/to/harmonyos-skills/plugins/harmony-platform
+/plugin install harmony-core /path/to/harmonyos-skills/plugins/harmony-core
+# ... 按需安装其余 plugin
+```
+
+### 方式三：直接文件夹替换
+
+适合非 Claude Code 工具（Codex / OpenCode 等）：
 
 ```bash
 git clone https://github.com/<你的用户名>/harmonyos-skills && cd harmonyos-skills
-./tools/sync-skills.sh           # 复制全部 47 个 skill 到 ~/.agents/skills
+./tools/sync-skills.sh           # 复制全部 53 个 skill 到 ~/.agents/skills
+./tools/sync-skills.sh --link    # 或软链接（修改仓库即生效）
 ```
 
-## 命令（Claude Code）
+### 方式四：独立命令脚本
 
-| 命令 | 作用 |
-|------|------|
-| `/harmony-doctor` | 环境与工程健康一键诊断 |
-| `/harmony-api-scan` | 扫描高于 compatibleSdkVersion 的 API 调用 |
-| `/harmony-sign-check` | 签名全链路一致性排查 |
-| `/harmony-cloud-deploy` | 端云工程部署前检查 |
-| `/harmony-test-plan` | 定制化测试计划生成 |
-| `/harmony-feedback` | 蒸馏回流知识库（错误对照表） |
+如果只需要环境诊断 / 签名检查等工具，直接用独立脚本，无需安装任何 plugin：
+
+```bash
+git clone https://github.com/<你的用户名>/harmonyos-skills && cd harmonyos-skills
+
+# 环境健康诊断
+bash tools/commands/harmony-doctor.sh /path/to/harmony-project
+
+# 签名全链路排查
+bash tools/commands/harmony-sign-check.sh /path/to/harmony-project
+
+# 端云部署前检查
+bash tools/commands/harmony-cloud-deploy.sh /path/to/harmony-project
+
+# API 版本扫描
+bash tools/commands/harmony-api-scan.sh /path/to/harmony-project
+```
+
+详见 [tools/commands/README.md](./tools/commands/README.md)。
+
+---
+
+## 命令
+
+| 命令 | 位置 | 作用 | 跨工具 |
+|------|------|------|:--:|
+| `/harmony-doctor` | Claude Code / 独立脚本 | 环境与工程健康一键诊断 | ✅ |
+| `/harmony-api-scan` | Claude Code / 独立脚本 | 扫描高于 compatibleSdkVersion 的 API 调用 | ✅ |
+| `/harmony-sign-check` | Claude Code / 独立脚本 | 签名全链路一致性排查 | ✅ |
+| `/harmony-cloud-deploy` | Claude Code / 独立脚本 | 端云工程部署前检查 | ✅ |
+| `/harmony-test-plan` | Claude Code / 独立脚本 | 定制化测试计划生成 | ✅ |
+| `/harmony-feedback` | Claude Code / 独立脚本 | 蒸馏回流知识库（错误对照表） | ✅ |
+
+> Claude Code 下使用 `/harmony-*` 命令；Codex / OpenCode / 终端下运行 `tools/commands/harmony-*.sh` 独立脚本。核心逻辑已抽象，一套实现跨工具流转。
+
+---
+
+## 示例项目
+
+`examples/` 目录包含 8 个典型场景的可运行示例：
+
+| 示例 | 对应 Skill | 场景 |
+|------|-----------|------|
+| [navigation-app](./examples/navigation-app/) | arkui-patterns / stage-model | Navigation 多页应用 + UIAbility 生命周期 |
+| [media-player](./examples/media-player/) | audio-playback / media-system | 音频播放 + 锁屏播控（AVSession） |
+| [background-download](./examples/background-download/) | background-tasks | 后台长时任务下载 |
+| [cloud-function](./examples/cloud-function/) | cloud-foundation | 端云一体化：云函数调用 |
+| [service-card](./examples/service-card/) | atomic-services-and-cards | 元服务卡片：FormExtensionAbility |
+| [ble-scanner](./examples/ble-scanner/) | connectivity | BLE 蓝牙设备扫描 |
+| [multi-device-layout](./examples/multi-device-layout/) | multi-device-adaptation | 折叠屏/平板响应式布局 |
+| [photo-picker](./examples/photo-picker/) | security-permissions / file-system | PhotoViewPicker 免权限选图 |
+
+详见 [examples/README.md](./examples/README.md)。
+
+---
 
 ## 设计原则
 
@@ -158,10 +258,20 @@ git clone https://github.com/<你的用户名>/harmonyos-skills && cd harmonyos-
 
 ## 自进化机制
 
-- **知识回流**：`/harmony-feedback` 蒸馏真实踩坑到错误对照表
-- **SDK diff**：`tools/sdk-diff/diff_api.py` 机器生成 API 变更清单
+- **知识回流**：`/harmony-feedback` 捕获踩坑 → `tools/feedback-distill.sh` 月度蒸馏到错误对照表
+- **SDK diff**：`tools/sdk-diff/diff_api.py` 机器生成 API 变更清单 → 自动标记受影响 skill
 - **变更监测**：`.github/workflows/weekly-sdk-watch.yml` 每周检测文档更新
-- **防退化**：`tools/evals/evals.json` 16 条回归样本（含负样本）
+- **防退化**：`tools/evals/evals.json` 72 条回归样本（15 条含质量断言）；`tools/lint-skills.sh` 12 项一致性 + 内容质量检查（CI 强制）
+- **内容审查**：`tools/validate-frontmatter.py` 按 Claude Skills 规范审查 name/description 质量
+- **季度审计**：`tools/quarterly-audit-checklist.md` 标准化审计流程 + 判定标准（首次 2026-09）
+- **官方文档巡检**：`harmony-docs-retriever/scripts/check-doc-urls.sh` 检查锚点 URL 有效性
+
+## 质量保证
+
+- ✅ **全量审计**：45 个深度 skill 逐条 API 正确性审查（AUDIT_REPORT v3.0，2026-06-13）
+- ✅ **12 项一致性检查**：`tools/lint-skills.sh` 覆盖 frontmatter 检查、路由表验证、references 引用完整性、JSON 解析、内容质量审查
+- ✅ **72 条回归样本**：15 条含输出正确性断言（quality_assertion），3 条负样本
+- ✅ **CI 强制**：push / PR 自动跑 lint，阻断引用断裂、JSON 非法、frontmatter 不合格
 
 ## License
 

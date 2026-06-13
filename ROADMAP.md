@@ -55,10 +55,35 @@ v0.2.1 修复发布阻断 ✅ → v0.2.2 一致性基建 ✅ → v0.3.0 占位�
 
 ## Phase 4 — 自进化闭环常态运转（持续）
 
-1. **知识回流**：`/harmony-feedback` → `harmony-debugging/references/common-errors.md`，每月审视回流质量
+1. **知识回流**：`/harmony-feedback` → `harmony-debugging/references/common-errors.md`，**每月审视回流质量**
+   - ✅ 已落地：`tools/feedback-distill.sh` 蒸馏管道（支持 --dry-run）
 2. **SDK 监测**：weekly-sdk-watch 检出变更 → `diff_api.py` 生成清单 → `version-guide/references/` → 触达相关 skill 修订
 3. **防退化**：CI 每次 push 跑 lint；skill 修改必须跑对应 eval
-4. **季度审计**：参照 AUDIT_REPORT v2.0 流程做 v3.0（约 2026-09），重测覆盖率与正确性
+4. **季度审计**：参照 AUDIT_REPORT 流程做季度审计（首次 2026-09）
+   - ✅ 已落地：`tools/quarterly-audit-checklist.md` 标准化 checklist + 判定标准
+
+## Phase 5 — 质量打磨（当前: v0.6.0）
+
+### 5.1 全量审计与修复 ✅（2026-06-13 完成）
+
+- [x] 45 个深度 skill 逐条 API 正确性审查（7 个并行 agent，跨 8 个领域）
+- [x] P0 修复：media-system / ipc-ime / crash-diagnostics / arkts-syntax 共 4 处虚构 API/杜撰概念
+- [x] P1 修复：2d-graphics / audio-playback / arkui-window / hvigor-build / release-and-compliance 共 6 处 ACK 但不准确的 API/术语
+- [x] AUDIT_REPORT v3.0 产出，含 12 条修复记录 + P0/P1/P2 待处理清单
+- [x] 可执行增强：feedback-distill.sh + quarterly-audit-checklist.md
+
+### 5.2 待推进
+
+| # | 项目 | 状态 |
+|---|------|------|
+| 1 | 3d-ar skill 重写（20+ 虚构 API） | 🔴 待办 |
+| 2 | ai-speech 声纹模块删除 | 🔴 待办 |
+| 3 | crypto-security HUKS API 示例重写 | 🟡 待办 |
+| 4 | evals 质量断言升级（10-20 条高频 skill） | 🟡 待办 |
+| 5 | examples/ 示例项目（5-8 个典型场景） | 🟡 待办 |
+| 6 | 6 个 command 核心逻辑抽象为独立脚本 | ⚪ 待办 |
+| 7 | cloud-foundation / huawei-kits 补充 kits 字段 | ⚪ 待办 |
+| 8 | camera-capture / media-processing 错误码核实 | ⚪ 待办 |
 
 ## 贯穿红线
 

@@ -50,7 +50,7 @@ windowClass.setPreferredOrientation(window.Orientation.AUTO_ROTATION); // 跟随
 ```
 
 - 通过 `display.on('change')` 监听旋转事件，**不要轮询方向**
-- 横竖屏切换会导致 Activity 重建(类似 Android configChange)，需在
+- 横竖屏切换会导致 UIAbility 重建（类似 Android 的 configChange），需在
   `onConfigurationUpdate` 中保存/恢复状态
 - 折叠屏展开/闭合也会触发方向变更，需一并处理
 
