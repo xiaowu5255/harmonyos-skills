@@ -41,15 +41,28 @@ metadata:
 ## 密钥安全存储(HUKS)
 
 **密钥绝不能硬编码在代码中**——字符串常量可被反编译提取。用 HUKS
-(Harmony Universal KeyStore)管理密钥：
+(Universal Keystore Kit)管理密钥。官方模块是 `huks`(**不是** `cryptoFramework.createHuks`,
+那个写法不存在);生成密钥用 `generateKeyItem`,参数是 `HuksOptions`(`properties: HuksParam[]`):
 
 ```ts
-const huks = cryptoFramework.createHuks('HUKS_KEY_ALG_AES', 'HUKS_KEY_PURPOSE_ENCRYPT');
-huks.generateKey(keyAlias, options, (err, out) => { /* 返回 handle,密钥不出 TEE */ });
+import { huks } from '@kit.UniversalKeystoreKit';
+
+const keyAlias = 'my_aes_key';
+const options: huks.HuksOptions = {
+  properties: [
+    { tag: huks.HuksTag.HUKS_TAG_ALGORITHM, value: huks.HuksKeyAlg.HUKS_ALG_AES },
+    { tag: huks.HuksTag.HUKS_TAG_KEY_SIZE,  value: huks.HuksKeySize.HUKS_AES_KEY_SIZE_256 },
+    { tag: huks.HuksTag.HUKS_TAG_PURPOSE,
+      value: huks.HuksKeyPurpose.HUKS_KEY_PURPOSE_ENCRYPT | huks.HuksKeyPurpose.HUKS_KEY_PURPOSE_DECRYPT },
+    // 还需 PADDING / BLOCK_MODE 等,具体 tag 以本地 d.ts 为准
+  ],
+};
+await huks.generateKeyItem(keyAlias, options); // 密钥生成即入 TEE,不返回明文
 ```
 
-密钥永远存在于安全硬件(TEE/SE)内，应用代码只能拿到 handle(句柄)，
-无法提取密钥明文。keyAlias 作为应用内唯一标识用，丢失即永久丢失密钥。
+加解密是**三段式会话**:`initSession`(拿 handle)→ `updateSession`(分段喂数据)
+→ `finishSession`(收尾)。密钥永远存在于安全硬件(TEE/SE)内,应用按 keyAlias 引用,
+拿不到密钥明文。**keyAlias 是应用内唯一标识,丢失即永久丢失密钥**。
 
 ## 生物认证集成
 
