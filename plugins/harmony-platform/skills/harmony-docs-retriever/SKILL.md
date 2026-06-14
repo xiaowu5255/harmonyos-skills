@@ -52,12 +52,17 @@ metadata:
 用法:`resolve-library-id` 取库 → `query-docs(libraryId, query)`,query 带**具体 API 名**
 (语义检索,问得越具体召回越准;不能用它"遍历列全部 Kit")。返回的每条 snippet 自带官方 URL。
 
-**三条铁律**:
-1. **快照非实时**——Context7 是周期抓取的快照,最新季度 API(API 21-24 新增)可能滞后;
-   命中后仍要看 snippet 自带 URL 的版本标记。
-2. **版本混杂**——同一 query 可能跨版本召回,务必按步骤 4 消歧。
-3. **优先级**——本地 SDK `.d.ts`(项目实际锁定版) > Context7 官方快照 > 通用搜索。
-   三者冲突,**以本地 d.ts 为准**。
+**四条铁律**:
+1. **快照非实时,新版有盲区**——Context7 是周期快照,典型滞后约一个季度。鸿蒙季度级迭代,
+   **大版本发布后数周至数月内 Context7 必无新内容**(实证:2026-06 HarmonyOS 7/API 26 已发布,
+   Context7 快照仍停在 ~2026-03、最高 API 19)。
+2. **盲区降级(关键)**——出现以下任一信号,判定 Context7 对目标版本失效,**跳过它**改走
+   本地 d.ts → 官方 SPA 抓取(步骤 5),都缺则如实声明"该版本文档尚未覆盖":
+   - query-docs 召回的**最高 API 版本明显低于目标** `compatibleSdkVersion`;
+   - 命中 snippet 的 `Last Updated` 早于目标版本的发布日期。
+3. **版本混杂**——同一 query 可能跨版本召回,务必按步骤 4 消歧。
+4. **优先级**——本地 SDK `.d.ts`(项目实际锁定版,零延迟最终托底) > Context7 官方快照 >
+   官方 SPA 抓取 > 通用搜索。冲突时**以本地 d.ts 为准**。
 
 ### 步骤 3 —— 仍未命中则用 site 限定搜索(回退)
 
@@ -101,8 +106,9 @@ robots.txt 只禁 `/doc/search?`,**文档页本身允许被搜索引擎索引**,
 
 - [ ] 先查了 `references/doc-anchors.md` 再决定是否搜索
 - [ ] 锚点未命中时优先用 Context7 官方库(references 验签名/guides 查用法),而非直接通用搜索
+- [ ] 目标是新发布版本(Context7 召回最高 API 低于目标 / Last Updated 早于发布日)时,已跳过 Context7 降级到 d.ts / 官方抓取
 - [ ] site 限定搜索作回退,未直连 `/doc/search?`
-- [ ] 做了版本消歧,匹配 `compatibleSdkVersion`;注意 Context7 是快照,最新季度 API 可能滞后
+- [ ] 做了版本消歧,匹配 `compatibleSdkVersion`
 - [ ] 输出标注了文档版本与 URL
 - [ ] 与本地 SDK d.ts 冲突时以 d.ts 为准
 - [ ] 不确定处如实说明,未编造 API

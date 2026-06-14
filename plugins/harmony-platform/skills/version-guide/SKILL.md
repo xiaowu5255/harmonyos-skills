@@ -5,11 +5,11 @@ description: >-
   canIUse 运行时探测、@since/@deprecated 注释解读、SDK 版本间 API diff、
   升级 API 版本的完整流程。凡是涉及"升级到新 API 版本""这个 API 在 API XX
   能不能用""deprecated 怎么替换""不同设备系统版本兼容"时使用本技能。
-  鸿蒙 API 每季度迭代(6.x 周期已历 API 20→24),版本治理是长期必修课。
+  鸿蒙 API 每季度迭代(6.x 历 API 20→24,7.0 起 API 26),版本治理是长期必修课。
 license: MIT
 requires: harmony-index
 metadata:
-  target-platform: "HarmonyOS 6.x / API 20-24"
+  target-platform: "HarmonyOS 6.x / API 20-24（兼顾 7.0 / API 26）"
 ---
 
 # API 版本治理与升级
@@ -48,6 +48,21 @@ metadata:
 
 版本分支逻辑收口到适配层(如 `compat/` 目录),UI/业务代码不直接写版本
 判断——散落各处的 if(version) 在下次升级时是地雷阵。
+
+## 版本基线速览(写代码前先定位项目在哪一档)
+
+| 系统版本 | API Level | 状态(截至 2026-06) |
+|---|---|---|
+| HarmonyOS 6.0.0 | 20 | 存量主力 |
+| 6.0.1 / 6.0.2 | 21 / 22 | |
+| 6.1.0 / 6.1.1 | 23 / 24 | 6.x 末段,覆盖大量存量设备 |
+| **HarmonyOS 7.0** | **26** | **2026-06-12 HDC 2026 发布 Developer Beta;正式版定于 2026 秋随 Mate90 系列** |
+
+- 记法惯例 `系统版本(API Level)`,如 `6.1.1(24)`、`7.0(26)`。
+- HarmonyOS 7 = **API 26**(已核实);主打端侧 Agent/盘古大模型、安全、连接、流畅四向。
+- ⚠ **待核实**:有单一来源称"API 26 起版本号改用 SemVer X.Y.Z 格式",二次检索未获官方佐证。
+  **按本仓库红线,未核实不写成事实**——需要时用 harmony-docs-retriever 查官方发布说明或以本地 SDK 为准。
+- 注意 API 25 在公开材料中未见单独露出,HarmonyOS 7 直接对应 API 26;遇 API 25 声明先存疑核实。
 
 ## 维护本插件自身
 
