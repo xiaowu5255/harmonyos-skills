@@ -1,120 +1,132 @@
 ---
 name: 3d-ar
 description: >-
-  鸿蒙3D/AR: 3D渲染(ArkGraphics 3D)、AR Engine空间感知、
-  动作跟踪、光照估计、平面检测。涉及AR试穿、空间测量、
-  虚拟摆放、3D展示时使用本技能。
+  鸿蒙3D/AR: 3D渲染(ArkGraphics 3D 的 Scene/Component3D)、AR Engine 空间感知
+  (平面检测、命中测试、位姿跟踪、人脸/人体跟踪、光照估计)。涉及 AR 试穿、空间测量、
+  虚拟摆放、3D 展示时使用本技能。
 license: MIT
 requires: 0-graphics-index
-kits: ["@kit.ArkGraphics3D", "@kit.AREngineKit"]
+kits: ["@kit.ArkGraphics3D", "@kit.AREngine"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
 # 3D 与 AR：渲染、空间感知与虚实融合
 
-## 两 Kit 定位
+> ⚠️ 本领域 API 极易记错。**写码前必做**：在本地 SDK `@hms.*.d.ts` / `@ohos.graphics.scene.d.ts`
+> 核对类名与签名，或用 harmony-docs-retriever 查官方。下文 API 已对照官方核实，但仍以本地 d.ts 为准。
 
-| Kit | 职责 | 输出 |
+## 两 Kit 定位与正确包名
+
+| Kit | 导入 | 职责 |
 |-----|------|------|
-| **ArkGraphics 3D** | 3D 场景渲染（模型加载、光照、材质、相机） | 渲染帧 |
-| **AR Engine Kit** | 空间感知（SLAM、平面检测、动作跟踪、光照估计） | 位姿数据 + 空间锚点 |
+| **ArkGraphics 3D** | `@kit.ArkGraphics3D`（`@ohos.graphics.scene`） | 3D 场景渲染：Scene/Node/相机/光照/材质 |
+| **AR Engine** | `@kit.AREngine`（注意**不是** `@kit.AREngineKit`） | 空间感知：位姿、平面、命中测试、人脸/人体、光照估计 |
 
-**协作关系**：AR Engine 提供"真实世界在哪儿"→ ArkGraphics 3D 负责"虚拟物体画在哪儿"。
+- AR 侧两大入口：`arViewController.ARViewContext`（管 scene/session/resume/pause）与
+  `arEngine.ARSession`（取帧 `getFrame()`、取可跟踪物 `getAllTrackables()`）。
+- **协作关系**：AR Engine 给"真实世界在哪"（位姿+平面）→ ArkGraphics 3D 把虚拟物画上去。
+- **能力探测**：调用前用 `arViewController.isARTypeSupported(...)` 判断设备是否支持，
+  不支持的机型直接降级，别盲调。
 
-## ArkGraphics 3D：场景构建五要素
+## ArkGraphics 3D：场景以 `Scene.load()` 异步获取
+
+官方没有 `new Scene()` / `new Camera()` / `scene.loadModel()` 这类构造写法。
+场景通过 **`Scene.load()` 返回 Promise**，UI 侧用 **`Component3D`** 承载：
 
 ```typescript
-import { Scene, Camera, Light, Model, Material } from '@kit.ArkGraphics3D';
+import { Scene } from '@kit.ArkGraphics3D';
 
-// 1. 场景容器
-let scene = new Scene();
-scene.setBackgroundColor({ r: 0.1, g: 0.1, b: 0.1, a: 1.0 });
+// 加载场景（可传 glTF/GLB 资源；具体重载以本地 d.ts 为准）
+Scene.load().then((scene: Scene) => {
+  // 对 scene 的相机/光照/节点操作，使用 @ohos.graphics.scene 提供的 API
+  // 具体类型(SceneNode/SceneResource/相机/光照)签名以本地 d.ts 为准——不要照记忆写
+}).catch((err: BusinessError) => {
+  console.error(`load scene failed: ${err.code} ${err.message}`);
+});
+```
 
-// 2. 相机——必须且唯一
-let camera = new Camera();
-camera.setPosition(0, 2, 5);    // 如人眼高 2m，距物体 5m
-camera.lookAt(0, 0, 0);         // 看向场景中心
-scene.setCamera(camera);
+UI 承载（ArkUI 组件 `Component3D`）：
 
-// 3. 光照——默认纯黑，不加灯看不见
-let light = new Light({ type: 'directional' });
-light.setDirection(-0.5, -1, -0.5);
-light.setIntensity(1.0);
-scene.addLight(light);
-
-// 4. 模型加载
-let model = scene.loadModel('/path/to/model.glb'); // 支持 glTF/GLB
-model.setPosition(0, 0, 0);
-
-// 5. 材质
-let material = new Material();
-material.setBaseColor({ r: 1, g: 0, b: 0, a: 1 });
-model.setMaterial(material);
+```typescript
+// Component3D 两种模式：
+// - 传 glTF 给 scene 选项 → 自动场景模式，框架托管基础相机/光照/手势(旋转缩放)
+// - 传 Scene 对象 → 自定义场景模式，相机/光照/交互全由开发者用 ArkGraphics 3D API 管理
+Component3D({ scene: this.sceneResource })
 ```
 
 **三个不变量**：
-1. 不加 Light 的场景 = 全黑画面——DirectionalLight 是 3D 的"必须配置项"
-2. glTF/GLB 是推荐格式（`@kit.ArkGraphics3D` 原生优先支持），OBJ/FBX 需自行转换
-3. Scene 绑定的 Surface 来自 XComponent，分辨率 = XComponent 的物理像素
+1. **自定义场景模式下无内置相机控制器**——手势与相机位姿更新得自己写，否则虚拟物不跟手。
+2. glTF/GLB 是原生优先格式；OBJ/FBX 需自行转换。
+3. 渲染目标分辨率 = 承载组件的物理像素；与 XComponent 协作时注意 surface 尺寸。
 
-## AR Engine：SLAM 核心概念
+## AR Engine：SLAM 与六自由度位姿
 
-AR 的核心是 **SLAM(同步定位与建图)**——设备边移动边建立环境地图：
-
-```
-设备启动 → 特征点提取 → 平面检测 → 建立世界坐标系 → 创建锚点(Anchor)
-```
-
-**六自由度位姿(6DOF Pose)**：AR Engine 每帧输出设备的 `position(x,y,z)` + `rotation(四元数)`。虚拟内容渲染时必须用这个位姿更新 Camera，否则不跟手。
-
-## AR Engine 核心能力
-
-| 能力 | 接口 | 用途 |
-|------|------|------|
-| 平面检测 | `ARPlaneTracking` | 识别桌面/地面，虚拟物品摆放 |
-| 动作跟踪 | `ARBodyTracking` | 识别人体骨架，AR 试穿/动作捕捉 |
-| 人脸跟踪 | `ARFaceTracking` | AR 眼镜/表情捕捉 |
-| 光照估计 | `ARLightEstimate` | 虚拟物体打光匹配真实环境 |
-| 命中测试 | `ARHitTest` | 点击屏幕确定空间中的对应位置 |
-
-**平面检测调优**：
-- 检测前提：环境有足够纹理特征（白墙/纯色桌面无法检测）
-- `setPlaneFindingMode(ENABLE_HORIZONTAL)`：只检测水平面（桌面/地面）比全向检测快 2x
-- 首次检测需 1-3 秒特征点积累，这期间不要创建锚点
-
-## AR 应用骨架代码
+AR 的核心是 **SLAM（边移动边建图）**：设备启动 → 特征点提取 → 平面/锚点建立 → 持续位姿跟踪。
+**6DOF 位姿**用 `ARPose`（位置 + 朝向）描述，每帧从 `ARFrame` 取，用来更新 3D 相机。
 
 ```typescript
-// 1. 启动 AR Session
-let arSession = await arEngine.createSession();
-arSession.addTrackMode('plane');    // 平面检测模式
-await arSession.start();
+import { arEngine } from '@kit.AREngine';
+import { arViewController } from '@kit.AREngine';
 
-// 2. 每帧更新
-arSession.on('update', (frame: ARFrame) => {
-  // frame.cameraPose → 更新 ArkGraphics 3D Camera
-  camera.setFromPose(frame.cameraPose);
-  
-  // frame.planes → 检测到的平面列表
-  if (frame.planes.length > 0 && !anchorCreated) {
-    let plane = frame.planes[0]; // 取第一个平面
-    anchor = plane.createAnchor(plane.centerPose);
-    anchorCreated = true;
-  }
-  scene.render(); // 渲染 3D 场景
-});
+// 1. ARViewContext 管理 scene 与 session（Stage 模型）
+let ctx: arViewController.ARViewContext = new arViewController.ARViewContext();
+// ctx.scene 设置 AR 场景；ctx.session 取得 ARSession（失败为 undefined）
+let session: arEngine.ARSession | undefined = ctx.session;
 
-// 3. XComponent → Surface 绑定
-xComponent.getXComponentSurfaceId(); // 给 ArkGraphics 3D 绑定渲染目标
+// 2. 每帧取 ARFrame（实际帧循环由 ARView 渲染驱动）
+let frame: arEngine.ARFrame = session!.getFrame();
+
+// 3. 命中测试：从屏幕像素 (x,y) 投射射线，命中平面/点云
+let hits: Array<arEngine.ARHitResult> = frame.hitTest(0, 0);
+if (hits.length > 0) {
+  let pose: arEngine.ARPose = hits[0].getHitPose(); // 命中点位姿 → 放置虚拟物
+}
+
+// 4. 取所有平面（ARTrackableType.PLANE），判断点是否落在平面多边形内
+let trackables: Array<arEngine.ARTrackable> =
+  session!.getAllTrackables(arEngine.ARTrackableType.PLANE);
+if (trackables.length > 0) {
+  let plane = trackables[0] as arEngine.ARPlane;
+  let p: arEngine.ARPose = plane.getPose();
+  plane.isPoseInPolygon(p); // true=在平面边界内
+}
+
+// 5. 生命周期：切前后台用 ctx.resume() / ctx.pause()
+ctx.resume();
 ```
+
+## AR 能力通过 `ARConfig` 配置（属性，不是独立类）
+
+官方没有 `ARPlaneTracking` / `ARBodyTracking` / `ARLightEstimate` 这类独立能力类。
+能力由 **`ARConfig` 配置对象的属性 + `ARType` 枚举**决定：
+
+| 配置项 | 类型 | 说明 |
+|--------|------|------|
+| `type` | `ARType` | AR 能力类型（如 FACE / BODY 等，取值以 d.ts 为准） |
+| `planeFindingMode` | `ARPlaneFindingMode` | 平面检测模式，默认 HORIZONTAL_AND_VERTICAL |
+| `powerMode` | `ARPowerMode` | 功耗模式，默认 NORMAL |
+| `focusMode` | `ARFocusMode` | 对焦模式，默认 FIXED |
+| `cameraLensFacing` | `ARCameraLensFacing` | 前后摄；FRONT 仅当 type=FACE/BODY 生效（API 23+/6.1.0 起） |
+| `maxDetectedBodyNum` | number | type=BODY 时最大检测人体数，默认 1、上限 2（API 23+/6.1.0 起） |
+| `maxMapSize` | number | 地图内存上限(MB)，默认 800MB，可设区间见官方；按设备内存设，过大可能异常 |
+
+> 平面检测、人脸跟踪、人体跟踪不是"调某个类"，而是"把 `ARConfig.type` / `planeFindingMode`
+> 配对，再从 `ARFrame` / `getAllTrackables` 取结果"。`semanticDenseMode` 自 6.0.0(20) 起、
+> 多人脸与前摄相关项自 6.1.0(23) 起——用前确认 `compatibleSdkVersion`。
+
+**平面检测注意**：
+- 前提：环境要有纹理特征（纯白墙/纯色无纹理面检测不到）。
+- 只检测水平面时把 `planeFindingMode` 设为水平模式，比全向检测开销小。
+- 刚启动需要一段时间积累特征点，这期间平面可能为空，别急着创建锚点。
 
 ## 排查清单
 
-1. **AR 显示黑屏** → Camera 权限未授予（AR Session 需要 CAMERA）；检查 XComponent surfaceId 绑定
-2. **平面不出现** → 纹理不足（对着白墙/纯暗环境）；移动设备，确保光线充足
-3. **虚拟物体漂移** → 平面检测不稳定：创建锚点后持续追踪，用 `plane.updateMode = 'FIXED'` 固定
-4. **3D 模型不显示但无报错** → 最常见是忘了加 Light；其次是模型路径错误（glTF 内部路径引用问题）
-5. **渲染帧率低** → 模型面数过高（>50k 三角面慎用）、纹理过大（>2048×2048）；用 `LOD` 自适应降低精度
+1. **AR 黑屏** → CAMERA 权限未授；或设备不支持（先 `isARTypeSupported`）；或 `ctx.session` 为 undefined（初始化失败）。
+2. **平面检测不到** → 纹理不足（对着白墙/暗光）；移动设备、补光后重试。
+3. **虚拟物漂移** → 位姿未每帧更新到 3D 相机；锚点跟踪不稳；环境特征少。
+4. **3D 模型不显示但无报错** → 自定义场景模式忘了配光照/相机；或模型路径/glTF 内部引用错误。
+5. **包名/类名报 cannot find** → 多半把 `@kit.AREngine` 写成 `@kit.AREngineKit`，或用了
+   `new Scene()`/`ARPlaneTracking` 等不存在的写法——回到本地 d.ts 核对。
 
-> 官方文档：[ArkGraphics 3D](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkgraphics3D-introduction) · [AR Engine](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arengine-overview)
+> 官方文档：[ArkGraphics 3D](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/graphics3d) · [AR Engine](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/arengine-api-arengine)
