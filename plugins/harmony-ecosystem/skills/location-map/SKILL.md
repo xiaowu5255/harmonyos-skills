@@ -85,7 +85,7 @@ mapController.setCameraPosition({
 ```
 
 **不要在列表滚动中实时更新地图 Center**——高频 `setCameraPosition` 导致
-地图引擎卡顿。用 `animateCamera` 替代，或限制调用频率(节流 300ms)。
+地图引擎卡顿。用 `animateCamera` 替代，或对调用做节流（间隔按实际体验调，约数百毫秒级）。
 
 ## POI 搜索与路线规划
 

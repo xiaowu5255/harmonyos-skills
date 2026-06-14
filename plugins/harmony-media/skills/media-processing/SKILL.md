@@ -49,7 +49,7 @@ createDecoder → configure → start → on('bufferAvailable')
 
 1. **codecMime**：视频 `'video/avc'`(H.264) / `'video/hevc'`(H.265)，音频 `'audio/mp4a-latm'`(AAC)
 2. **width × height**：视频编码必须匹配输入帧尺寸，差 1 像素 = `CODEC_ERROR`
-3. **bitrate**：码率 = 分辨率 × 帧率 × 系数。1080p@30fps 推 4-6Mbps
+3. **bitrate**：码率随分辨率与帧率上升而增大；具体取值按画质/体积权衡实测调优，不照搬固定值
 4. **frameRate**：常见 15/24/30/60，编码端和源视频一致
 5. **profile**：H.264 → baseline/main/high；H.265 → main
 6. **pixelFormat**：`NV12`(默认) / `NV21` / `RGBA8888`
