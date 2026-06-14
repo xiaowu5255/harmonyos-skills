@@ -76,20 +76,24 @@ drmManager.generateLicense(licenseServerUrl, requestHeaders);
 不要用相机预览自己解析二维码——**系统已内置专为扫码优化的 Scan Kit**：
 
 ```typescript
-import { scanBarcode } from '@kit.ScanKit';
+import { scanBarcode, scanCore, customScan } from '@kit.ScanKit';
 
-// 方式1：默认扫码视图（有取景框/闪光灯/相册选图）
-scanBarcode.startScanForResult(context, options).then(result => {
+// 方式1：默认扫码界面（取景框/闪光灯/相册选图）
+let options: scanBarcode.ScanOptions = {
+  scanTypes: [scanCore.ScanType.ALL], enableMultiMode: true, enableAlbum: true,
+};
+scanBarcode.startScanForResult(context, options).then((result: scanBarcode.ScanResult) => {
   console.info(result.originalValue); // 解码结果
 });
 
-// 方式2：自定义扫码 UI
-let view = new scanBarcode.CustomScanView();
-view.start(); // 绑定 surfaceId 后启动
-view.on('scanResult', (result) => { /* 拿到结果 */ });
+// 方式2：自定义扫码 UI — customScan.init → start(绑定 XComponent surfaceId)
+customScan.init(options);
+let viewControl: customScan.ViewControl = { width: w, height: h, surfaceId };
+customScan.start(viewControl).then((results: Array<scanBarcode.ScanResult>) => { /* 结果数组 */ });
 ```
 
-**选型原则**：默认视图能满足 90% 场景（取景框+闪光灯+相册），只有需要自定义取景框 UI 时才用 CustomScanView。
+**选型原则**：默认界面满足绝大多数场景（取景框+闪光灯+相册）；仅需自定义取景 UI 时才用
+`customScan`（要自管 XComponent surface 与生命周期 init/start/stop/release）。
 
 ## 排查清单
 
@@ -97,6 +101,6 @@ view.on('scanResult', (result) => { /* 拿到结果 */ });
 2. **手表/耳机按键控制不生效** → AVSession 的 `on('controlCommand')` 未注册对应事件
 3. **投屏失败"设备不可达"** → 分布式五条前置清单逐条核对
 4. **DRM 视频花屏或无声** → 检查 `decryptConfig` 是否正确绑定到 AVCodec 的 configure 步骤
-5. **扫码识别率低** → 检查 ScanKit 版本（API 18+ 有明显优化），设置合适的 `scanType` (QR_CODE / AZTEC)
+5. **扫码识别率低** → 用 `options.scanTypes` 指定预期码制（如 `scanCore.ScanType.QR_CODE`）而非全类型，缩小范围提识别率
 
 > 官方文档：[AVSession Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/avsession-kit) · [DRM Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/drm-kit) · [Scan Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/scan-kit-guide)

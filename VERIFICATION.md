@@ -65,6 +65,12 @@
 | 29 | ai-inference | 帧率 5-15/30-60fps、加载 1-3s/3-5s 等 | 无信源**编造数值** | 全删,改定性描述(实测为准) | 红线#2 |
 | 30 | ai-inference | bash 注释 `# 1.` 被计 4 个 H1 | 触发 lint WARN | 注释 `#`→`##`,H1 归一 | 内部一致性 |
 | 31 | harmony-docs-retriever | 检索流仅本地锚点表 + site 搜索 + web-fetch | 缺一级稳态源 | 新增「步骤 2 Context7 官方库检索」(优先通用搜索),含 5 库 ID + 优先级铁律 | 工程增强 |
+| 32 | harmony-docs-retriever / version-guide | 未区分 Context7 快照时效 | Context7 季度滞后,无 HarmonyOS 7 | 补盲区降级判断;version-guide 加 HarmonyOS 7=API 26 基线(SemVer 标待核实) | D + WebSearch(HDC 2026) |
+| 33 | 3d-ar | `new Scene()/new Camera()/scene.loadModel()`、`ARPlaneTracking/ARBodyTracking/ARLightEstimate`、`@kit.AREngineKit` | **几乎整套 API 杜撰** | `@kit.AREngine`;`Scene.load()`+`Component3D`;`arViewController.ARViewContext`+`arEngine.ARSession`+`ARFrame.hitTest`+`ARPlane.isPoseInPolygon`;能力改 `ARConfig` 属性+`ARType` 枚举 | D(arengine-api-arengine / arengine-api-arviewcontroller / graphics3d) |
+| 34 | ai-speech | `@kit.SpeechKit` voiceprint 声纹 + `MANAGE_VOICE_WAKEUP` 唤醒 | **杜撰能力**,该 Kit 实为 TextReader/AICaption | 删声纹/唤醒段,改 TextReader/AICaptionComponent | D(speech-api / speech-aicaptioncomponent / speech-textreader-api) |
+| 35 | ai-speech | ASR `createRecognizer`+`on('recognizeword')`;TTS `speechSynthesis.createSpeechPlayer/synthesizeToFile/getVoiceList` | **杜撰接口** | ASR `createEngine`+`setListener(RecognitionListener)`;TTS `textToSpeech.createEngine`+`speak(text, SpeakParams)`,单次≤10000字符 | D(hms-ai-speechrecognizer / hms-ai-texttospeech) |
+| 36 | crypto-security | HUKS `cryptoFramework.createHuks(...)` | **杜撰**,模块名错 | `huks.generateKeyItem(keyAlias, HuksOptions)`+HuksParam properties;加解密三段式 init/update/finishSession | D(capi-native-huks-api-h) |
+| 37 | camera-capture / media-system | `SESSION_NOT_CONFIG`;Scan Kit `CustomScanView`+`on('scanResult')`;`scanType` | 错误码名错 / 杜撰扫码类 / 字段名错 | 错误码 **7400103**;`customScan.init/start(ViewControl)`;`scanTypes`+`scanCore.ScanType` | D(errorcode-camera / scan-customscan-api / scan-scanbarcode-api) |
 
 ## 三、核验通过(无需修改)的关键项
 

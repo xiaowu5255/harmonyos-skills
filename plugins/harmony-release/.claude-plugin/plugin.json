@@ -1,6 +1,6 @@
 {
   "name": "harmony-release",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "发布运维:性能优化/QA测试/签名证书/上架合规/故障日志分型诊断(崩溃·卡死·内存泄漏)。",
   "author": "HarmonyOS Skills",
   "skills": ["0-release-index", "performance-tuning", "testing-harmony", "signing-and-certificates", "release-and-compliance", "crash-diagnostics"]

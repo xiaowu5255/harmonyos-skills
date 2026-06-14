@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.6.2] - 2026-06-15
+
+### 检索时效分层 + 虚构 API 系统性清除（独立审计第三轮）
+
+**检索架构（应对 Context7 时效盲区）**
+- 实证 Context7 为季度快照（快照停 ~2026-03，无 6 月发布的 HarmonyOS 7）。ROADMAP 6.0
+  三层→**四层**（加官方 SPA 抓取）；检索优先级带**版本判定 + 盲区降级**；本地 d.ts 定为零延迟最终托底。
+- `harmony-docs-retriever`：三条铁律→四条，新增盲区降级判断（召回最高 API 低于目标 / Last Updated
+  早于发布日 → 跳过 Context7）；检查清单补盲区项。
+- `version-guide`：补 HarmonyOS 7 = **API 26** 版本基线（2026-06-12 HDC 发布 Beta，秋季正式版）；
+  SemVer 26.0.0 二次检索无佐证，按红线标"待核实"不写成事实。
+
+**虚构 API 清除（逐条 Context7 官方核验，ROADMAP 5.2）**
+- `audio-playback`：删杜撰 `createAudioSession`→`getSessionManager()`+`activateAudioSession`；
+  `createAudioCapturer` 嵌套结构；`deviceChange` 补 DeviceFlag；MIDI 正本清源为 C-API（API 24, UMP）。
+- `ai-inference`：`target:['npu']`+"仅限 Kirin" → NNRt（KIRIN_NPU 官方为保留未支持）；补 context 约束。
+- `3d-ar`：**几乎整套 API 为虚构**。`@kit.AREngineKit`→`@kit.AREngine`；`new Scene()`→`Scene.load()`；
+  UI 用 `Component3D`；AR 经 `arViewController.ARViewContext`+`arEngine.ARSession`+`ARFrame.hitTest`；
+  能力类 `ARPlaneTracking` 等→`ARConfig` 配置属性 + `ARType` 枚举。
+- `ai-speech`：Speech Kit 声纹/唤醒**不存在**（实为 TextReader/AICaption），删虚构段；
+  ASR `createRecognizer`→`createEngine`+`RecognitionListener`；TTS `speechSynthesis`→`textToSpeech`
+  （补官方实锤"单次 speak ≤10000 字符"）；实时转写→长语音模式 `recognizerMode:'long'`。
+- `crypto-security`：HUKS `cryptoFramework.createHuks`（不存在）→ `huks.generateKeyItem`+HuksParam，
+  加解密三段式 init/update/finishSession；生物认证经核实正确保留。
+- `camera-capture`：错误码 `SESSION_NOT_CONFIG`→官方 **7400103**（"Session not config"）。
+- `media-system`：Scan Kit 自定义扫码 `CustomScanView`（虚构）→ `customScan.init/start(ViewControl)`；
+  `scanType`→`scanTypes` + `scanCore.ScanType`。
+
+**性能臆测清除（ROADMAP 6.1）**
+- P1：删 5 个 skill 无信源性能数值（ai-vision/ai-speech/ai-nlp/ai-inference/connectivity 的精度%、
+  速度倍数、固定 ms/MB），改定性"实测为准"。
+- P2：软化工程经验值（media-processing 码率、2d-graphics 帧率档、location-map 节流、file-system 分块阈值）。
+- 贯穿红线新增第 3 条：**禁止无信源性能数值入库**。
+
+**回归**：lint 12 PASS / 0 FAIL；frontmatter 53 skill / 0 CRITICAL / 0 WARNING；尺寸全达标。
+
 ## [0.6.1] - 2026-06-15
 
 ### Context7 官方库核验修复（独立审计第二轮）

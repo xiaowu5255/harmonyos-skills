@@ -33,7 +33,7 @@ getCameraManager → getSupportedCameras → createCameraInput
 ```
 
 **三个不变量**：
-1. 任何配置变更（切镜头/改分辨率）必须走 `beginConfig → commitConfig`，运行时直接改 = `SESSION_NOT_CONFIG`
+1. 任何配置变更（切镜头/改分辨率）必须走 `beginConfig → commitConfig`，未配置就操作 = 错误码 **7400103**（"Session not config"，如配置前就 start）
 2. Session 状态机不可跳跃：CONFIG → READY → START，跳级必崩
 3. 释放顺序与创建严格相反：先 stop → 先释放 output → 再释放 input → 最后 releaseCamera
 

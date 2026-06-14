@@ -1,6 +1,6 @@
 {
   "name": "harmony-platform",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "HarmonyOS 6.x 平台入口层 — 总索引 + 版本迁移 + 官方文档检索",
   "author": "HarmonyOS Skills",
   "skills": ["harmony-index", "version-guide", "harmony-docs-retriever"]
