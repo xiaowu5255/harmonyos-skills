@@ -50,11 +50,13 @@ asrEngine.stopListening();
 
 | 维度 | 在线 | 离线 |
 |------|------|------|
-| 精度 | ~97% | ~90% |
-| 延迟 | 100-300ms | 实时 |
+| 精度 | 更高(依赖云端大模型) | 够用(端侧模型) |
+| 延迟 | 含网络往返 | 本地即时 |
 | 网络 | 需要 | 不需要 |
 | 并发限制 | 1 路 / 应用 | 1 路 / 应用 |
 | 适用 | 语音输入、搜索 | 语音指令、离线场景 |
+
+> 精度/延迟的具体数值依网络、口音、场景而定,实测为准,不臆断固定百分比。
 
 `RECOGNIZER_BUSY` 错误 → 前一次识别未 stop 就调了 start。ASR 是单路资源，用完必释放。
 
@@ -85,7 +87,7 @@ ttsEngine.on('error', (err) => { /* 合成失败 */ });
 **TTS 三个常见坑**：
 1. **男声不生效** → 部分设备只装了女声资源包，检查 `speechSynthesis.getVoiceList()` 查看可用音色
 2. **speak 调用后没声音** → 确认 AudioRenderer 未被其他应用独占（音频焦点冲突）
-3. **长文本中断** → 单次合成上限 2000 字，超长文本需分段，每段之间 delay 200ms
+3. **长文本中断** → 单次合成有字数上限（具体值以官方文档/本地 SDK 为准），超长文本需分段合成、依次衔接播放
 
 ## 实时语音转写
 
@@ -111,7 +113,7 @@ import { voiceprint } from '@kit.SpeechKit';
 voiceprint.enroll(userId, text, (result) => { /* success/fail */ });
 // 2. 验证：比对当前语音与已注册声纹
 voiceprint.verify(userId, text, (result, score) => {
-  // score >= 0.7 认为是本人
+  // score 越高越可信;判定阈值按安全等级与官方建议设定,勿照搬固定值
 });
 ```
 
@@ -131,6 +133,6 @@ voiceprint.verify(userId, text, (result, score) => {
 2. **TTS 合成输出为空白音频** → 检查文本编码（必须是 UTF-8），若含 emoji 需先过滤
 3. **离线 ASR 精度差** → 离线模型按需下载，检查 `getModelStatus()` 确认模型已就绪
 4. **ASR 和 TTS 同时使用冲突** → 两者共享音频焦点。先 stop ASR 再 start TTS，反之亦然
-5. **实时转写时间戳不准** → 连续语音场景下 `startTime` 有 ~50ms 系统偏差，对时序敏感的用 VAD(静音检测) 二次修正
+5. **实时转写时间戳不准** → 连续语音场景下 `startTime` 存在系统偏差，对时序敏感的用 VAD(静音检测) 二次修正
 
 > 官方文档：[Core Speech Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-speech-kit-guide) · [Speech Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/speech-kit-guide)

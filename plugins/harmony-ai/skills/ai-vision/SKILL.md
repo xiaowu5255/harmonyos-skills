@@ -55,7 +55,7 @@ import { textRecognition } from '@kit.CoreVisionKit';
 // 返回结构化：block > line > element 三级树，每级有 boundingBox + content
 ```
 
-支持语言：中英日韩法德意西葡俄。在线模式精度 ~98%，离线模式 ~92%。
+支持语言：中英日韩法德意西葡俄。在线模式精度高于离线模式；具体精度依图像质量与语言而定，实测为准。
 
 ### 3. 物体检测与跟踪
 
@@ -88,18 +88,18 @@ import { barcode } from '@kit.CoreVisionKit';
 ## 性能调优六条
 
 1. **PixelMap 复用**：连续多帧检测时复用同一个 PixelMap，避免每帧都做 GPU→CPU 回读
-2. **备选模式匹配**：先 `detect` 拿人脸 boundingBox，再 `recognizeText` 缩小裁剪区，速度提升 3x
-3. **尺寸控制**：OCR 输入图短边控制在 1080px 以内，过大对精度无提升但耗时线性增长
-4. **释放时序**：每次 detect 完成后立即 `pixelMap.release()`，积压 5 帧以上显存溢出
-5. **在线/离线切换**：OCR 和物体检测支持 `serverStatus`。弱网环境强制离线，省 500ms+ 网络超时
-6. **检测间隔**：人脸跟踪 > 15fps 即可，不需要每渲染帧都跑推理
+2. **备选模式匹配**：先 `detect` 拿人脸 boundingBox，再 `recognizeText` 缩小裁剪区，减少无效像素提速
+3. **尺寸控制**：OCR 输入图短边不必过大，过大对精度无提升但耗时随像素增长
+4. **释放时序**：每次 detect 完成后立即 `pixelMap.release()`，积压多帧会显存溢出
+5. **在线/离线切换**：OCR 和物体检测支持 `serverStatus`。弱网环境强制离线，省去网络往返超时
+6. **检测间隔**：人脸跟踪无需每渲染帧都跑推理，按可感知变化的频率降采样即可
 
 ## 排查清单
 
 1. **OCR 识别乱码** → 检查图片方向：Core Vision 不支持自动旋转，先对 `pixelMap` 做旋转处理
 2. **detect 返回空数组** → 图片过小(短边 < 64px)或纯色无特征区域
 3. **人脸检测漏检侧脸** → `angle` 参数默认 ±30°，侧脸 >30° 需调大；但精度会下降
-4. **init 初始化超时** → 模型首次加载需下载（~15MB），WiFi 环境下等 3-5 秒；真机首次要按提示下载
+4. **init 初始化超时** → 模型首次加载需联网下载，真机首次按提示下载；首次比稳态慢，超时阈值给足
 5. **超分结果模糊** → 检查输入是不是 JPEG 高压缩图——先把压缩图片重新解码为无损 PixelMap 再超分
 
 > 官方文档：[Core Vision Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/core-vision-kit-guide) · [Vision Kit](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/vision-kit-guide)
