@@ -7,6 +7,7 @@
 > - **A 级**:developer.huawei.com 官方页(SPA,正文常抓取失败,多用于证实页面存在/标题)
 > - **B 级**:gitee.com/openharmony/docs(master 分支 markdown,与华为商用文档同源)
 > - **C 级**:逐字转载官方文档的第三方页 / 多源交叉佐证
+> - **D 级**:Context7 结构化收录的 developer.huawei.com 官方文档(High 声誉,带官方 URL;为周期快照,最新季度 API 可能滞后)
 >
 > 全量首轮核验日期:**2026-06-12**。覆盖全部 19 个深度 skill 的事实性声明。
 
@@ -47,6 +48,23 @@
 | 21 | signing-and-certificates | signingConfigs 字段不全;路径少 Project;证书有效期"以年计" | 不完整 | 补 signAlg(SHA256withECDSA)/type;路径加 Project;补调试1年/发布3年(上限3)/设备100台 | A(ide-signing) + A(AGC 帮助中心) |
 | 22 | atomic-services-and-cards | 包体"以官方为准";生命周期仅四个;form_config 无单位;call 权限模糊 | 不完整 | 补单包2MB/总10MB;补 onChangeFormVisibility 等;updateDuration=30min 倍数;call 需 KEEP_BACKGROUND_RUNNING;补实况窗辨析 | B(卡片生命周期/配置/call 事件文档) |
 | 23 | 全仓库交叉引用 | huawei-ecosystem-kits / security-and-permissions / distributed-collaboration / arkdata-storage / api-version-migration | 重构后旧 skill 名残留(8 处) | 全部更新为现名 | 内部一致性 |
+
+## 二之二、Context7 核验修正(2026-06-15 落地)
+
+> 本轮经 **D 级**信源核验:Context7 已结构化收录 developer.huawei.com 全量文档
+> (`/websites/developer_huawei_consumer_cn_doc*`,High 声誉一手源)。优先级仍为
+> 本地 SDK `.d.ts` > Context7 官方快照 > 通用搜索;Context7 为快照,最新季度 API 可能滞后。
+
+| # | Skill | 原内容 | 问题 | 修正 | 信源 |
+|---|---|---|---|---|---|
+| 24 | audio-playback | `audio.createAudioSession({strategy:枚举})` | **杜撰 API**,官方无此接口 | `audioManager.getSessionManager()`→`activateAudioSession(strategy)`(API 12+),枚举装 `concurrencyMode` 字段 | D(arkts-apis-audio-audiosessionmanager) |
+| 25 | audio-playback | `createAudioCapturer` options 平铺 `streamUsage`+`source` | 结构错误 | 嵌套 `{streamInfo, capturerInfo:{source, capturerFlags}}` | D(arkts-apis-audio-f) |
+| 26 | audio-playback | `audioManager.on('deviceChange', cb)` | **API 9 已废弃**,且漏 deviceFlag 参数 | `routingManager.on('deviceChange', DeviceFlag, cb)` | D(arkts-apis-audio-audioroutingmanager) |
+| 27 | audio-playback | MIDI `midi.createMIDIDevice()` ArkTS + `[0x90,0x3C,0x7F]` + 延迟数值 | **杜撰 ArkTS 接口**;MIDI 实为纯 C-API | 改纯 C-API(`native_midi.h`,API 24 起,UMP 格式,client 配额全局8/单app2);删延迟数值 | D(capi-ohmidi / capi-native-midi-h) |
+| 28 | ai-inference | `target:['npu']`;"仅限 Kirin SoC" | 失实:KIRIN_NPU 官方标注"保留,尚未支持" | 改 `target:['nnrt']`,加速经 NNRt 统一抽象;补 context 单次 build 约束 + `context.cpu` 结构 | D(capi-types-h OH_AI_DeviceType / capi-model-h) |
+| 29 | ai-inference | 帧率 5-15/30-60fps、加载 1-3s/3-5s 等 | 无信源**编造数值** | 全删,改定性描述(实测为准) | 红线#2 |
+| 30 | ai-inference | bash 注释 `# 1.` 被计 4 个 H1 | 触发 lint WARN | 注释 `#`→`##`,H1 归一 | 内部一致性 |
+| 31 | harmony-docs-retriever | 检索流仅本地锚点表 + site 搜索 + web-fetch | 缺一级稳态源 | 新增「步骤 2 Context7 官方库检索」(优先通用搜索),含 5 库 ID + 优先级铁律 | 工程增强 |
 
 ## 三、核验通过(无需修改)的关键项
 

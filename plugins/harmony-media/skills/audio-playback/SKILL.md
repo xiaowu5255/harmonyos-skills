@@ -30,26 +30,44 @@ metadata:
 **选错典型案例**：VoIP 通话误用 MUSIC 流——对方听不到声音(回声消除未开)、
 扬声器不切换(走错音频路由)。
 
-## 音频焦点(AudioSession)抢占与恢复
+## 音频焦点(AudioSession)抢占与恢复(API 12+)
+
+API 名以本地 SDK `@ohos.multimedia.audio.d.ts` 为准;以下经官方
+[AudioSessionManager](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/arkts-apis-audio-audiosessionmanager)
+核验(API 12+):**先从 AudioManager 取 AudioSessionManager,再 activate**,没有 `createAudioSession` 这个接口。
 
 ```ts
-const audioSession = audio.createAudioSession({
-  strategy: audio.AudioConcurrencyMode.CONCURRENCY_PAUSE_OTHERS, // 被抢占时暂停
-});
+import { audio } from '@kit.AudioKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
-audioSession.on('audioSessionDeactivated', (reason) => {
-  // reason: LOWPRIORITY(低优先级抢占) / INTERNAL(系统抢占如通话)
-  // 暂停播放，释放资源
-});
-audioSession.on('audioSessionActivated', () => {
-  // 焦点恢复，继续播放
+// 1. 取 AudioSessionManager(由 audioManager 派生,不是 audio.createXxx)
+const audioManager = audio.getAudioManager();
+const audioSessionManager: audio.AudioSessionManager = audioManager.getSessionManager();
+
+// 2. strategy 是 AudioSessionStrategy 对象,枚举装在 concurrencyMode 字段里
+const strategy: audio.AudioSessionStrategy = {
+  concurrencyMode: audio.AudioConcurrencyMode.CONCURRENCY_PAUSE_OTHERS, // 被抢占时暂停
+};
+
+// 3. activateAudioSession 返回 Promise
+audioSessionManager.activateAudioSession(strategy)
+  .then(() => console.info('audio session activated'))
+  .catch((err: BusinessError) => console.error(`activate failed: ${err}`));
+
+// 4. 监听停用事件(参数是 AudioSessionDeactivatedEvent,带 reason)
+audioSessionManager.on('audioSessionDeactivated', (event) => {
+  // event.reason: AudioSessionDeactivatedReason
+  //   LOW_PRIORITY(被低优先级流抢占) / TIMEOUT(超时未用被回收)
+  // 暂停播放、释放资源
 });
 ```
 
-- 纯音乐播放器用 `CONCURRENCY_PAUSE_OTHERS`——通话来了暂停，通话结束自动恢复
-- 导航语音用 `CONCURRENCY_DUCK_OTHERS`——压低其他音频音量而非抢占焦点
+- 枚举值以官方为准,常见:`CONCURRENCY_MIX_WITH_OTHERS`(混音)、
+  `CONCURRENCY_DUCK_OTHERS`(压低其他音频)、`CONCURRENCY_PAUSE_OTHERS`(暂停其他)。
+- 纯音乐播放器用 `CONCURRENCY_PAUSE_OTHERS`——通话来了暂停。
+- 导航语音用 `CONCURRENCY_DUCK_OTHERS`——压低其他音频音量而非抢占焦点。
 - **不要忽略 `audioSessionDeactivated` 回调**——不做响应会导致"两个播放器
-  同时出声"或"通话结束后不恢复播放"
+  同时出声"或"通话结束后不恢复播放"。恢复播放在重新拿到焦点后由业务自行触发。
 
 ## 音频播放状态机
 
@@ -67,11 +85,24 @@ IDLE → PREPARED → PLAYING ──→ PAUSED
 
 ## 录制权限与音频源
 
+官方 `createAudioCapturer` 的 options 是 **嵌套结构**(`streamInfo` + `capturerInfo`),
+不是平铺字段。经
+[audio API](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/arkts-apis-audio-f)
+核验:
+
 ```ts
-const audioCapturer = await audio.createAudioCapturer({
-  streamUsage: audio.StreamUsage.STREAM_USAGE_VOICE_COMMUNICATION,
-  source: audio.SourceType.SOURCE_TYPE_MIC,
-});
+const streamInfo: audio.AudioStreamInfo = {
+  samplingRate: audio.AudioSamplingRate.SAMPLE_RATE_48000,
+  channels: audio.AudioChannel.CHANNEL_2,
+  sampleFormat: audio.AudioSampleFormat.SAMPLE_FORMAT_S16LE,
+  encodingType: audio.AudioEncodingType.ENCODING_TYPE_RAW,
+};
+const capturerInfo: audio.AudioCapturerInfo = {
+  source: audio.SourceType.SOURCE_TYPE_MIC, // 录音源,按场景选
+  capturerFlags: 0,
+};
+const audioCapturer: audio.AudioCapturer =
+  await audio.createAudioCapturer({ streamInfo, capturerInfo });
 ```
 
 | 权限 | 使用场景 |
@@ -85,30 +116,51 @@ const audioCapturer = await audio.createAudioCapturer({
 
 ## 设备路由监听(蓝牙耳机插拔)
 
-```ts
-audioRoutingManager.on('deviceChange', (deviceChangeAction) => {
-  // deviceChangeAction.type: 'DEVICE_AVAILABLE' / 'DEVICE_UNAVAILABLE'
-  // deviceChangeAction.deviceType: SPEAKER / WIRED_HEADSET / BLUETOOTH_A2DP / BLUETOOTH_SCO
-});
-```
-
-- 蓝牙耳机连接后自动路由，通常无需手动切换
-- 通话场景 SCO 协议(双向低延迟)与音乐场景 A2DP 协议(单向高质量)自动切换
-- 需要手动切换设备时用 `audioRoutingManager.selectDevice()`
-
-## MIDI C API(USB/BLE 设备连接与消息收发)
+`audioManager.on('deviceChange')` 已于 **API 9 废弃**;改用 `AudioRoutingManager`,
+且 `on('deviceChange', ...)` 第二参数是 **`DeviceFlag`(必填)**,指定监听的设备方向。
+经
+[AudioRoutingManager](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/arkts-apis-audio-audioroutingmanager)
+核验:
 
 ```ts
-const midiDevice = midi.createMIDIDevice();
-midiDevice.connect(deviceId).then(() => {
-  midiDevice.on('midiMessage', (msg) => { /* 标准 MIDI 消息 */ });
-  midiDevice.sendMidiMessage([0x90, 0x3C, 0x7F]); // Note On, C4, velocity 127
-});
+const routingManager: audio.AudioRoutingManager =
+  audio.getAudioManager().getRoutingManager();
+
+routingManager.on('deviceChange', audio.DeviceFlag.OUTPUT_DEVICES_FLAG,
+  (action: audio.DeviceChangeAction) => {
+    // action.type: audio.DeviceChangeType.CONNECT / DISCONNECT
+    // action.deviceDescriptors[i].deviceType: SPEAKER / WIRED_HEADSET / BLUETOOTH_A2DP / BLUETOOTH_SCO ...
+  });
 ```
 
-- 支持 USB MIDI 和 BLE MIDI 两种传输协议
-- MIDI 消息为 1-3 字节标准格式(Note On/Off, CC, Program Change 等)
-- 多设备并发时按 deviceId 区分消息来源，不要混用线程处理——推入 TaskPool
+- 蓝牙耳机连接后自动路由，通常无需手动切换。
+- 通话场景 SCO 协议(双向低延迟)与音乐场景 A2DP 协议(单向高质量)自动切换。
+- 需要手动选择输出设备时用 `routingManager.selectOutputDevice(...)`(API 名以本地 d.ts 为准)。
+
+## MIDI(OHMIDI,**纯 C-API,API 24 起**)
+
+⚠ MIDI **没有 ArkTS 接口**——只有 Native C-API(`native_midi.h`),需经 NDK 调用(转 native-ndk 技能)。
+数据格式是 **UMP(Universal MIDI Packet)**,不是裸 1-3 字节短消息。经
+[OHMIDI C API](https://developer.huawei.com/consumer/cn/doc/harmonyos-references/capi-ohmidi)
+核验,典型流程:
+
+```c
+// 1. 创建 client(全局上限 8 个,单 app 上限 2 个,建议全程复用 1 个)
+OH_MIDIClient *client = NULL;
+OH_MIDIClient_Create(&client, callbacks, userData);
+// 2. 发现设备/端口 → 3. 打开设备
+OH_MIDIDevice *device = NULL;
+OH_MIDIClient_OpenDevice(client, deviceId, &device);
+// 4. 按方向打开输入/输出端口
+OH_MIDIDevice_OpenOutputPort(device, descriptor);
+// 5. 收(回调 UMP)/ 发(构造 UMP 包):
+OH_MIDIDevice_Send(device, portIndex, events, eventCount, &eventsWritten);
+// 6. 用完关端口、关设备、销毁 client
+```
+
+- 接收 MIDI 数据通过回调以 UMP 格式返回;发送需构造 UMP 数据包。
+- client 配额硬限:全局 ≤8、单 app ≤2,**一个 app 维持单 client 管理多设备/端口**。
+- USB MIDI 与 BLE MIDI 均走此统一 C 接口。
 
 ## 音频性能调优(低延迟模式)
 
@@ -117,7 +169,7 @@ midiDevice.connect(deviceId).then(() => {
 | 音乐播放 | 默认缓冲(避免卡顿) |
 | 游戏音效 | 低延迟模式: bufferSize=1024 frames, sampleRate 匹配设备原生采样率 |
 | 实时音频(通话/乐器) | 最低延迟: 小 buffer + 高优先级线程 + 避免 GC 抖动 |
-| MIDI 输入延迟 | USB MIDI < 1ms, BLE MIDI 7-15ms——对延迟敏感场景优先 USB |
+| MIDI 输入延迟 | USB 通常优于 BLE;具体数值依设备而定,实测为准,不臆断固定毫秒 |
 
 ## 排查清单：“无声/音质差/录音失败”
 

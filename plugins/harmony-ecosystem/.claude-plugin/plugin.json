@@ -1,6 +1,6 @@
 {
   "name": "harmony-ecosystem",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "HarmonyOS 6.x 应用生态 — 账号/推送/支付/通知/地图/云开发/分享",
   "author": "HarmonyOS Skills",
   "skills": ["0-ecosystem-index", "huawei-kits", "cloud-foundation", "notification", "location-map", "sharing-social"]

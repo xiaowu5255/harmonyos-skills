@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.1] - 2026-06-15
+
+### Context7 官方库核验修复（独立审计第二轮）
+- **接入 Context7 官方文档库**：确认 Context7 已结构化收录 developer.huawei.com 全量文档
+  （guides 56k + references 78k + v13 + faqs + AGC ≈ 20 万 snippet，均 High 声誉一手源）。
+- **harmony-docs-retriever 增强**：检索工作流新增「步骤 2 — Context7 官方库检索」作为一级源
+  （优先于通用搜索），给出 5 个库 ID 映射表 + 三条铁律（快照非实时／版本消歧／本地 d.ts 优先级最高）；
+  步骤编号重排（1→6），检查清单补 Context7 项。从根上替换"SPA 抓不到→凭记忆编造"链路中的不稳定 web-fetch 层。
+- **P1 修复 `audio-playback`（整段逐 API 对照官方核验，问题最重）**：
+  - 删除杜撰 API `audio.createAudioSession`，改 `audioManager.getSessionManager()`→`activateAudioSession(strategy)`（API 12+），枚举装 `concurrencyMode` 字段
+  - `createAudioCapturer` options 平铺→嵌套 `{streamInfo, capturerInfo}`
+  - `audioManager.on('deviceChange')`（API 9 废弃）→ `routingManager.on('deviceChange', DeviceFlag, cb)`
+  - MIDI 杜撰 ArkTS `midi.createMIDIDevice()` → 纠正为纯 C-API（`native_midi.h`，API 24 起，UMP 格式）
+  - 删除编造的 MIDI 延迟数值
+- **P1 修复 `ai-inference`**：
+  - `target:['npu']`+"仅限 Kirin" → `target:['nnrt']`（官方 `OH_AI_DeviceType` 中 KIRIN_NPU 标注"保留，尚未支持"，实际通道是 NNRt）
+  - 删除编造 fps（5-15/30-60）与加载秒数；补 context 单次 build 约束、`context.cpu` 结构、精度模式层级
+  - 消除 4 个 H1 的 lint WARN（bash 注释 `#`→`##`）
+- **回归**：lint 12 PASS / 0 FAIL；frontmatter 53 skill / 0 CRITICAL / 0 WARNING（原 1 WARN 清零）；尺寸全达标。
+
 ## [0.6.0] - 2026-06-13
 
 ### 全量深度审计与质量修复（v3.0）
