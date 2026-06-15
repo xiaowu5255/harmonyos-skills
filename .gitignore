@@ -23,3 +23,6 @@ node_modules/
 # WorkBuddy 抓取缓存
 .workbuddy/*.md
 .workbuddy/*.json
+
+# v0.7.0 evals 报告输出（仅保留 .gitkeep）
+tools/evals/reports/*.json
