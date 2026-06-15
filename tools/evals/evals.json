@@ -449,6 +449,439 @@
       "prompt": "界面卡死转圈,faultlog 显示 THREAD_BLOCK_6S,怎么定位?",
       "expected_output": "判定 AppFreeze;直奔 main 线程栈顶判断阻塞类型(IO/IPC/锁/计算);等锁则找持锁线程;区分与 performance-tuning 边界",
       "quality_assertion": "输出必须定位 main 线程栈,按阻塞类型(IO/IPC/锁/计算/死循环)分型,不得笼统归为'性能问题'"
+    },
+    {
+      "id": 73,
+      "skill": "arkts-syntax",
+      "prompt": "我想在鸿蒙页面里用解构赋值给一个对象初始化,这样写能编译过吗?",
+      "expected_output": "触发 arkts-syntax;明确解构为错误级禁止;给出替代写法",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "markContentDirty"
+        ]
+      }
+    },
+    {
+      "id": 74,
+      "skill": "arkts-syntax",
+      "prompt": "鸿蒙里有 @Styles 这个装饰器吗?和 Vue 的 scoped style 比有什么区别?",
+      "expected_output": "触发 arkts-syntax;指出 @Styles/@Extend 已废弃,推荐 AttributeModifier",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "@Styles",
+          "@Extend"
+        ]
+      }
+    },
+    {
+      "id": 75,
+      "skill": "arkts-syntax",
+      "prompt": "我在 TaskPool 里传一个普通对象到子任务,提示 can't sendable,怎么处理?",
+      "expected_output": "触发 arkts-syntax 并联;指出需 @Sendable 或用 Worker",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "@Sendable",
+          "TaskPool"
+        ]
+      }
+    },
+    {
+      "id": 76,
+      "skill": "arkts-syntax",
+      "prompt": "鸿蒙里能 const {a, b} = obj 这么解构吗?",
+      "expected_output": "触发 arkts-syntax;ArkTS 不允许解构赋值的描述必须出现",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:输出必须显式说明 ArkTS 不允许解构赋值,不能含糊带过"
+      }
+    },
+    {
+      "id": 77,
+      "skill": "arkui-patterns",
+      "prompt": "鸿蒙里 LazyForEach 和 if 一起用报错,怎么办?",
+      "expected_output": "触发 arkui-patterns;不要把 if 嵌进 LazyForEach 内部",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "LazyForEach",
+          "if"
+        ]
+      }
+    },
+    {
+      "id": 78,
+      "skill": "arkui-patterns",
+      "prompt": "长列表滑动掉帧,怎么系统性优化?",
+      "expected_output": "触发 arkui-patterns;列出三/四件套(缓存项布局/组件复用/分帧加载/freezeWhenInactive)",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "reuseId",
+          "cachedCount",
+          "LazyForEach"
+        ]
+      }
+    },
+    {
+      "id": 79,
+      "skill": "arkui-patterns",
+      "prompt": "Navigation 跳转和 router 跳转哪个好?",
+      "expected_output": "触发 arkui-patterns;推荐 Navigation(router 已是历史)",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "router.pushUrl（?!\b.*deprecated）"
+        ]
+      }
+    },
+    {
+      "id": 80,
+      "skill": "arkui-patterns",
+      "prompt": "鸿蒙里能做自定义动画吗?",
+      "expected_output": "触发 arkui-patterns;提及 animateTo/显式动画/属性动画",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:必须给出动画选型决策(animateTo/属性动画/转场动画),不能只说用 animation"
+      }
+    },
+    {
+      "id": 81,
+      "skill": "stage-model",
+      "prompt": "UIAbility 的 onCreate 和 onWindowStageCreate 区别?",
+      "expected_output": "触发 stage-model;区分 UIAbility 生命周期与 WindowStage 生命周期",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "onCreate",
+          "onWindowStageCreate"
+        ]
+      }
+    },
+    {
+      "id": 82,
+      "skill": "stage-model",
+      "prompt": "应用被外部拉起多次,Want 怎么读?",
+      "expected_output": "触发 stage-model;onNewWant + want.parameters 必现",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "onNewWant",
+          "want"
+        ]
+      }
+    },
+    {
+      "id": 83,
+      "skill": "stage-model",
+      "prompt": "module.json5 里 abilities 字段怎么写?",
+      "expected_output": "触发 stage-model;指出 module.json5 + UIAbility 配置",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "module.json5",
+          "abilities"
+        ]
+      }
+    },
+    {
+      "id": 84,
+      "skill": "stage-model",
+      "prompt": "怎么从我的应用跳到系统设置页?",
+      "expected_output": "触发 stage-model;startAbility + 设置页 Want 必现",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:必须显式给出 startAbility 跳设置页的 action + entity 写法,不能只说 openLink"
+      }
+    },
+    {
+      "id": 85,
+      "skill": "security-permissions",
+      "prompt": "用户选一张照片上传,需要什么权限?",
+      "expected_output": "触发 security-permissions;PhotoViewPicker 免权限",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "Picker",
+          "安全控件"
+        ]
+      }
+    },
+    {
+      "id": 86,
+      "skill": "security-permissions",
+      "prompt": "我要申请相机权限直接拍,要不要先想想?",
+      "expected_output": "触发 security-permissions;提到 Picker 优先",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "regex_match",
+        "target": "stdout",
+        "value": "permission.*ACL"
+      }
+    },
+    {
+      "id": 87,
+      "skill": "security-permissions",
+      "prompt": "READ_MEDIA 申请被拒了,怎么办?",
+      "expected_output": "触发 security-permissions;建议改用 PhotoViewPicker",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "直接申请 READ_MEDIA"
+        ]
+      }
+    },
+    {
+      "id": 88,
+      "skill": "security-permissions",
+      "prompt": "应用启动时一堆权限请求,合规怎么过?",
+      "expected_output": "触发 security-permissions;按需申请 + 用途说明",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:必须显式给出 Picker 优先于权限申请的判断逻辑,不能只列权限清单"
+      }
+    },
+    {
+      "id": 89,
+      "skill": "network-requests",
+      "prompt": "鸿蒙里怎么发 HTTPS 请求?",
+      "expected_output": "触发 network-requests;http.createHttp + RequestOptions",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "http.createHttp",
+          "RequestOptions"
+        ]
+      }
+    },
+    {
+      "id": 90,
+      "skill": "network-requests",
+      "prompt": "WebSocket 断了怎么重连?",
+      "expected_output": "触发 network-requests;指数退避 + 状态机",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "WebSocket",
+          "on"
+        ]
+      }
+    },
+    {
+      "id": 91,
+      "skill": "network-requests",
+      "prompt": "弱网下大文件上传失败?",
+      "expected_output": "触发 network-requests;分块 + 重试 + 断点续传",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "一口气传完"
+        ]
+      }
+    },
+    {
+      "id": 92,
+      "skill": "network-requests",
+      "prompt": "鸿蒙里 Socket 编程怎么搞?",
+      "expected_output": "触发 network-requests;socket.createTCPSocket 必现",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:必须区分 TCP/UDP 选型并说明线程模型,不能只给 createTCPSocket 一句"
+      }
+    },
+    {
+      "id": 93,
+      "skill": "audio-playback",
+      "prompt": "鸿蒙里怎么播放网络音频?",
+      "expected_output": "触发 audio-playback;AVPlayer + url",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "createAudioSession"
+        ]
+      }
+    },
+    {
+      "id": 94,
+      "skill": "audio-playback",
+      "prompt": "音频焦点怎么管理?多个音频同时播放谁优先?",
+      "expected_output": "触发 audio-playback;getSessionManager + activateAudioSession",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "getSessionManager",
+          "activateAudioSession"
+        ]
+      }
+    },
+    {
+      "id": 95,
+      "skill": "audio-playback",
+      "prompt": "鸿蒙支持 MIDI 设备吗?怎么用?",
+      "expected_output": "触发 audio-playback;MIDI 是 native C-API",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "MIDI.*ArkTS",
+          "midi.createMIDIDevice"
+        ]
+      }
+    },
+    {
+      "id": 96,
+      "skill": "audio-playback",
+      "prompt": "音频播放怎么监听耳机拔出?",
+      "expected_output": "触发 audio-playback;routingManager.on deviceChange",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:必须显式给出 routingManager.on('deviceChange', DeviceFlag, cb) 而非 audioManager.on"
+      }
+    },
+    {
+      "id": 97,
+      "skill": "media-system",
+      "prompt": "锁屏播控怎么做?",
+      "expected_output": "触发 media-system;AVSession + Controller",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "AVSession",
+          "Controller"
+        ]
+      }
+    },
+    {
+      "id": 98,
+      "skill": "media-system",
+      "prompt": "鸿蒙里扫码用什么 Kit?",
+      "expected_output": "触发 media-system;Scan Kit + customScan.init",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "CustomScanView"
+        ]
+      }
+    },
+    {
+      "id": 99,
+      "skill": "media-system",
+      "prompt": "DRM 内容保护怎么接?",
+      "expected_output": "触发 media-system;DRM Kit + MediaKeySession",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "DRM",
+          "MediaKeySession"
+        ]
+      }
+    },
+    {
+      "id": 100,
+      "skill": "media-system",
+      "prompt": "怎么自定义扫码界面?",
+      "expected_output": "触发 media-system;customScan.init(ViewControl) + scanTypes",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:必须显式给出 customScan.init + start + scanTypes 三个调用,不能只说 Scan Kit"
+      }
+    },
+    {
+      "id": 101,
+      "skill": "ai-inference",
+      "prompt": "MindSpore Lite 推理在鸿蒙上怎么用 NPU 加速?",
+      "expected_output": "触发 ai-inference;context.target = ['nnrt'],KIRIN_NPU 保留未支持",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "nnrt",
+          "context"
+        ]
+      }
+    },
+    {
+      "id": 102,
+      "skill": "ai-inference",
+      "prompt": "模型加载很慢,要不要量化?",
+      "expected_output": "触发 ai-inference;INT8 量化 + ms 工具链",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "not_contains",
+        "target": "stdout",
+        "value": [
+          "5-15 fps",
+          "30-60 fps",
+          "省 40% 显存"
+        ]
+      }
+    },
+    {
+      "id": 103,
+      "skill": "ai-inference",
+      "prompt": "ONNX 模型怎么转 MindSpore?",
+      "expected_output": "触发 ai-inference;onnx→ms + 量化 + NPU 适配三板斧",
+      "quality_assertion": {
+        "type": "machine",
+        "check": "contains",
+        "target": "stdout",
+        "value": [
+          "ONNX",
+          "convert"
+        ]
+      }
+    },
+    {
+      "id": 104,
+      "skill": "ai-inference",
+      "prompt": "端侧推理和云侧推理怎么选?",
+      "expected_output": "触发 ai-inference;给端云分工决策树",
+      "quality_assertion": {
+        "type": "semantic",
+        "note": "维护者必读:必须给出端侧 vs 云侧的选型维度(隐私/延迟/算力/费用),不能只列比例"
+      }
     }
   ]
 }
