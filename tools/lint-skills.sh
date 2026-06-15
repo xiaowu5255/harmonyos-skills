@@ -176,6 +176,29 @@ while IFS= read -r f; do
 done < <(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/*")
 if [ "$miss" -eq 0 ]; then check 0 "全部深度 skill 均有 test-cases/test-prompts.md"; else echo "  提示: $miss 个深度 skill 暂无 test-cases/test-prompts.md(建议逐步补充,不拦截)"; fi
 
+# ── 13. 高优 skill evals 覆盖软提示（v0.7.0 引入）──
+section "13. 8 高优 skill quality_assertion 覆盖（软提示，不拦截）"
+declare -A priority_skills=(
+  [arkts-syntax]=4 [arkui-patterns]=4 [stage-model]=4
+  [security-permissions]=4 [network-requests]=4
+  [audio-playback]=4 [media-system]=4 [ai-inference]=4
+)
+for skill in "${!priority_skills[@]}"; do
+  target=${priority_skills[$skill]}
+  count=$("${PY:-python3}" -c "
+import json
+d = json.load(open('$ROOT/tools/evals/evals.json'))
+print(sum(1 for e in d['evals']
+          if e.get('skill') == '$skill'
+          and 'quality_assertion' in e))
+")
+  if [ "$count" -ge "$target" ]; then
+    check 0 "$skill: $count / $target quality_assertion"
+  else
+    check 0 "$skill: $count / $target quality_assertion（建议补足，非阻断）"
+  fi
+done
+
 echo ""
 echo "===== 结果: $PASS PASS / $FAIL FAIL ====="
 if [ "$FAIL" -gt 0 ]; then exit 1; fi
