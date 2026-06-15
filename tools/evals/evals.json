@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 72 条(含 3 负样本)。15 条高频 skill 已升级 quality_assertion(输出正确性断言)。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 104 条(含 3 负样本)。48 条 quality_assertion(24 machine 可机检 + 24 semantic 待人工),覆盖 8 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference)。",
   "evals": [
     {
       "id": 1,
