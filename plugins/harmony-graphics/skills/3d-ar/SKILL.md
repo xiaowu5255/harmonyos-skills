@@ -22,6 +22,22 @@ metadata:
 - 涉及 虚拟摆放 时
 - 涉及 3D 展示 时
 
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| `import { arEngine } from '@kit.AREngineKit'` | 正确包名是 `@kit.AREngine`(无 Kit 后缀) | AREngine 包名 |
+| `let scene = new Scene()` 同步构造 | 官方**没有**同步构造;场景用 `Scene.load()` 异步返回 Promise | ArkGraphics 3D |
+| `new ARPlaneTracking()` / `new ARBodyTracking()` | 没有独立能力类;能力由 `ARConfig.type` + `planeFindingMode` 决定 | ARConfig 文档 |
+| `scene.loadModel('model.glb')` | `Scene.load()` 接收 glTF/GLB;OBJ/FBX 需自行转换 | glTF 支持 |
+| 自定义场景模式默认有相机和手势 | 自定义模式下**无内置相机控制器**;手势与位姿更新需自己写 | Component3D 双模式 |
+| 平面检测对纯白墙失败 | 需要环境有纹理特征;纯白墙/暗光/镜面都检测不到 | AR 平面检测前提 |
+
+> **验证方法**:本领域 API 极易记错。**写码前必做**:
+> 1. 查本地 SDK `@hms.*.d.ts` / `@ohos.graphics.scene.d.ts` 核对类名与签名
+> 2. 调用前用 `arViewController.isARTypeSupported(...)` 判断设备能力
+> 3. 不确定的 API 走 `harmony-docs-retriever` 查官方文档
+
 # 3D 与 AR：渲染、空间感知与虚实融合
 
 > ⚠️ 本领域 API 极易记错。**写码前必做**：在本地 SDK `@hms.*.d.ts` / `@ohos.graphics.scene.d.ts`

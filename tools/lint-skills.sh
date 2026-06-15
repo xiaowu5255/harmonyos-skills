@@ -184,6 +184,7 @@ declare -A priority_skills=(
   [arkts-syntax]=4 [arkui-patterns]=4 [stage-model]=4
   [security-permissions]=4 [network-requests]=4
   [audio-playback]=4 [media-system]=4 [ai-inference]=4
+  [3d-ar]=2
 )
 for skill in "${!priority_skills[@]}"; do
   target=${priority_skills[$skill]}
@@ -202,11 +203,12 @@ print(sum(1 for e in d['evals']
 done
 
 # ── 14. 高优 skill 主动纠错覆盖率(软提示,不拦截 FAIL) ──
-section "14. 8 高优 skill 主动纠错覆盖率（软提示，不拦截）"
+section "14. 9 高优 skill 主动纠错覆盖率（软提示，不拦截）"
 declare -A high_priority_skills=(
   [arkts-syntax]=1 [arkui-patterns]=1 [stage-model]=1
   [security-permissions]=1 [network-requests]=1
   [audio-playback]=1 [media-system]=1 [ai-inference]=1
+  [3d-ar]=1
 )
 CORRECTION_MARKERS="⚠️|纠正|不存在|反模式|误区|禁止"
 for skill in "${!high_priority_skills[@]}"; do

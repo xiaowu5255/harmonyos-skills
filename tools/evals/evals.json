@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 111 条(含 10 负样本)。48 条 quality_assertion(24 machine 可机检 + 24 semantic 待人工),覆盖 8 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference)。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 112 条(含 10 负样本)。49 条 quality_assertion(25 machine 可机检 + 24 semantic 待人工),覆盖 9 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference/3d-ar)。",
   "evals": [
     {
       "id": 1,
@@ -351,6 +351,13 @@
       "skill": "3d-ar",
       "prompt": "AR 场景里虚拟物体一直漂移不固定,怎么解决?",
       "expected_output": "触发 3d-ar;检查平面纹理(白墙/黑暗不行)+锚点固定模式 updateMode:'FIXED'+等待特征点积累(1-3s)"
+    },
+    {
+      "id": 57,
+      "skill": "3d-ar",
+      "prompt": "鸿蒙 AR 项目 import 报错 cannot find module '@kit.AREngineKit',是不是包名写错了?",
+      "expected_output": "触发 3d-ar;纠正包名为 @kit.AREngine(无 Kit 后缀);同时提醒 Scene 必须用 .load() 异步而非 new Scene()",
+      "quality_assertion": "输出必须使用 @kit.AREngine,不得出现 @kit.AREngineKit 或 new Scene() 写法"
     },
     {
       "id": 57,

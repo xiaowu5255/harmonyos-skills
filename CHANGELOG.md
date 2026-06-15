@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.7.2] - 2026-06-16
+
+### 3d-ar 收尾 + 性能臆测软化（Phase 5.2/6.1 闭环）
+
+**3d-ar skill 收尾（v0.6.2 重写后补主动纠错 + eval 增强）**
+- 新增 `## ⚠️ 常见误区与反模式` 段：覆盖 6 类典型踩坑（`@kit.AREngineKit` 包名误写、`new Scene()` 同步构造、不存在的 `ARPlaneTracking`、自定义场景模式无相机、glTF/GLB 限制、纯白墙检测失败）
+- evals 新增 id 57:针对 `@kit.AREngineKit` 拼写错误的 machine 断言（防回潮）
+- 3d-ar 升级为 9 高优 skill 之一（lint 第 13/14 项同步纳入）
+
+**Phase 6.1 性能臆测软化（5 skill 收尾）**
+- `ai-inference`：模型分片阈值(>500MB)、HAP 内模型限制(>100MB)、小/大模型边界(~50MB) 三处工程经验值加 "约/实测为准" 对冲
+- `ai-vision / ai-speech / ai-nlp / connectivity`：v0.6.2 已完成精度/速度数值删除，本次复检无残余
+
+**工具链与回归**
+- `tools/lint-skills.sh` 第 13 项 priority_skills 扩到 9（加 3d-ar=2）
+- `tools/lint-skills.sh` 第 14 项扩到 9 高优 skill 纠错覆盖
+- evals 111→112 / 49 quality_assertion（25 machine + 24 semantic）/ 10 负样本
+- 9/9 高优 skill 纠错覆盖：arkts-syntax/audio-playback/ai-inference/arkui-patterns/network-requests/security-permissions/stage-model/media-system/3d-ar
+
+**回归**
+- lint 30 PASS / 0 FAIL（第 13/14 项扩到 9 skill）
+- frontmatter 53 skill / 0 CRITICAL / 0 WARNING
+
 ## [0.7.1] - 2026-06-16
 
 ### 跨平台结构 + 主动纠错模式泛化（基于评估报告再论证的优化）

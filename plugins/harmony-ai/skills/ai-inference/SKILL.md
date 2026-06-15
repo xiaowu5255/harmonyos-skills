@@ -68,10 +68,10 @@ let accModel: mindSporeLite.Model =
 > 明确约束)；加载多个模型需各自新建 context。`target` 取值与 `cpu`/`nnrt` 配置结构以本地
 > SDK `@hms.ai.mindSporeLite.d.ts` 为准。
 
-**模型文件放在哪**：
-- 小模型(≤50MB)：放 `entry/src/main/resources/rawfile/` → 运行时用 `resourceManager.getRawFileContent()` 读取
+**模型文件放在哪**（阈值仅为工程经验值,实际以应用包大小上限/安装体验为准）：
+- 小模型(约 ≤50MB)：放 `entry/src/main/resources/rawfile/` → 运行时用 `resourceManager.getRawFileContent()` 读取
 - 大模型(>50MB)：放 HAP 外，运行时从服务器下载到沙箱 `/data/storage/el2/base/haps/entry/files/`
-- **模型不要放 HAP 内**：超过 100MB 影响安装包大小，且更新模型需重新上架
+- **模型不要放 HAP 内**：超过 100MB 显著影响安装包大小,且更新模型需重新上架
 
 ## 输入输出张量处理
 
@@ -135,7 +135,7 @@ mindspore-lite-converter --fmk=ONNX --modelFile=model.onnx \
 
 1. **预热机制**：`model.predict()` 前调用一次空跑（dummy input），触发加速后端的算子编译/图优化
 2. **张量复用**：循环预测时复用 `MSTensor` 对象，用 `setData` 更新而非反复创建——省去重复显存分配开销
-3. **模型分片**：超大模型（>500MB）按层拆分为多个 `.ms`，流水线执行
+3. **模型分片**：超大模型(>500MB,经验值)按层拆分为多个 `.ms`,流水线执行;实际阈值取决于设备内存与加载耗时
 4. **并行预测**：多个 `Model` 实例在不同线程中可并行推理（TaskPool），但需注意各自独立的内存开销
 5. **精度模式**：精度设在 `context.cpu.precisionMode`（如 `'preferred_fp16'` 兼顾速度与精度，
    `'enforce_fp32'` 强制全精度）——字段层级以本地 d.ts 为准
