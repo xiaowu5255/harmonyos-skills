@@ -11,6 +11,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙无障碍与本地化: Accessibility Kit 无障碍属性标注、屏幕朗读适配、 长辈关怀模式、Localization Kit 多语言资源组织与格式化。
+
+## When to Use
+
+- 涉及 上架合规 时
+- 涉及 国际化 时
+- 涉及 适老化 时
+
 # 无障碍与本地化：上架合规双支柱
 
 ## 上架驳回高频原因

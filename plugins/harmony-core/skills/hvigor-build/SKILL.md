@@ -12,6 +12,19 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+hvigor 构建系统与工程组织:HAP/HAR/HSP 三种包形态选型、多模块工程依赖、 build-profile.json5 的 products/targets/buildOption、ohpm 依赖管理、release 混淆配置。构建报错的排查方法论在 harmony-debugging 技能。
+
+## When to Use
+
+- 涉及 新建模块 时
+- 涉及 抽公共库 时
+- 涉及 配置多渠道 时
+- 涉及 多环境构建 时
+- 涉及 release 包行为 异常(尤其混淆相关) 时
+- 涉及 构建产物组织问题 时
+
 # hvigor 构建与工程组织
 
 ## 包形态选型(最常被问错的问题)

@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.7.1] - 2026-06-16
+
+### 跨平台结构 + 主动纠错模式泛化（基于评估报告再论证的优化）
+
+**结构国际化（Hermes/OpenCode 兼容基础）**
+- 53/53 SKILL.md 新增 `## Overview` 段（索引类用领域描述，深度类从 description 自动生成）
+- 53/53 SKILL.md 新增 `## When to Use` 段（自动从"涉及...时"提取触发条件 + 回退到 name）
+- 工具脚本 `tools/add-overview-when.py`（带 `--dry-run` / `--force` 模式，可复用）
+
+**主动纠错模式推广（ai-speech / crypto-security 的成功模式）**
+- 5 个高优 skill 新增 `## ⚠️ 常见误区与反模式` 表（arkts-syntax / stage-model / network-requests / media-system / security-permissions）
+- 3 个剩余高优 skill 跟进：audio-playback / ai-inference / arkui-patterns
+- **8/8 高优 skill 全部覆盖**反模式段（lint 第 14 项软提示保证不退化）
+
+**provides: index 显式机制文档化**
+- ARCHITECTURE.md 新增"索引声明机制（`provides: index`）"专节
+- 阐明 8 个索引的 requires 链、显式 vs 隐式推理差异、跨平台迁移价值
+
+**evals 负样本扩充（回归覆盖面）**
+- 3 → 10 条负样本（新增 React/iOS/Flutter/通用网络/CI/用户操作/设备对比 7 类）
+- comment 同步更新：104→111 条 / 10 负样本 / 48 quality_assertion
+
+**工具链增量**
+- `tools/hermes-migrate.py` 利用 `provides: index` 生成 Hermes 路由注册表（8 routers + 45 skills，含 JSON/YAML 双格式输出）
+- `tools/validate-frontmatter.py` 新增 `--strict` 模式（WARNING 也阻断返回码 1）
+- `tools/lint-skills.sh` 新增第 14 项：8 高优 skill 主动纠错覆盖率软提示
+- `.github/workflows/ci.yml` 新增独立 `Validate frontmatter` step（`--strict` 模式）
+
+**README 数字同步**
+- 14 项一致性检查 / 111 条回归样本 / 10 条负样本 / 版本号 0.7.0 → 0.7.1
+- 顶部 banner 增加"跨平台结构 + 主动纠错模式泛化"标识
+
+**回归**
+- lint 28 PASS / 0 FAIL（新增第 14 项）
+- frontmatter 53 skill / 0 CRITICAL / 0 WARNING
+- evals 111 条 / 10 负样本 / 48 quality_assertion（与 v0.7.0 一致 + 7 新负样本）
+
 ## [0.7.0] - 2026-06-15
 
 ### 信源质量 + 自进化硬化

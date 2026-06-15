@@ -5,6 +5,18 @@ provides: index
 requires: harmony-index
 ---
 
+## Overview
+
+鸿蒙媒体能力领域索引，覆盖音频播放/录制/MIDI、相机拍照/录像、音视频编解码、图片处理、媒体库、DRM、AVSession 播控、扫码。
+
+## When to Use
+
+- 涉及音频播放/录制、MIDI 外设
+- 相机拍照/录像、Camera Kit
+- 音视频编解码、图片处理
+- 媒体库、DRM 版权保护
+- AVSession 播控、扫码功能
+
 # 鸿蒙媒体能力索引
 
 覆盖音频、相机、编解码、图片处理等媒体相关能力。

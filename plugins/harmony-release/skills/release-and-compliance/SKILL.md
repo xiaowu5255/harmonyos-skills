@@ -10,6 +10,14 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---
 
+## Overview
+
+鸿蒙应用发布与合规:版本号管理、release 包构建检查、AGC 上架流程、隐私 合规(隐私声明/权限用途/SDK 目录)、审核常见驳回与整改。凡是准备提审上架、 被审核驳回、做合规自查、配置版本号策略时使用本技能。
+
+## When to Use
+
+- 当用户请求与 release-and-compliance 相关的开发任务时
+
 # 发布与合规
 
 ## 版本号(AppScope/app.json5)

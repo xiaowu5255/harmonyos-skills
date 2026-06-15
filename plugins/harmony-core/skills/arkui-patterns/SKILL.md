@@ -11,6 +11,31 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+ArkUI 声明式 UI 开发模式:布局组件选型、Navigation 路由、列表性能(LazyForEach/ 组件复用)、@Builder/@Styles/@Extend 复用、动画与转场、自定义弹窗、资源引用。 凡是要实现具体界面、写页面布局、做页面跳转、优化列表卡顿、加动画效果时使用本技能。 注意:语言级语法约束与状态管理装饰器在 arkts-syntax 技能中,两者经常需要配合使用。
+
+## When to Use
+
+- 涉及 ArkUI 布局 时
+- 涉及 自定义组件 时
+- 涉及 状态管理 时
+- 涉及 列表渲染 时
+- 涉及 页面路由 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| V1 `@State` 假设深度观察 | V1 `@State` 仅观察第一层;嵌套属性变化需 `@Observed` + `@ObjectLink` | 状态管理文档 |
+| V1/V2 装饰器混用 | V1 (`@State`/`@Prop`/`@Link`) 与 V2 (`@ComponentV2`/`@Local`/`@Param`) 默认不互通;新项目优先 V2 | V1/V2 迁移文档 |
+| `build()` 内执行副作用 | `build()` 应纯渲染;网络请求/计时器放 `aboutToAppear()`/`onPageShow()` | 组件生命周期 |
+| 列表用 `if/else` 替代 `LazyForEach` | 长列表必须用 `LazyForEach` + 复用 item;否则全量渲染性能崩塌 | 列表渲染文档 |
+| `@Builder` 直接访问外部状态 | `@Builder` 是值捕获;外部状态变化不会自动刷新,需改用 `@Component` 方法或 `@BuilderParam` | 装饰器约束 |
+
+> **验证方法**:ArkUI API 以 `@kit.ArkUI` 声明文件为准。
+> V1/V2 装饰器混用是最常见坑——遇到状态不更新先检查装饰器版本一致性。
+
 # ArkUI 开发模式
 
 ## 布局组件选型决策

@@ -12,6 +12,14 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---
 
+## Overview
+
+HarmonyOS 签名证书全链路:密钥(p12)、证书请求(CSR)、调试/发布证书(cer)、 Profile(p7b)、调试设备 UDID 注册、build-profile.json5 签名配置。凡是遇到 签名报错、HAP 安装提示 signature/verify 失败、真机无法安装调试、证书过期、 准备上架打 release 包,或新人搭建鸿蒙调试环境时,务必使用本技能。签名是 鸿蒙新手放弃率最高的环节,按本清单排查可避免盲目试错。
+
+## When to Use
+
+- 当用户请求与 signing-and-certificates 相关的开发任务时
+
 # 鸿蒙签名证书全链路
 
 ## 心智模型:四件套 + 一个绑定关系

@@ -11,6 +11,29 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙端侧推理: MindSpore Lite Kit 模型加载(inference/train)、 张量操作、NNRt 硬件加速、模型转换与优化。
+
+## When to Use
+
+- 涉及 端侧AI 时
+- 涉及 图像分类 时
+- 涉及 语音识别模型部署 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| `target:['npu']` 假设 NPU 必支持 | KIRIN_NPU 在官方文档为"保留未支持";实际可用多为 CPU/GPU | NNRt 设备能力文档 |
+| 量化精度损失按 < 1% 评估 | 精度损失因模型/任务/量化方案差异巨大;以实测为准 | 量化方案文档 |
+| 模型直接放 resources/rawfile/ | 必须先 `.ms` 转换(MSLite 模型转换工具);原始模型无法直接加载 | MindSpore Lite 文档 |
+| 用 `model.predict()` 同步阻塞 | 推荐 `model.run()` 异步 + TaskPool;主线程阻塞会导致 ANR | NNRt 线程模型 |
+| 假设所有设备都支持 INT8 量化 | 需先 `deviceInfo.getSupportQuantization()` 检查设备能力 | 设备能力查询 |
+
+> **验证方法**:推理 API 以 `@kit.CoreVisionKit` / `@kit.NNRtKit` 声明文件为准。
+> 不要引用任何"省 N% 显存/速度快 M 倍"等无信源数值——这类指标实测为准。
+
 # 端侧推理：MindSpore Lite 模型部署
 
 ## 推理流水线五步法

@@ -12,6 +12,14 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙后台任务体系:短时任务、长时任务(continuousTask)、延迟任务 (workScheduler)、提醒代理。凡是出现"应用切后台就停了/被杀了""后台下载/ 播放/定位中断""定时任务不执行"类问题,或需要设计任何后台执行逻辑时,务必 使用本技能。鸿蒙的后台管控比 Android 严格得多,不按系统提供的任务类型申请, 代码写得再对也会被冻结——这是 Android 转鸿蒙开发者踩得最狠的坑。
+
+## When to Use
+
+- 当用户请求与 background-tasks 相关的开发任务时
+
 # 后台任务体系
 
 ## 第一原则:后台默认死,活着要申请

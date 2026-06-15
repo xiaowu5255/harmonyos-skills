@@ -11,6 +11,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙传感器与输入: Sensor Service Kit 加速度/陀螺仪/光线/距离/振动、 Input Kit 多模输入(键盘/鼠标/手柄事件)、Pen Kit 手写笔。
+
+## When to Use
+
+- 涉及 摇一摇 时
+- 涉及 计步器 时
+- 涉及 游戏手柄 时
+- 涉及 手写输入 时
+
 # 传感器与输入：感知、交互与手写笔
 
 ## 三 Kit 边界

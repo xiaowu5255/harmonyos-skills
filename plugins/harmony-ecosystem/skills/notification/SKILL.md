@@ -10,6 +10,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙通知系统: Notification Kit 发布/更新/取消通知、通知授权、角标管理、 通知渠道、跨设备协同通知。
+
+## When to Use
+
+- 涉及 推送 时
+- 涉及 状态栏消息 时
+- 涉及 桌面角标 时
+
 # 通知系统
 
 ## 通知发布流程(严格顺序)

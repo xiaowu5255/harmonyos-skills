@@ -12,6 +12,20 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---
 
+## Overview
+
+HarmonyOS 端云一体化开发(Cloud Foundation Kit):云函数、云数据库、云存储、 认证服务、AGC 工程绑定与云侧部署。
+
+## When to Use
+
+- 涉及 在 DevEco Studio 中创建云开发工程 时
+- 涉及 调用 AGC 云服务 时
+- 涉及 配置 agconnect-services.json 时
+- 涉及 编写云函数 时
+- 涉及 云对象 时
+- 涉及 设计云数据库 对象类型 时
+- 涉及 或排查"端侧调云侧失败"类问题 时
+
 # 端云一体化开发(Cloud Foundation Kit)
 
 ## 核心模型

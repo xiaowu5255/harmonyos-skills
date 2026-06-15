@@ -10,6 +10,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙蜂窝通信: Telephony Kit 拨打电话、短信收发(含验证码自动填充)、 网络状态监听、SIM卡管理。
+
+## When to Use
+
+- 涉及 通话界面 时
+- 涉及 验证码 时
+- 涉及 网络诊断 时
+
 # 蜂窝通信：通话、短信与 SIM 管理
 
 ## Telephony Kit 能力地图

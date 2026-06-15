@@ -5,6 +5,18 @@ provides: index
 requires: harmony-index
 ---
 
+## Overview
+
+鸿蒙应用框架领域索引，覆盖 ArkTS 语法、状态管理、ArkUI 布局/导航/动画/窗口、Stage 模型、ArkWeb、元服务卡片、多设备适配、Hvigor 构建、工程调试。
+
+## When to Use
+
+- 涉及 ArkTS 语法、装饰器、编译器报错
+- ArkUI 布局、组件、动画开发
+- Stage 模型生命周期、Ability 配置
+- ArkWeb WebView、元服务卡片
+- 多设备适配、Hvigor 构建、工程调试
+
 # 鸿蒙应用框架索引
 
 覆盖 ArkTS/ArkUI/Stage 模型等核心应用开发能力。

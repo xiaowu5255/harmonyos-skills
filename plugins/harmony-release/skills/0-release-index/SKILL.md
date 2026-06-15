@@ -5,6 +5,17 @@ provides: index
 requires: harmony-index
 ---
 
+## Overview
+
+鸿蒙发布与运维领域索引，覆盖性能优化 (Profiler/冷启动/内存)、QA 测试 (Hypium/UiTest/稳定性/云测)、应用签名、上架合规。
+
+## When to Use
+
+- 涉及性能优化、Profiler 分析
+- QA 测试、Hypium/UiTest
+- 应用签名、证书管理
+- 上架合规、隐私政策
+
 # 鸿蒙发布与运维索引
 
 覆盖性能优化、自动化测试、签名、上架合规等发布流程。

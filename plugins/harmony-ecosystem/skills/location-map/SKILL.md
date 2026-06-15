@@ -11,6 +11,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙定位与地图深度: Location Kit 高精度定位(融合/GNSS/网络)、逆地理编码、 Map Kit 地图显示/标记/路线。涉及获取位置、显示地图、POI搜索、导航规划时 使用本技能。
+
+## When to Use
+
+- 涉及 获取位置 时
+- 涉及 显示地图 时
+- 涉及 POI搜索 时
+- 涉及 导航规划 时
+
 # 定位与地图
 
 ## 定位模式选型

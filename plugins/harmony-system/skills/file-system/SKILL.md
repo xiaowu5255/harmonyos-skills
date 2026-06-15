@@ -10,6 +10,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙文件管理: Core File Kit 沙箱文件读写、应用文件目录结构、用户文件访问、 文件 URI 转路径。
+
+## When to Use
+
+- 涉及 读写文件 时
+- 涉及 缓存管理 时
+- 涉及 文件选择器 时
+
 # 文件管理
 
 ## 沙箱目录结构(先理解这几个目录)

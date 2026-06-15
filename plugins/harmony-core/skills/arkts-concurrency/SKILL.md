@@ -10,6 +10,15 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙 ArkTS 并发编程: TaskPool 任务池、Worker 线程、Sendable 对象共享、 并发容器。
+
+## When to Use
+
+- 涉及 多线程 时
+- 涉及 任务超 时
+
 # ArkTS 并发编程
 
 ## 第一原则：TaskPool 优先，Worker 为后

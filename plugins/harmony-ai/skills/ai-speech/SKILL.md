@@ -11,6 +11,15 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙语音AI: Core Speech Kit 语音识别(ASR)、语音合成(TTS), Speech Kit 场景化语音服务(TextReader 朗读、AICaption AI 字幕)。
+
+## When to Use
+
+- 涉及 语音输入 时
+- 涉及 文本朗读 时
+
 # 语音 AI：识别、合成与唤醒
 
 ## 双 Kit 分工

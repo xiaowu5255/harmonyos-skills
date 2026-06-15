@@ -11,6 +11,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙3D/AR: 3D渲染(ArkGraphics 3D 的 Scene/Component3D)、AR Engine 空间感知 (平面检测、命中测试、位姿跟踪、人脸/人体跟踪、光照估计)。
+
+## When to Use
+
+- 涉及 AR 试穿 时
+- 涉及 空间测量 时
+- 涉及 虚拟摆放 时
+- 涉及 3D 展示 时
+
 # 3D 与 AR：渲染、空间感知与虚实融合
 
 > ⚠️ 本领域 API 极易记错。**写码前必做**：在本地 SDK `@hms.*.d.ts` / `@ohos.graphics.scene.d.ts`

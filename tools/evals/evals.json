@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 104 条(含 3 负样本)。48 条 quality_assertion(24 machine 可机检 + 24 semantic 待人工),覆盖 8 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference)。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 111 条(含 10 负样本)。48 条 quality_assertion(24 machine 可机检 + 24 semantic 待人工),覆盖 8 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference)。",
   "evals": [
     {
       "id": 1,
@@ -882,6 +882,48 @@
         "type": "semantic",
         "note": "维护者必读:必须给出端侧 vs 云侧的选型维度(隐私/延迟/算力/费用),不能只列比例"
       }
+    },
+    {
+      "id": 105,
+      "skill": "none(负样本)",
+      "prompt": "帮我用 React 写一个 Todo List 组件",
+      "expected_output": "不触发任何鸿蒙技能(前端 Web 开发)"
+    },
+    {
+      "id": 106,
+      "skill": "none(负样本)",
+      "prompt": "SwiftUI 的 NavigationStack 怎么做深链接?",
+      "expected_output": "不触发任何鸿蒙技能(iOS 开发)"
+    },
+    {
+      "id": 107,
+      "skill": "none(负样本)",
+      "prompt": "我的鸿蒙手机怎么截长图?",
+      "expected_output": "不触发任何鸿蒙技能(用户操作问题,非开发问题)"
+    },
+    {
+      "id": 108,
+      "skill": "none(负样本)",
+      "prompt": "Flutter 里怎么做状态管理?Provider 和 Riverpod 哪个好?",
+      "expected_output": "不触发任何鸿蒙技能(Flutter 开发)"
+    },
+    {
+      "id": 109,
+      "skill": "none(负样本)",
+      "prompt": "什么是 WebSocket?和 HTTP 长轮询有什么区别?",
+      "expected_output": "不触发任何鸿蒙技能(通用计算机网络概念)"
+    },
+    {
+      "id": 110,
+      "skill": "none(负样本)",
+      "prompt": "GitHub Actions 怎么配置 Node.js 项目的 CI 流水线?",
+      "expected_output": "不触发任何鸿蒙技能(DevOps/CI 问题)"
+    },
+    {
+      "id": 111,
+      "skill": "none(负样本)",
+      "prompt": "鸿蒙和安卓有什么区别?哪个更好用?",
+      "expected_output": "不触发任何鸿蒙技能(用户对比问题,非开发问题)"
     }
   ]
 }

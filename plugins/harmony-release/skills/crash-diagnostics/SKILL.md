@@ -11,6 +11,21 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙故障日志分型诊断:把 faultlogger/DevEco 抓到的崩溃、卡死、内存泄漏日志按类型定位根因。 涉及 CppCrash(Native 崩溃)、JsCrash(ArkTS/JS 闪退)、AppFreeze(卡死/无响应/ANR)、 内存泄漏(rawheap/heapsnapshot/native 内存涨)、错误码与 faultlog 分析时使用。 收到崩溃堆栈、应用闪退/冻屏、内存只涨不降等问题先用本技能分型,再读对应 references 深挖。
+
+## When to Use
+
+- 涉及 CppCrash(Native 崩溃) 时
+- 涉及 JsCrash(ArkTS 时
+- 涉及 JS 闪退) 时
+- 涉及 AppFreeze(卡死 时
+- 涉及 无响应 时
+- 涉及 ANR) 时
+- 涉及 内存泄漏(rawheap 时
+- 涉及 heapsnapshot 时
+
 # 鸿蒙故障日志分型诊断
 
 ## 先分型:不同故障读不同的日志、找不同的根因

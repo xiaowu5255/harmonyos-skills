@@ -11,6 +11,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙NLP: Natural Language Kit 分词、实体抽取(时间/地点/人名等)、 文本向量化(嵌入)、词性标注。
+
+## When to Use
+
+- 涉及 文本分析 时
+- 涉及 搜索优化 时
+- 涉及 语义理解 时
+
 # 自然语言处理：分词、实体与嵌入
 
 ## Natural Language Kit 能力矩阵

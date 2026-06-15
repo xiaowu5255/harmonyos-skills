@@ -11,6 +11,34 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙权限与安全体系:权限分级与 ACL、动态申请流程、Picker 与安全控件免权限 方案、应用沙箱、数据加密。鸿蒙的 设计哲学是"能不要权限就不要权限"——先想免权限方案,再谈申请,这也是过审的关键。
+
+## When to Use
+
+- 涉及 申请任何权限 时
+- 涉及 访问相册 时
+- 涉及 文件 时
+- 涉及 位置 时
+- 涉及 剪贴板 时
+- 涉及 联系人 时
+- 涉及 权限弹窗 时
+- 涉及 被拒处理 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| `access_token` 直接传字符串 | 用 `abilityAccessCtrl.createAtManager()` 获取 `AtManager` 实例 | 权限 API 文档 |
+| 权限名用 `ohos.permission.CAMERA` 就够 | 部分权限需要在 `module.json5` 声明 + 运行时申请;两步缺一不可 | 权限申请链路 |
+| 用户拒绝后反复弹窗 | 检查 `canIUse`;永久拒绝后引导用户到设置页;不要死循环弹窗 | UX 最佳实践 |
+| `ohos.permission.READ_MEDIA` 读相册 | API 12+ 用 `PhotoViewPicker` 替代直接读取;不需要 READ_MEDIA 权限 | 沙箱与数据安全 |
+| `ohos.permission.DISTRIBUTED_DATASYNK` 直接用 | 需要先在 AGC 控制台开通分布式能力;本地声明权限不等于可用 | 分布式文档 |
+
+> **验证方法**:权限名以 `@ohos.abilityAccessCtrl` 声明文件为准。
+> 用 `grep -r "ohos.permission" oh_modules/` 检查实际可用权限列表。
+
 # 权限与安全
 
 ## 决策树:遇到"需要权限"先走这三步

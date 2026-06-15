@@ -11,6 +11,14 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+HarmonyOS 6 (API 20-24) 构建与运行时问题诊断方法论。凡是遇到 hvigor 构建失败、 HAP 安装失败、应用闪退/白屏、hilog 日志分析、hdc 连接真机或模拟器问题、 ohpm 依赖报错、模拟器与真机行为不一致等情况,务必先使用本技能——即使报错信息 看起来是普通的 JS/TS 错误,鸿蒙工程的根因往往在配置文件和签名链路而非代码本身。
+
+## When to Use
+
+- 当用户请求与 harmony-debugging 相关的开发任务时
+
 # 鸿蒙构建与运行时调试方法论
 
 ## 诊断总纲:先定位层,再看码

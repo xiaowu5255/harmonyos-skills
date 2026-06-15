@@ -10,6 +10,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙短距通信: Connectivity Kit(蓝牙/WiFi)、NearLink Kit(星闪)、NFC。
+
+## When to Use
+
+- 涉及 蓝牙设备配对联调 时
+- 涉及 WiFi 直连 时
+- 涉及 一碰传 时
+
 # 短距通信：蓝牙 / WiFi / 星闪 / NFC
 
 ## 通信方式选型

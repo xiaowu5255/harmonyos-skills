@@ -11,6 +11,14 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙应用性能优化:冷启动、丢帧/卡顿、内存、列表滑动性能;DevEco Profiler 与 HiTraceMeter 的使用方法。凡是用户反馈"启动慢""卡顿""掉帧""内存涨""列表 滑动不流畅",或上架前性能达标整改时使用本技能。性能工作的铁律:先测量定位 热点,再优化——没有 profiler 数据支撑的优化建议一律视为猜测。
+
+## When to Use
+
+- 当用户请求与 performance-tuning 相关的开发任务时
+
 # 性能优化
 
 ## 工作流(强制顺序)

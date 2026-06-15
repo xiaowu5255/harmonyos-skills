@@ -12,6 +12,14 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24（兼顾 7.0 / API 26）"
 ---
 
+## Overview
+
+鸿蒙 API 版本治理与升级:compatibleSdkVersion/targetSdkVersion 语义、 canIUse 运行时探测、@since/@deprecated 注释解读、SDK 版本间 API diff、 升级 API 版本的完整流程。 鸿蒙 API 每季度迭代(6.x 历 API 20→24,7.0 起 API 26),版本治理是长期必修课。
+
+## When to Use
+
+- 涉及 "升级到新 API 版本""这个 API 在 API XX 能不能用""deprecated 怎么替换""不同设备系统版本兼容" 时
+
 # API 版本治理与升级
 
 ## 三个版本号的语义(混淆即事故)

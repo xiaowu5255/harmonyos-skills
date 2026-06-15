@@ -11,6 +11,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙社交与分享: Share Kit 系统分享、App Linking Kit DeepLink 跳转、 Contacts Kit 联系人读写、Calendar Kit 日历/日程。
+
+## When to Use
+
+- 涉及 分享内容到其他应用 时
+- 涉及 DeepLink配置 时
+- 涉及 读取通讯录 时
+
 # 社交与分享
 
 ## Share Kit：系统分享

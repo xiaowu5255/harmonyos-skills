@@ -11,6 +11,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙2D图形: ArkGraphics 2D Canvas绘制、RenderNode自定义渲染、 DisplaySync同步、离屏渲染与Snapshot。
+
+## When to Use
+
+- 涉及 自定义图表 时
+- 涉及 手绘板 时
+- 涉及 游戏2D界面 时
+- 涉及 动画引擎 时
+
 # 2D 图形绘制：Canvas、RenderNode 与 DisplaySync
 
 ## 三条渲染路径

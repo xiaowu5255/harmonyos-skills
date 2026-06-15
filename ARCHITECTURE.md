@@ -263,6 +263,30 @@ kits: ["@kit.XXX", "@kit.YYY"]   # 必须加引号: @ 是 YAML 保留字符,裸�
 | 领域索引 `0-*-index` | 300 词 | 列出子领域 + 1-2 条领域原则 |
 | 深度 skill | 600-1200 词 | 保持现有方法论密度 |
 
+### 索引声明机制 (`provides: index`)
+
+索引类 skill 使用 `provides: index` 元字段标识自身为路由层，Agent loader 可通过此字段区分"索引路由"与"深度知识"。
+
+**当前状态**: 8 个索引 skill 均有此标记（1 个总索引 + 7 个领域索引）。
+
+```
+harmony-index        → provides: index              (总索引,无 requires)
+0-core-index         → provides: index, requires: harmony-index
+0-system-index       → provides: index, requires: harmony-index
+0-media-index        → provides: index, requires: harmony-index
+0-graphics-index     → provides: index, requires: harmony-index
+0-ecosystem-index    → provides: index, requires: harmony-index
+0-ai-index           → provides: index, requires: harmony-index
+0-release-index      → provides: index, requires: harmony-index
+```
+
+**设计意图**:
+- `provides: index` 是显式声明机制，不依赖 Agent 的隐式推理
+- 外部 loader（如 Hermes 适配层、gstack ultrawork）可通过扫描此字段自动注册路由
+- 深度 skill 没有 `provides` 字段，只有 `requires` 指向其领域索引
+
+**跨平台迁移价值**: 在不支持 `description` 路由的平台上，只要有 loader 能识别 `provides: index`，即可实现索引→领域→深度的渐进加载，无需重写 skill 内容。
+
 ---
 
 ## 五、渐进加载流程示例

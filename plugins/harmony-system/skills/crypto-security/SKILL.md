@@ -11,6 +11,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙加解密与安全认证: Crypto Architecture Kit(加解密/签名/摘要/MAC/密钥派生)、 Universal Keystore Kit(密钥存储)、User Authentication Kit(生物认证)。
+
+## When to Use
+
+- 涉及 数据加密 时
+- 涉及 安全存储 时
+- 涉及 指纹 时
+- 涉及 人脸登录 时
+
 # 加解密与安全认证
 
 ## 算法选型(先选对算法)
