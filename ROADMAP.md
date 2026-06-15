@@ -149,3 +149,28 @@ Context7       →  官方 API 事实 + URL                        (季度快照
 1. **任何 SKILL.md 引用的文件必须存在** —— lint check #7 拦截
 2. **任何具体 API 名/文档 URL 必须经 sdk-diff 或实测核实** —— 未核实内容只能以"参考官方文档"指引存在（本仓库曾因臆造 slug 产生 49 个失效链接，教训记录于 CHANGELOG 0.2.2）
 3. **禁止无信源性能数值** —— %/fps/ms/速度倍数等臆测数值不入库；量化诉求改为"实测为准 + 影响因素"。事实层退给 Context7 与本地 d.ts，skill 只留方法（见 Phase 6）
+
+## Phase 7 — 自进化主动脉节奏化（v0.7.0 引入，v0.7.1+ 首跑）
+
+### 7.0 节奏表
+
+| 主动脉 | 频率 | 责任人 | 入口 | 首跑 |
+|--------|------|--------|------|------|
+| 季度审计 | 每季度 | 维护者 | `tools/quarterly-audit-checklist.md` | 2026-09 |
+| feedback-distill | 每月 | 维护者 | `tools/feedback-distill.sh` | 2026-07 |
+| weekly-sdk-watch | 每周 | 自动化 | `.github/workflows/weekly-sdk-watch.yml` | 已跑 |
+| CI evals-report | 每次 PR | 自动化 | `.github/workflows/ci.yml` (evals-report job) | v0.7.0 |
+
+### 7.1 季度审计判定标准
+
+参照 AUDIT_REPORT v3.0 流程，输出"通过 / 有 P0 修复项 / 有 P1 修复项 / 有 P2 修复项"四级结论；P0 必须当版本修复。
+
+### 7.2 feedback-distill 判定标准
+
+输出"新增 N 条 / 合并入 X skill / 拒收 M 条"三栏。**拒收必须记录原因**，归档 6 个月。
+
+### 7.3 CI evals-report 判定标准
+
+- `machine` 类断言：通过率趋势（与上一次报告对比）
+- `semantic` 类断言：维护者人工 review（PR 评论列出待审条目）
+- 30 天观察期：误报率 > 30% 时可一键 disable（仓库 Settings → Actions）
