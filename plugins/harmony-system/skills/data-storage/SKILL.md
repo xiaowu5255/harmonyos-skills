@@ -11,6 +11,20 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙数据持久化与管理(ArkData):Preferences 轻量存储、RelationalStore 关系型数据库、统一数据通路 UDMF、分布式数据同步、加密与数据分级。
+
+## When to Use
+
+- 涉及 存配置 时
+- 涉及 存结构化数据 时
+- 涉及 数据库设计 时
+- 涉及 迁移 时
+- 涉及 跨应用数据传递 时
+- 涉及 数据同步 时
+- 涉及 或读写数据 类 bug 时
+
 # 数据持久化与管理
 
 ## 存储选型

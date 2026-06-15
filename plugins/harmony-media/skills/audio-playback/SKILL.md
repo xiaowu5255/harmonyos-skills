@@ -11,6 +11,29 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙音频开发: Audio Kit 音频播放/录制、音频流类型选型、音频焦点/会话管理、 设备路由(耳机/扬声器)、MIDI 外设通信。
+
+## When to Use
+
+- 涉及 播放音乐 时
+- 涉及 录音 时
+- 涉及 语音通话 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| 用 `createAudioSession()` 直接创建会话 | API 12+ 用 `getSessionManager()` + `activateAudioSession()` | Audio Kit API 文档 |
+| `AudioCapturer` 用旧嵌套结构 | API 12+ 嵌套为 `{ audioCapturerOptions: { ... } }` | Audio Kit 迁移文档 |
+| MIDI 用 `MIDIPlayer` 高级 API | API 24+ 正本清源为 C-API (UMP 协议);MIDIPlayer 仅部分支持 | MIDI Kit 文档 |
+| 音频焦点靠 `requestFocus()` 单独调 | 必须配合 `AVSession` 注册;焦点竞争时系统优先选择有会话的应用 | AVSession + AudioSession |
+| 设备切换用 `setOutputDevice` 旧名 | API 12+ 用 `audioRenderer.setDeviceChangeCallback` 监听 `DeviceFlag` | 设备路由文档 |
+
+> **验证方法**:音频 API 以 `@kit.AudioKit` 声明文件为准。
+> 用 `grep -r "AudioRenderer\|AudioCapturer" oh_modules/@kit.AudioKit/` 查实际可用接口。
+
 # 音频开发：播放、录制与焦点管理
 
 ## 音频流类型(StreamUsage)选型

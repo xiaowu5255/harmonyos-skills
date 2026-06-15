@@ -11,6 +11,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---
 
+## Overview
+
+华为生态 Kit 接入:华为账号一键登录(Account Kit)、推送(Push Kit)、应用内 支付(IAP Kit)、地图/定位、扫码(Scan Kit)等开放能力。生态 Kit 的失败九成出在 AGC 侧前置配置而非端侧代码,先验前置链路。
+
+## When to Use
+
+- 涉及 接入任何 华为系 Kit 时
+- 涉及 "接入代码对但一直报错 时
+- 涉及 拿不到 token 时
+- 涉及 拉不起登录"类问题 时
+
 # 华为生态 Kit 接入
 
 ## 通用接入方法论(每个 Kit 都适用)

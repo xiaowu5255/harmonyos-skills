@@ -7,17 +7,21 @@ Skill frontmatter 内容质量审查(借鉴 harmonyos-agent-skills 的 .hmos-ski
 判定分级:
   CRITICAL(返回码 1)—— name 字符集非法 / description 缺失 / description > 1024 字符 /
                         frontmatter 结构缺失。
-  WARNING(不影响返回码)—— description 过短(<40)/ 缺 what+when 信号 / name 含版本号 /
-                          正文非恰好一个 H1。
+  WARNING(默认不影响返回码; --strict 模式下也返回 1)—— description 过短(<40)/
+                        缺 what+when 信号 / name 含版本号 / 正文非恰好一个 H1。
 
-用法: python tools/validate-frontmatter.py [plugins_dir]
+用法:
+  python tools/validate-frontmatter.py [plugins_dir]          # 默认: CRITICAL 阻断
+  python tools/validate-frontmatter.py --strict [plugins_dir] # WARNING 也阻断
 """
 import os
 import re
 import sys
 
+STRICT = "--strict" in sys.argv
+args = [a for a in sys.argv[1:] if a != "--strict"]
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PLUGINS = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "plugins")
+PLUGINS = args[0] if args else os.path.join(ROOT, "plugins")
 
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 VERSION_SUFFIX_RE = re.compile(r"-v?\d+$")
@@ -122,4 +126,7 @@ for dirpath, _dirs, files in os.walk(PLUGINS):
 
 print("")
 print("===== frontmatter 审查: %d skill / %d CRITICAL / %d WARNING =====" % (checked, crit, warn))
-sys.exit(1 if crit > 0 else 0)
+if STRICT:
+    sys.exit(1 if (crit + warn) > 0 else 0)
+else:
+    sys.exit(1 if crit > 0 else 0)

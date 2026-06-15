@@ -11,6 +11,15 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙跨进程通信与输入法: IPC Kit 进程间通信(RPC/远端订阅)、 IME Kit 输入法开发与自绘编辑器集成。
+
+## When to Use
+
+- 涉及 多进程架构 时
+- 涉及 输入法扩展 时
+
 # 进程通信与输入法：IPC、RPC 与 IME
 
 ## 两 Kit 定位

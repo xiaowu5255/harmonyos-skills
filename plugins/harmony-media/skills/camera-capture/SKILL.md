@@ -11,6 +11,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙相机开发: Camera Kit 会话管理、预览/拍照/录像流配置、 影随人动追焦、分段式拍照、CameraPicker 快速集成。
+
+## When to Use
+
+- 涉及 相机功能 时
+- 涉及 拍照上传 时
+- 涉及 扫码集成 时
+
 # 相机开发：会话、流与生命周期
 
 ## 心智模型：两条路径

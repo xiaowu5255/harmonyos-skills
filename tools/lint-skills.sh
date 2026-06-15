@@ -14,6 +14,8 @@
 #  10. 尺寸约束(索引 ≤4KB,深度 ≤12KB)
 #  11. frontmatter 内容质量(name 字符集/description what+when,CRITICAL 拦截)
 #  12. 深度 skill test-cases 覆盖(软提示,不拦截)
+#  13. 高优 skill quality_assertion 覆盖(软提示,不拦截)
+#  14. 高优 skill 主动纠错覆盖率(软提示,不拦截)
 
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -196,6 +198,28 @@ print(sum(1 for e in d['evals']
     check 0 "$skill: $count / $target quality_assertion"
   else
     check 0 "$skill: $count / $target quality_assertion（建议补足，非阻断）"
+  fi
+done
+
+# ── 14. 高优 skill 主动纠错覆盖率(软提示,不拦截 FAIL) ──
+section "14. 8 高优 skill 主动纠错覆盖率（软提示，不拦截）"
+declare -A high_priority_skills=(
+  [arkts-syntax]=1 [arkui-patterns]=1 [stage-model]=1
+  [security-permissions]=1 [network-requests]=1
+  [audio-playback]=1 [media-system]=1 [ai-inference]=1
+)
+CORRECTION_MARKERS="⚠️|纠正|不存在|反模式|误区|禁止"
+for skill in "${!high_priority_skills[@]}"; do
+  skill_file=$(find "$ROOT/plugins" -name "SKILL.md" -path "*/skills/$skill/*" | head -1)
+  if [ -n "$skill_file" ]; then
+    matches=$(grep -cE "$CORRECTION_MARKERS" "$skill_file" 2>/dev/null) || matches=0
+  else
+    matches=0
+  fi
+  if [ "$matches" -ge 1 ]; then
+    check 0 "$skill: $matches 处纠错标记"
+  else
+    echo "  提示: $skill 暂无主动纠错标记(建议补充⚠️/纠正/反模式段,非阻断)"
   fi
 done
 

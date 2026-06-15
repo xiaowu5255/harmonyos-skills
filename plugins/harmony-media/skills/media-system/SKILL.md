@@ -11,6 +11,29 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙播控与媒体系统: AVSession Kit 播控中心、媒体通知栏、 跨设备投屏与流转、DRM 版权保护、扫码(Scan Kit)。
+
+## When to Use
+
+- 涉及 后台播放 时
+- 涉及 锁屏控制 时
+- 涉及 投屏到电视 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| 用 `AVPlayer` 做播控交互 | `AVPlayer` 是底层播放器;播控交互必须通过 `AVSession` 接入系统控制中心 | AVSession 文档 |
+| `scanBarcode()` 直接返回结果 | API 12+ `scanBarcode` 是异步 Promise;需 `await` 且处理 `BusinessError` | Scan Kit 文档 |
+| DRM 直接用 `MediaKeySystem` | 需先 `isMediaKeySystemSupported()` 检查设备能力;不是所有设备都支持所有 DRM 类型 | DRM Kit 文档 |
+| 后台播放只需 `continuousTask` | 还需注册 `AVSession` + 设置音频焦点;缺一步都会被系统打断 | 后台播放最佳实践 |
+| 扫码用 `@system.barcode` 旧 API | API 12+ 用 `@kit.ScanKit` 的 `scanBarcode()` | 模块迁移文档 |
+
+> **验证方法**:多媒体 API 以 `@kit.AudioKit` / `@kit.MediaKit` / `@kit.ScanKit` 声明文件为准。
+> 不确定的 API 名先 `grep` 本地 SDK 再使用。
+
 # 播控与媒体系统：AVSession、DRM、扫码
 
 ## AVSession 心智模型

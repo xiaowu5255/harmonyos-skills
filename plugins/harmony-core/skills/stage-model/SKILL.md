@@ -11,6 +11,33 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+HarmonyOS Stage 模型:UIAbility 生命周期、AbilityStage、各类 ExtensionAbility、 Want 与页面/应用拉起、module.json5 配置、Context 体系、应用内事件与数据共享。
+
+## When to Use
+
+- 涉及 应用入口 时
+- 涉及 生命周期问题 时
+- 涉及 新建 时
+- 涉及 配置 Ability 时
+- 涉及 应用间跳转 时
+- 涉及 后台前台切换行为 时
+- 涉及 module.json5 改动 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| 把 FA 模型的 `onShow`/`onHide` 当 Stage 模型用 | Stage 模型用 `onWindowStageCreate` / `onForeground` / `onBackground` | 生命周期文档 |
+| 在 `onCreate` 里直接操作 UI | `onCreate` 时无 Window;UI 操作必须在 `onWindowStageCreate` 之后 | UIAbility 生命周期 |
+| `launchAbility` 传 `bundleName` + `abilityName` 就行 | API 12+ 需显式指定 `moduleName`;跨应用需 `want.wantAgent` | Want 文档 |
+| `want.parameters` 可传任意对象 | 只支持基本类型 + `Parcelable`;复杂对象需序列化 | IPC 约束 |
+| `context.terminateSelf()` 可以在任何地方调 | 只能在 UIAbility 实例内调;ServiceAbility 不适用 | Context 体系 |
+
+> **验证方法**:生命周期顺序以官方文档为准,不要凭 Android/iOS 经验类比。
+> 用 `harmony-docs-retriever` 查 "UIAbility 生命周期" 获取最新 API 版本对应的流程图。
+
 # Stage 模型
 
 ## 心智模型

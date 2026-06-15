@@ -10,6 +10,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙窗口管理与屏幕适配: 窗口创建/移动/缩放、悬浮窗、分屏、屏幕方向/密度/ 刷新率。
+
+## When to Use
+
+- 涉及 多窗口 时
+- 涉及 悬浮窗权限 时
+- 涉及 横竖屏切换 时
+
 # 窗口管理与屏幕适配
 
 ## 核心入口：WindowStage

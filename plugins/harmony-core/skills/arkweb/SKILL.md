@@ -10,6 +10,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙 Web 容器开发: ArkWeb 组件、H5 混合开发、JS Bridge 通信、Cookie 管理、 WebView 调试。
+
+## When to Use
+
+- 涉及 加载网页 时
+- 涉及 JS 时
+- 涉及 ArkTS 互调 时
+- 涉及 Web 性能优化 时
+
 # ArkWeb：Web 容器与混合开发
 
 ## 加载控制生命周期

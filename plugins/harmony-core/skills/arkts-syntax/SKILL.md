@@ -12,6 +12,34 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+HarmonyOS 6 (API 20-24) ArkTS 语言与 ArkUI 声明式开发规范。ArkTS 与 TypeScript 存在大量不兼容约束,凭 TS 直觉 写代码会直接产生编译错误。
+
+## When to Use
+
+- 涉及 编写 时
+- 涉及 审查 时
+- 涉及 修改 .ets 文件 时
+- 涉及 使用 @Entry 时
+- 涉及 处理 ArkTS 编译器报错(arkts-* 规则) 时
+- 涉及 TypeScript 时
+- 涉及 JavaScript 代码迁移到 ArkTS 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| 用 `any` / `unknown` 绕过类型检查 | 所有类型必须显式、静态可知;JSON 用 interface 定义 | arkts-no-any-unknown |
+| 动态增删对象属性 | 对象布局运行时不可变;用 class 定义固定结构 | arkts-no-structural-typing |
+| 用 `var` 声明变量 | 只用 `let` / `const` | arkts-no-var |
+| 解构赋值 `{...obj}` | 禁止解构;逐字段赋值或用 Object.assign 的 ArkTS 等价写法 | arkts-no-destructuring |
+| 用 TS 的 `interface` 继承写法 | ArkTS 的 interface 仅用于类型声明,不支持实现细节 | 官方文档 |
+| 假设 `@State` 自动深度观察 | V1 `@State` 仅观察第一层;嵌套属性变化需 `@Observed` + `@ObjectLink` | 状态管理文档 |
+
+> **验证方法**:遇到不确定的 ArkTS 写法,不要凭 TS 经验猜测。先用 `grep` 在本地 SDK 的
+> `.d.ts` / `.d.ets` 文件中搜索 API 名,或用 `harmony-docs-retriever` 查官方文档。
+
 # ArkTS 语法与 ArkUI 开发规范
 
 ## 第零条原则:先核对项目事实,再写代码

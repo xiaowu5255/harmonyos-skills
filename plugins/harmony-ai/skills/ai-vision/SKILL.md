@@ -11,6 +11,16 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙视觉AI: Core Vision Kit 人脸/文字/物体检测、码生成、OCR， Vision Kit 文档识别/表单识别/图像超分。
+
+## When to Use
+
+- 涉及 图像分析 时
+- 涉及 文档扫描 时
+- 涉及 人脸验证 时
+
 # 视觉 AI：检测、识别与超分
 
 ## 双 Kit 分工

@@ -11,6 +11,17 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙音视频处理: AVCodec Kit 编解码、Image Kit 图片处理、 Media Kit 播放/录制、封装解封装(muxer/demuxer)。
+
+## When to Use
+
+- 涉及 视频编辑 时
+- 涉及 音频转码 时
+- 涉及 图片变换 时
+- 涉及 媒体文件加工 时
+
 # 音视频处理：编解码、图片与播放器
 
 ## 三 Kit 边界速判

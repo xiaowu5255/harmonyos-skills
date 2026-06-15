@@ -10,6 +10,28 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙网络请求: HTTP 数据请求、WebSocket 双向连接、Socket 通信、弱网优化、 网络状态监听、连接管理。
+
+## When to Use
+
+- 涉及 调用API 时
+- 涉及 文件上传下载 时
+
+## ⚠️ 常见误区与反模式
+
+| 误区 | 正确做法 | 来源 |
+|------|---------|------|
+| 用 `@ohos.net.http` 旧 API | API 12+ 用 `@kit.NetworkKit` 的 `http.createHttp()` | 模块迁移文档 |
+| WebSocket 不做心跳 | 必须实现 ping/pong 心跳 + 断线重连;无心跳连接会被运营商/网关静默断开 | 最佳实践 |
+| 请求超时不设置 | 必须设置 `connectTimeout` + `readTimeout`;默认无超时会导致线程泄漏 | http.request options |
+| 在主线程做网络请求 | 网络请求必须在子线程/TaskPool 中执行;主线程阻塞会导致 ANR | 线程模型 |
+| 用 `fetch` 替代 `http` 模块 | `fetch` 是 Web API 兼容层;原生开发优先用 `http.createHttp()` 获得更完整的控制 | API 选型 |
+
+> **验证方法**:所有网络 API 以 `@kit.NetworkKit` 声明文件为准。
+> 用 `grep -r "declare" oh_modules/@ohos.net.*` 检查实际可用 API。
+
 # 网络请求与连接管理
 
 ## HTTP 请求生命周期(铁律)

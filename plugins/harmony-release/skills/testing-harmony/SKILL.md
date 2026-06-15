@@ -11,6 +11,20 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙应用 QA 测试全维度:Hypium 单元测试、UI 自动化(UiTest/Driver)、稳定性 测试、兼容性与云测(DevEco Testing/华为云测)、性能与功耗专项、内测分发、 测试计划制定。
+
+## When to Use
+
+- 涉及 写测试用例 时
+- 涉及 搭测试工程 时
+- 涉及 CI 跑测试 时
+- 涉及 制定测试计划 时
+- 涉及 QA 方案 时
+- 涉及 上架前测试验证 时
+- 涉及 组织内测 时
+
 # 鸿蒙 QA 测试全维度
 
 ## QA 全景图(制定测试方案先看这张表)

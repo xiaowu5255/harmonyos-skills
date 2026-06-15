@@ -5,6 +5,18 @@ provides: index
 requires: harmony-index
 ---
 
+## Overview
+
+鸿蒙 AI 能力领域索引，覆盖视觉 AI (OCR/检测)、语音 AI (识别/合成)、NLP、端侧推理 (MindSpore/CANN/NNRt)、意图框架。
+
+## When to Use
+
+- 涉及 OCR 文字识别、图像检测
+- 语音识别 (ASR)、语音合成 (TTS)
+- NLP 自然语言处理
+- 端侧推理、MindSpore/CANN/NNRt
+- 意图框架、智能推荐
+
 # 鸿蒙 AI 能力索引
 
 覆盖视觉、语音、NLP、端侧推理等 AI 能力。

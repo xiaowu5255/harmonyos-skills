@@ -10,6 +10,19 @@ metadata:
   target-platform: "HarmonyOS 6.x / API 20-24"
 ---
 
+## Overview
+
+鸿蒙 Native 开发(NDK):N-API/Node-API 桥接 ArkTS 与 C/C++、CMake 工程配置、 so 库集成与三方 C++ 库移植、跨语言类型映射与线程约束。
+
+## When to Use
+
+- 涉及 C++ 代码接入 时
+- 涉及 .so 文件 时
+- 涉及 napi 报错 时
+- 涉及 性能敏感模块下沉 时
+- 涉及 移植现有 C 时
+- 涉及 C++ 库到鸿蒙 时
+
 # Native 开发(NDK)
 
 ## 工程结构(模板生成,核心三件)
