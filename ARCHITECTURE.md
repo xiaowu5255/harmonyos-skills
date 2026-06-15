@@ -472,3 +472,53 @@ harmonyos-skills/
 ### 跨工具兼容
 
 `tools/sync-skills.sh` 将 skill 目录复制到 `~/.agents/skills`（加 `harmony-` 前缀防止冲突），Codex / OpenCode 等工具直接读取。commands 核心逻辑已抽象到 `tools/commands/*.sh`，终端下可独立运行。
+
+## 断言撰写规范（v0.7.0 引入）
+
+`tools/evals/evals.json` 的 `quality_assertion` 字段是 v0.7.0 起的"防回潮"硬约束，撰写时必须遵循以下规范。
+
+### 1. `machine` 断言可追溯
+
+每条 `machine` 断言必须**给出 ≥1 条对应 ROADMAP 6.1 / 5.2 的修复记录**——即该断言是"防某个已知杜撰 API / 性能臆测回潮"。
+
+### 2. `semantic` 断言可判定
+
+每条 `semantic` 断言必须**有具体可读的判定提示**（`note` 字段），例如"必须显式给出 X 调用，不能只说 Y"——禁止写"输出质量好""表述准确"这种空话。
+
+### 3. 数量上限
+
+同一 skill 的 `machine` 断言不超过 6 条；超出部分由维护者评估是否真有必要。理由：黑名单维护成本与鸿蒙版本迭代速度正相关，无信源不扩。
+
+### 4. 命名稳定
+
+断言名沿用 `q-<skill_slug>-<idx>` 格式（仅作为 `id` 字段在 `quality_assertion` 内的可选 key 出现），便于历史趋势 diff。
+
+### 5. 失败转 semantic 机制
+
+任何新增断言若 3 次 PR 都被维护者手动判"误报"，自动转 `semantic` 并 issue 化。run_evals.py 的 `aggregate` 输出会标记误报率；CI 评论附统计。
+
+### 6. 撰写模板
+
+```json
+{
+  "id": <递增 int>,
+  "skill": "<skill-slug>",
+  "prompt": "<用户提问样例>",
+  "expected_output": "<期望 agent 触发的技能与行动>",
+  "quality_assertion": {
+    "type": "machine",
+    "check": "not_contains | contains | regex_match",
+    "target": "stdout",
+    "value": ["token1", "token2"]    // 或 "regex pattern"（regex_match 时为字符串）
+  }
+}
+```
+
+`semantic` 类型示例：
+
+```json
+{
+  "type": "semantic",
+  "note": "维护者必读:<具体可读判定>"
+}
+```
