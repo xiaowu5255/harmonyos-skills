@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.7.0] - 待发布
+
+### 信源质量 + 自进化硬化
+
+**质量断言扩容（16→48）**
+- 8 个高优 skill 各补 4 条 quality_assertion（3 machine + 1 semantic），共 +32 条
+- 高优名单：arkts-syntax、arkui-patterns、stage-model、security-permissions、network-requests、audio-playback、media-system、ai-inference
+- 机器可判定 24 条（v0.6.x 已清杜撰 API/性能臆测的"防回潮"）；semantic 24 条（16 旧字符串 + 8 新 dict）由维护者人工 review
+- 涵盖 ROADMAP 5.2（杜撰 API 清除）与 6.1（性能臆测清除）的全部修复记录
+
+**CI 轻量采集成（不阻断）**
+- `.github/workflows/ci.yml` 新增 `evals-report` job，依赖 lint、仅 PR 触发
+- 默认 `continue-on-error: true`，不阻断合并；产出趋势表 PR 评论 + artifact
+- 复用 `ANTHROPIC_API_KEY` secret；claude CLI 缺失降级而非 fail
+
+**自进化主动脉节奏化（文档化，不实跑）**
+- ROADMAP Phase 7：季度审计 / feedback-distill / weekly-sdk-watch / CI evals-report 四条主动脉节奏表 + 判定标准
+- 首跑留 v0.7.1 / v0.8.0（季度审计 2026-09，feedback-distill 2026-07）
+
+**工具链增量**
+- `tools/evals/run_evals.py`（协议层：调 agent / 收 stdout / 应用断言 / 出报告）
+- `tools/evals/test_run_evals.py`（8 个单元测试覆盖）
+- `tools/lint-skills.sh` 第 13 项：高优 skill evals 覆盖软提示（不阻断）
+- `ARCHITECTURE.md` 新增"断言撰写规范"节
+
+**回归**
+- lint 13 PASS / 0 FAIL；frontmatter 53 skill / 0 CRITICAL / 0 WARNING
+- evals 72→104（机器可判定 24，semantic 24）
+- 整体新增 < 800 行（不含 evals 文本与 spec）
+
 ## [0.6.2] - 2026-06-15
 
 ### 检索时效分层 + 虚构 API 系统性清除（独立审计第三轮）
