@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 在 v0.7.0 把 evals 质量断言从 15 扩到 ≥30 条并接入 CI 轻量采集，让 v0.6.x 阶段已修复的杜撰 API 与性能臆测有可量化的防回潮手段；季度审计与 feedback-distill 走"节奏表文档化"。
+**Goal:** 在 v0.7.0 把 evals 质量断言扩到 ≥30 条（实际 16→48）并接入 CI 轻量采集，让 v0.6.x 阶段已修复的杜撰 API 与性能臆测有可量化的防回潮手段；季度审计与 feedback-distill 走"节奏表文档化"。
 
 **Architecture:** 只在 tooling 层 + evals 数据层叠加，不改 skill 业务内容。新增 `tools/evals/run_evals.py`（协议层脚本：调起 agent → 收 stdout → 跑正则/字符串 → 出报告）；CI 加 `evals-report` job（`continue-on-error: true` 不阻断）；报告输出 `tools/evals/reports/<sha>.json` 入 gitignore；ROADMAP 增 Phase 7；CHANGELOG 增 v0.7.0。
 
@@ -713,7 +713,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 cd /home/xiao5/projects/harmonyos-skills && python -c "import json; d=json.load(open('tools/evals/evals.json')); print(len(d['evals']), 'evals'); print('quality_assertion count:', sum(1 for e in d['evals'] if 'quality_assertion' in e))"
 ```
 
-Expected：`104 evals` / `quality_assertion count: 47`（原 15 + 新 32）。
+Expected：`104 evals` / `quality_assertion count: 48`（原 16 + 新 32）。
 
 ### 3.3 跑 lint 第 9 项确认 JSON 严格解析通过
 
@@ -733,7 +733,7 @@ git commit -m "feat(evals): 8 高优 skill 补 32 条 quality_assertion (v0.7.0 
 arkts-syntax/arkui-patterns/stage-model/security-permissions/
 network-requests/audio-playback/media-system/ai-inference 各 +4 条(3 机 1 语)
 
-质量断言 15→47（机器可判定 32，semantic 15），lint 12 PASS 不退步。
+质量断言 16→48（机器可判定 24，semantic 24），lint 12 PASS 不退步。
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
@@ -972,10 +972,10 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ### 信源质量 + 自进化硬化
 
-**质量断言扩容（15→47）**
+**质量断言扩容（16→48）**
 - 8 个高优 skill 各补 4 条 quality_assertion（3 machine + 1 semantic），共 +32 条
 - 高优名单：arkts-syntax、arkui-patterns、stage-model、security-permissions、network-requests、audio-playback、media-system、ai-inference
-- 机器可判定 32 条（v0.6.x 已清杜撰 API/性能臆测的"防回潮"）；semantic 15 条由维护者人工 review
+- 机器可判定 24 条（v0.6.x 已清杜撰 API/性能臆测的"防回潮"）；semantic 24 条（16 旧字符串 + 8 新 dict）由维护者人工 review
 - 涵盖 ROADMAP 5.2（杜撰 API 清除）与 6.1（性能臆测清除）的全部修复记录
 
 **CI 轻量采集成（不阻断）**
