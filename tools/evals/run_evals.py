@@ -38,22 +38,27 @@ def apply_machine_assertion(assertion: dict, stdout: str) -> bool | None:
     raise ValueError(f"unknown check: {check}")
 
 
-def run_eval(eval_record: dict) -> dict:
+def run_eval(eval_record: dict, dry_run: bool = False) -> dict:
     """跑单条 eval，调起 claude CLI；返回 {skill, eval_id, type, passed, detail}。"""
     skill = eval_record["skill"]
     eval_id = eval_record["id"]
     qa = eval_record.get("quality_assertion")
     if not qa:
         return {"skill": skill, "eval_id": eval_id, "type": "skipped", "passed": None, "detail": "no quality_assertion"}
+    if isinstance(qa, str):
+        # 旧数据契约：quality_assertion 是字符串
+        return {"skill": skill, "eval_id": eval_id, "type": "semantic", "passed": None, "detail": qa}
 
     # dry-run 模式：用 prompt 自身当 stdout，避免真调 agent
-    if "--dry-run" in sys.argv:
+    if dry_run:
         stdout = eval_record["prompt"]
     else:
         try:
             proc = subprocess.run(
                 ["claude", "-p", eval_record["prompt"]],
                 capture_output=True, text=True, timeout=EVAL_TIMEOUT_SEC,
+                cwd=str(REPO_ROOT),
+                check=False,
             )
             stdout = proc.stdout
         except subprocess.TimeoutExpired:
@@ -108,9 +113,8 @@ def main() -> int:
     ap.add_argument("--skill", default=None, help="只跑该 skill 的 eval")
     args = ap.parse_args()
 
-    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     evals = load_evals(args.skill)
-    results = [run_eval(e) for e in evals]
+    results = [run_eval(e, dry_run=args.dry_run) for e in evals]
     summary = aggregate(results)
 
     report = {
@@ -120,9 +124,15 @@ def main() -> int:
         "results": results,
     }
     out = REPORTS_DIR / f"{args.report_date}.json"
-    out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"report written: {out.relative_to(REPO_ROOT)}")
-    return 0
+    try:
+        REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"report written: {out.relative_to(REPO_ROOT)}")
+        return 0
+    except OSError as e:
+        print(f"FATAL: failed to write report: {e}", file=sys.stderr)
+        print(json.dumps(report, ensure_ascii=False, indent=2), file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

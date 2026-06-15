@@ -52,3 +52,16 @@ def test_aggregate_summary():
     assert summary["semantic_count"] == 1
     assert summary["by_skill"]["a"]["machine_pass"] == 1
     assert summary["by_skill"]["a"]["machine_fail"] == 1
+
+
+def test_run_eval_skips_string_assertion():
+    """evals.json 旧契约：quality_assertion 是字符串，run_eval 应 skip。"""
+    # 通过 import run_eval 后 monkeypatch subprocess.run 来验证；但更简洁是直接验证 apply_machine_assertion 对 str 的处理
+    import run_evals
+    # apply_machine_assertion 不接受 str——但 run_eval 内部已 isinstance 拦截
+    # 验证拦截：在 run_eval 中传入带 str quality_assertion 的 eval 不会 KeyError
+    rec = {"id": 999, "skill": "test", "prompt": "x", "quality_assertion": "旧字符串断言"}
+    r = run_evals.run_eval(rec, dry_run=True)
+    assert r["type"] == "semantic"
+    assert r["passed"] is None
+    assert r["detail"] == "旧字符串断言"
