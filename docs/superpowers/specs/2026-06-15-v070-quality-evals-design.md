@@ -26,7 +26,7 @@
 
 ### 2.1 目标（v0.7.0 必须达成）
 
-1. **质量断言扩容**：从 15 → ≥30 条，新增分布到 8 个高优 skill
+1. **质量断言扩容**：从已有基数扩到 ≥30 条，新增分布到 8 个高优 skill
    - arkts-syntax、arkui-patterns、stage-model、security-permissions
    - network-requests、audio-playback、media-system、ai-inference
    - 每 skill 新增 4 条断言（3 正 + 1 负），共 +32 条
@@ -142,7 +142,7 @@
 ### 4.4 数据流
 
 ```
-evals.json (改前 72 条 / 15 machine 断言)
+evals.json (改前 72 条 / 已有 16 条 quality_assertion 含 15 字符串 + 1 dict)
    ↓ run_evals.py
    ├─ for each eval with quality_assertion:
    │     ├─ 调 agent 跑 eval.prompt
