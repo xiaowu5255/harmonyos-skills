@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.7.4] - 2026-06-16
+
+### ROADMAP Phase 5.2 #4/#5/#7/#8 推进（4 项并行交付）
+
+**1. cloud-foundation / huawei-kits 补 kits 字段**
+- `cloud-foundation` frontmatter 新增 `kits: ["@hms.cloud.foundation", "@hms.core.agsvc"]`
+- `huawei-kits` frontmatter 新增 `kits: ["@hms.account", "@hms.push", "@hms.iap", "@kit.ScanKit"]`
+- 解决 v0.2.2 遗留的 kits 字段缺失问题（lint #3 自动检测已对齐）
+
+**2. doctor 命令核心逻辑抽象为独立脚本**
+- 新增 `tools/doctor.sh`：4 段式诊断（工程配置 / 工具链可用性 / 设备在线 / SDK 版本）
+- 调用 `plugins/.../harmony-debugging/scripts/check_project_config.sh` 复用现有检查
+- 输出标准化 PASS/WARN/FAIL 报告 + 退出码（FAIL>0 返回 1 供 CI 拦截）
+- `commands/harmony-doctor.md` 改写为薄 wrapper：首选 tools/doctor.sh，缺失时退化
+
+**3. examples/ 已达成 5-8 场景目标（无需新建）**
+- 仓库已有 8 个完整示例：navigation-app / cloud-function / media-player / service-card / ble-scanner / background-download / multi-device-layout / photo-picker
+- README 表格与 skill 路由表对齐
+
+**4. evals 质量断言扩面（10 skill 目标）**
+- 新增 6 条 machine 断言（id 115-120），覆盖 6 个高频但零断言的 skill：
+  - accessibility-i18n: `$r('app.string.')` 引用检测
+  - sensors-input: sensor.on/off 生命周期检测
+  - telephony: makeCall vs dial 权限区分
+  - ipc-ime: Parcelable + Want.parameters 检测
+  - testing-harmony: Hypium 框架（防误推 Jest/Mocha）
+  - camera-capture: CameraPicker 优先（防忽略权限成本）
+- 实际达成：质量断言覆盖 9 高优 + 7 常用 = **16 skill**（超出 10 目标）
+- evals 114→121 / quality_assertion 50→56（32 machine + 24 semantic）/ 负样本 11 不变
+
+**回归**
+- lint 29 PASS / 0 FAIL
+- frontmatter 54 skill / 0 CRITICAL / 0 WARNING
+- 100% Overview / When to Use 覆盖 + 9/9 高优 skill 纠错标记
+
 ## [0.7.3] - 2026-06-16
 
 ### Rust 鸿蒙集成（rust-on-harmony skill 上线）

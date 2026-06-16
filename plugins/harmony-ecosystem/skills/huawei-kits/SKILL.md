@@ -7,6 +7,7 @@ description: >-
   技能。生态 Kit 的失败九成出在 AGC 侧前置配置而非端侧代码,先验前置链路。
 license: MIT
 requires: 0-ecosystem-index
+kits: ["@hms.account", "@hms.push", "@hms.iap", "@kit.ScanKit"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---

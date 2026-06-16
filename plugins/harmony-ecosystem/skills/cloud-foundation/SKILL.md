@@ -8,6 +8,7 @@ description: >-
   绝大多数源于 AGC 配置而非代码,不懂绑定流程会在错误的地方排查。
 license: MIT
 requires: 0-ecosystem-index
+kits: ["@hms.cloud.foundation", "@hms.core.agsvc"]
 metadata:
   target-platform: "HarmonyOS 6.x / API 20-24 + AGC"
 ---

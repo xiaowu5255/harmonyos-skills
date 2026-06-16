@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 114 条(含 11 负样本)。50 条 quality_assertion(26 machine 可机检 + 24 semantic 待人工),覆盖 10 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference/3d-ar/rust-on-harmony)。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 120 条(含 11 负样本)。56 条 quality_assertion(32 machine 可机检 + 24 semantic 待人工),覆盖 16 个 skill(9 高优 + 7 常用:accessibility-i18n/sensors-input/telephony/ipc-ime/testing-harmony/camera-capture/crash-diagnostics/atomic-services-and-cards/notification/arkts-concurrency/hvigor-build/data-storage/2d-graphics/3d-ar/rust-on-harmony/signing-and-certificates)。",
   "evals": [
     {
       "id": 1,
@@ -950,6 +950,48 @@
       "skill": "none(负样本)",
       "prompt": "Rust 里怎么写一个 HTTP 服务器?用 actix-web 还是 warp?",
       "expected_output": "不触发任何鸿蒙技能(纯 Rust Web 后端,与鸿蒙/Rust 集成无关)"
+    },
+    {
+      "id": 115,
+      "skill": "accessibility-i18n",
+      "prompt": "应用要做中英文切换,字符串应该放哪里管理?",
+      "expected_output": "触发 accessibility-i18n;使用 i18n 资源管理 + $r('app.string.xxx') 引用;不要硬编码中文字符串",
+      "quality_assertion": "输出必须提到 $r('app.string.') 引用方式,不得直接硬编码中文文案"
+    },
+    {
+      "id": 116,
+      "skill": "sensors-input",
+      "prompt": "想用鸿蒙读取手机加速度传感器的实时数据,怎么做?",
+      "expected_output": "触发 sensors-input;subscribeAccelerometer + Sensor.on() 回调;提醒主线程不要阻塞、用 offSensor 注销、避免频繁订阅",
+      "quality_assertion": "输出必须提到 sensor.on / sensor.off 的订阅与注销生命周期,不得建议轮询读取"
+    },
+    {
+      "id": 117,
+      "skill": "telephony",
+      "prompt": "应用需要跳转到系统拨号盘拨打电话,不直接调拨打电话接口,怎么做?",
+      "expected_output": "触发 telephony;使用 makeCall() 走系统拨号;需要 ohos.permission.PLACE_CALL 权限",
+      "quality_assertion": "输出必须区分 makeCall(系统拨号,需 PLACE_CALL 权限) 与 dial(直接拨打,需 PLACE_CALL+CALL 权限)"
+    },
+    {
+      "id": 118,
+      "skill": "ipc-ime",
+      "prompt": "鸿蒙里两个 Ability 之间怎么传复杂对象(不是字符串/数字)?",
+      "expected_output": "触发 ipc-ime;对象需实现 Parcelable;通过 Want.parameters 传递;不能传函数/闭包/带循环引用的对象",
+      "quality_assertion": "输出必须提到 Parcelable 接口与 Want.parameters,不得建议 JSON.stringify 跨 IPC 边界传输"
+    },
+    {
+      "id": 119,
+      "skill": "testing-harmony",
+      "prompt": "鸿蒙 UI 自动化测试用什么框架?怎么写第一个测试用例?",
+      "expected_output": "触发 testing-harmony;Hypium(单元) + UiTest/ArkUI Inspector(UI);@Test 注解 + expectAssertions;模拟器/真机均可",
+      "quality_assertion": "输出必须提到 Hypium 单元测试框架,不得建议 Jest/Mocha 等 Web 框架"
+    },
+    {
+      "id": 120,
+      "skill": "camera-capture",
+      "prompt": "想用鸿蒙 Camera Kit 做一个二维码扫描器,应该用哪个 API?",
+      "expected_output": "触发 camera-capture;推荐 CameraPicker(免权限) 而非直接控制 Camera Kit;若必须深度集成则用 PreviewOutput + ImageReceiver 拿到帧做扫码",
+      "quality_assertion": "输出必须提到 CameraPicker 作为优先方案(无需 CAMERA 权限),不得直接推荐会话模型而忽略权限成本"
     }
   ]
 }
