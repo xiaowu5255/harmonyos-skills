@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.7.3] - 2026-06-16
+
+### Rust 鸿蒙集成（rust-on-harmony skill 上线）
+
+**新 skill：`rust-on-harmony` (harmony-system)**
+- 覆盖 Rust→鸿蒙全链路：tier-2 target triple 矩阵、OHOS SDK Clang wrapper、`.cargo/config.toml` 交叉编译配置
+- 阐明 `napi-rs` 与官方 OHOS fork `ohos-rs/ohos-rs` 的关系（fork 是主线在 OHOS 的生产用法）
+- 4 类 FFI 边界安全模型：生命周期错配 / 线程错配 / 字符串数组拷贝 / Panic 跨界
+- 与 `native-ndk` 铁律对齐（线程约束、env 作用域、async work）
+- Cargo + hvigor 协同两条路径（CMake add_custom_command / hvigor 自定义 task）
+- `## ⚠️ 常见误区与反模式` 6 条（OHOS 不在预编译 std、用上游 napi-rs、Clang target 写法、跨线程调 napi、Rust String FFI、Panic 跨界）
+
+**核实依据（research-first 原则）**
+- [rustc OpenHarmony 平台支持](https://doc.rust-lang.org/stable/rustc/platform-support/openharmony.html) — Tier 2 with Host Tools
+- [napi-rs triples/target-list](https://github.com/napi-rs/napi-rs/blob/main/triples/target-list) — 3 个 OHOS triple 已纳入
+- [ohos-rs 官网](https://ohos.rs) / [Gitee 组织](https://gitee.com/ohos-rs) — 提供 ohos-rs/ohos-rs + ohos-native-bindings
+
+**集成改动**
+- `plugins/harmony-system/.claude-plugin/plugin.json` 加 `rust-on-harmony`、version 0.6.2 → 0.7.3
+- `plugins/harmony-system/skills/0-system-index/SKILL.md` 路由表新增 1 行（Native NDK + Rust 集成）
+- `tools/evals/evals.json` 新增 2 条正样本（id 112 移植算法 / id 113 线程约束）+ 1 条负样本（Rust HTTP 服务器，与鸿蒙无关）
+- evals 112→114（注释行）/ quality_assertion 49→50 / 负样本 10→11
+
+**回归**
+- lint 29 PASS / 0 FAIL
+- frontmatter 54 skill / 0 CRITICAL / 0 WARNING
+- 总 skill 数 53→54
+
 ## [0.7.2] - 2026-06-16
 
 ### 3d-ar 收尾 + 性能臆测软化（Phase 5.2/6.1 闭环）

@@ -4,7 +4,7 @@ HarmonyOS 6（API 20–24）开发专家技能集。让你的 AI 编码 agent �
 
 技能本体遵循 **Agent Skills 开放标准**（SKILL.md），采用**三层渐进式架构**避免 context 爆炸，可在 Claude Code、Codex、OpenCode 等所有兼容工具中使用。也提供 [Hermes Agent 消费指南](./HERMES.md)。
 
-当前版本：**0.7.2** — 8 plugin / 53 skill / 6 命令 / 2 hook / 全量质量审计 + 自进化工具链 + 信源质量防回潮 + 跨平台结构 + 主动纠错模式泛化 + 性能臆测软化。
+当前版本：**0.7.3** — 8 plugin / 54 skill / 6 命令 / 2 hook / 全量质量审计 + 自进化工具链 + 信源质量防回潮 + 跨平台结构 + 主动纠错模式泛化 + 性能臆测软化 + Rust 鸿蒙集成。
 
 ## 架构
 
@@ -261,7 +261,7 @@ bash tools/commands/harmony-api-scan.sh /path/to/harmony-project
 - **知识回流**：`/harmony-feedback` 捕获踩坑 → `tools/feedback-distill.sh` 月度蒸馏到错误对照表
 - **SDK diff**：`tools/sdk-diff/diff_api.py` 机器生成 API 变更清单 → 自动标记受影响 skill
 - **变更监测**：`.github/workflows/weekly-sdk-watch.yml` 每周检测文档更新
-- **防退化**：`tools/evals/evals.json` 112 条回归样本（49 条含质量断言：25 machine + 24 semantic，10 条负样本）；`tools/lint-skills.sh` 14 项一致性 + 内容质量检查（CI 强制）
+- **防退化**：`tools/evals/evals.json` 114 条回归样本（50 条含质量断言：26 machine + 24 semantic，11 条负样本）；`tools/lint-skills.sh` 14 项一致性 + 内容质量检查（CI 强制）
 - **内容审查**：`tools/validate-frontmatter.py` 按 Claude Skills 规范审查 name/description 质量
 - **季度审计**：`tools/quarterly-audit-checklist.md` 标准化审计流程 + 判定标准（首次 2026-09）
 - **官方文档巡检**：`harmony-docs-retriever/scripts/check-doc-urls.sh` 检查锚点 URL 有效性
@@ -270,7 +270,7 @@ bash tools/commands/harmony-api-scan.sh /path/to/harmony-project
 
 - ✅ **全量审计**：45 个深度 skill 逐条 API 正确性审查（AUDIT_REPORT v3.0，2026-06-13）
 - ✅ **14 项一致性检查**：`tools/lint-skills.sh` 覆盖 frontmatter 检查、路由表验证、references 引用完整性、JSON 解析、内容质量审查、9 高优 skill evals 覆盖软提示、9 高优 skill 主动纠错覆盖率软提示
-- ✅ **112 条回归样本**：49 条含输出正确性断言（quality_assertion，25 machine 可机检 + 24 semantic 待人工），10 条负样本
+- ✅ **114 条回归样本**：50 条含输出正确性断言（quality_assertion，26 machine 可机检 + 24 semantic 待人工），11 条负样本
 - ✅ **CI 强制**：push / PR 自动跑 lint，阻断引用断裂、JSON 非法、frontmatter 不合格
 
 ## License

@@ -1,6 +1,6 @@
 {
   "skill_name": "harmonyos-skills",
-  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 112 条(含 10 负样本)。49 条 quality_assertion(25 machine 可机检 + 24 semantic 待人工),覆盖 9 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference/3d-ar)。",
+  "comment": "触发率与质量回归种子集。每次修改 skill 后跑一遍;新增 skill 时补 2-3 条。共 114 条(含 11 负样本)。50 条 quality_assertion(26 machine 可机检 + 24 semantic 待人工),覆盖 10 个高优 skill(arkts-syntax/arkui-patterns/stage-model/security-permissions/network-requests/audio-playback/media-system/ai-inference/3d-ar/rust-on-harmony)。",
   "evals": [
     {
       "id": 1,
@@ -931,6 +931,25 @@
       "skill": "none(负样本)",
       "prompt": "鸿蒙和安卓有什么区别?哪个更好用?",
       "expected_output": "不触发任何鸿蒙技能(用户对比问题,非开发问题)"
+    },
+    {
+      "id": 112,
+      "skill": "rust-on-harmony",
+      "prompt": "我想把项目里一段用 Rust 写的图像处理算法移植到鸿蒙工程,应该怎么搭?",
+      "expected_output": "触发 rust-on-harmony;确认 OHOS SDK 准备+rustup target aarch64-unknown-linux-ohos+Clang wrapper;提示 ohos-rs 仓库是 napi-rs 的 OHOS fork;Rust→ArkTS 走 napi-rs 暴露为 .so",
+      "quality_assertion": "输出必须提到 aarch64-unknown-linux-ohos 目标 triple,必须使用 ohos-rs(而非上游 napi-rs)作为框架来源"
+    },
+    {
+      "id": 113,
+      "skill": "rust-on-harmony",
+      "prompt": "Rust 工作线程里能直接调 napi 接口给 ArkTS 传结果吗?",
+      "expected_output": "触发 rust-on-harmony;明确禁止,必须经 ThreadsafeFunction 投回 JS 线程;直接调会随机崩溃,引用 native-ndk 的线程约束铁律"
+    },
+    {
+      "id": 114,
+      "skill": "none(负样本)",
+      "prompt": "Rust 里怎么写一个 HTTP 服务器?用 actix-web 还是 warp?",
+      "expected_output": "不触发任何鸿蒙技能(纯 Rust Web 后端,与鸿蒙/Rust 集成无关)"
     }
   ]
 }
