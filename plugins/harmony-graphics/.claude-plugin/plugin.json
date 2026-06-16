@@ -1,7 +1,14 @@
 {
   "name": "harmony-graphics",
-  "version": "0.6.2",
+  "version": "0.7.4",
   "description": "HarmonyOS 6.x 图形渲染 — 2D/3D/AR/空间感知",
   "author": "HarmonyOS Skills",
-  "skills": ["0-graphics-index", "2d-graphics", "3d-ar"]
+  "skills": [
+    "0-graphics-index",
+    "2d-graphics",
+    "3d-ar"
+  ],
+  "homepage": "https://github.com/xiaowu5255/harmonyos-skills",
+  "repository": "https://github.com/xiaowu5255/harmonyos-skills",
+  "license": "Apache-2.0"
 }

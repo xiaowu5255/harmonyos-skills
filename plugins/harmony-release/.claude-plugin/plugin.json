@@ -1,7 +1,17 @@
 {
   "name": "harmony-release",
-  "version": "0.6.2",
+  "version": "0.7.4",
   "description": "发布运维:性能优化/QA测试/签名证书/上架合规/故障日志分型诊断(崩溃·卡死·内存泄漏)。",
   "author": "HarmonyOS Skills",
-  "skills": ["0-release-index", "performance-tuning", "testing-harmony", "signing-and-certificates", "release-and-compliance", "crash-diagnostics"]
+  "skills": [
+    "0-release-index",
+    "performance-tuning",
+    "testing-harmony",
+    "signing-and-certificates",
+    "release-and-compliance",
+    "crash-diagnostics"
+  ],
+  "homepage": "https://github.com/xiaowu5255/harmonyos-skills",
+  "repository": "https://github.com/xiaowu5255/harmonyos-skills",
+  "license": "Apache-2.0"
 }

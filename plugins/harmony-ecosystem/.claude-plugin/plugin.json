@@ -1,7 +1,17 @@
 {
   "name": "harmony-ecosystem",
-  "version": "0.6.2",
+  "version": "0.7.4",
   "description": "HarmonyOS 6.x 应用生态 — 账号/推送/支付/通知/地图/云开发/分享",
   "author": "HarmonyOS Skills",
-  "skills": ["0-ecosystem-index", "huawei-kits", "cloud-foundation", "notification", "location-map", "sharing-social"]
+  "skills": [
+    "0-ecosystem-index",
+    "huawei-kits",
+    "cloud-foundation",
+    "notification",
+    "location-map",
+    "sharing-social"
+  ],
+  "homepage": "https://github.com/xiaowu5255/harmonyos-skills",
+  "repository": "https://github.com/xiaowu5255/harmonyos-skills",
+  "license": "Apache-2.0"
 }

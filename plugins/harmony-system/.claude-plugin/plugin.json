@@ -1,7 +1,24 @@
 {
   "name": "harmony-system",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "HarmonyOS 6.x 系统能力 — 后台/网络/安全/存储/文件/加密/分布式/Native/Rust",
   "author": "HarmonyOS Skills",
-  "skills": ["0-system-index", "background-tasks", "data-storage", "security-permissions", "network-requests", "crypto-security", "file-system", "connectivity", "distributed", "native-ndk", "rust-on-harmony", "sensors-input", "telephony"]
+  "skills": [
+    "0-system-index",
+    "background-tasks",
+    "data-storage",
+    "security-permissions",
+    "network-requests",
+    "crypto-security",
+    "file-system",
+    "connectivity",
+    "distributed",
+    "native-ndk",
+    "rust-on-harmony",
+    "sensors-input",
+    "telephony"
+  ],
+  "homepage": "https://github.com/xiaowu5255/harmonyos-skills",
+  "repository": "https://github.com/xiaowu5255/harmonyos-skills",
+  "license": "Apache-2.0"
 }

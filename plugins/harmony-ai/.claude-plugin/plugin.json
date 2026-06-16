@@ -1,7 +1,16 @@
 {
   "name": "harmony-ai",
-  "version": "0.6.2",
+  "version": "0.7.4",
   "description": "HarmonyOS 6.x AI智能 — 视觉/语音/NLP/端侧推理/大模型",
   "author": "HarmonyOS Skills",
-  "skills": ["0-ai-index", "ai-vision", "ai-speech", "ai-nlp", "ai-inference"]
+  "skills": [
+    "0-ai-index",
+    "ai-vision",
+    "ai-speech",
+    "ai-nlp",
+    "ai-inference"
+  ],
+  "homepage": "https://github.com/xiaowu5255/harmonyos-skills",
+  "repository": "https://github.com/xiaowu5255/harmonyos-skills",
+  "license": "Apache-2.0"
 }
