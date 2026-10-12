@@ -1,8 +1,11 @@
-## SDK Watch — 2026-10-05T07:44:27Z
+## SDK Watch — 2026-10-12T08:07:29Z
 
 ### DevEco Studio
-hash: 28be8600991d561a998db42eca06e9d9d08148b9c3cc0f4df6187e04b2a77ba3
+hash: fc4059184bb5054e1a5321a88f5c4970ad3747d040f20b17a86c5a7ff2a584a1
+**CHANGED** (old: 28be8600991d561a998db42eca06e9d9d08148b9c3cc0f4df6187e04b2a77ba3, new: fc4059184bb5054e1a5321a88f5c4970ad3747d040f20b17a86c5a7ff2a584a1)
 ### Version Overview (SPA — needs web-fetch)
-hash: d68163e7fe4e929c76ca3727944046c2363f117467d6b2bc864a107d0b5fa6a6
+hash: d77761d325a3f8dc169daeca6896502e244ddf84a29ccf7e647ab80f039013c3
+**SPA shell changed — manual web-fetch check recommended**
 ### Doc Updates (SPA — needs web-fetch)
-hash: d68163e7fe4e929c76ca3727944046c2363f117467d6b2bc864a107d0b5fa6a6
+hash: d77761d325a3f8dc169daeca6896502e244ddf84a29ccf7e647ab80f039013c3
+**SPA shell changed — manual web-fetch check recommended**
